@@ -84,10 +84,12 @@ def zones_delete():
         return jsonify({"success": False, "message": "Zone " + zone + " doesn't exist"})  # TODO: Did this succeed?
 
 
+# Record management
+
 @app.route("/records/add", methods=["POST"])
 def records_add():
     try:
-        zone, record_domain, record_ttl, record_type, record_value = get_args("zone", "record_domain", "record_ttl", "record_type", "record_value")
+        zone, record_domain, record_ttl, record_type, record_value = get_args("zone", "domain", "ttl", "type", "value")
     except ValueError as e:
         return jsonify({"success": False, "message": str(e)})
 
@@ -134,6 +136,12 @@ def record_delete():
 @app.route("/debug/refresh_zones")
 def refresh_zones():
     add_queue_message("refresh_zones", args=None)
+    return "0"
+
+
+@app.route("/debug/refresh_single_zone/<zone>")
+def refresh_single_zone(zone):
+    add_queue_message("refresh_single_zone", {"zone": zone})
     return "0"
 
 
