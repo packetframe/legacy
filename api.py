@@ -5,6 +5,8 @@ from flask import Flask, request, jsonify
 from pymongo import MongoClient, ASCENDING
 from pymongo.errors import DuplicateKeyError
 
+from config import configuration
+
 import utils
 
 app = Flask(__name__)
@@ -133,20 +135,20 @@ def record_delete():
     return jsonify({"success": True, "message": "Deleted record index " + str(record_index) + " from " + zone})
 
 
-@app.route("/debug/refresh_zones")
-def refresh_zones():
-    add_queue_message("refresh_zones", args=None)
-    return "0"
+if configuration["development"]:
+    @app.route("/debug/refresh_zones")
+    def refresh_zones():
+        add_queue_message("refresh_zones", args=None)
+        return "0"
 
 
-@app.route("/debug/refresh_single_zone/<zone>")
-def refresh_single_zone(zone):
-    add_queue_message("refresh_single_zone", {"zone": zone})
-    return "0"
-
+    @app.route("/debug/refresh_single_zone/<zone>")
+    def refresh_single_zone(zone):
+        add_queue_message("refresh_single_zone", {"zone": zone})
+        return "0"
 
 if __name__ == "__main__":
     try:
-        app.run(debug=True)
+        app.run(debug=configuration["development"])
     except KeyboardInterrupt:
         connection.close()
