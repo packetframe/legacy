@@ -1,0 +1,4 @@
+soa_root: root.cdn.natesales.net
+nameservers:
+  - ns1.cdn.natesales.net
+  - ns2.cdn.natesales.net
