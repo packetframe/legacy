@@ -7,11 +7,16 @@ import requests
 from jinja2 import Template
 from pymongo import MongoClient
 
+from config import configuration
+
 client = MongoClient("mongodb://localhost:27017")
 db = client["cdn"]
 
 with open("templates/local.j2", "r") as local_template_file:
     local_template = Template(local_template_file.read())
+
+with open("templates/zone.j2") as zone_template_file:
+    zone_template = Template(zone_template_file.read())
 
 
 def callback(ch, method, properties, body):
@@ -23,8 +28,14 @@ def callback(ch, method, properties, body):
     if operation == "refresh_single_zone":
         print("refreshing " + args["zone"])
 
-        for record in db["zones"].find({"zone": args["zone"]}):
-            print(record)
+        zone = db["zones"].find_one({"zone": args["zone"]})
+
+        print(zone_template.render(
+            nameservers=configuration["nameservers"],
+            soa_root=configuration["soa_root"],
+            records=zone["records"],
+            serial=zone["serial"]
+        ))
 
         # Pull data out of the database and assemble the zone file into an object
         # POST the object to each node
@@ -49,7 +60,7 @@ def callback(ch, method, properties, body):
 
 
 def main():
-    connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
+    connection = pika.BlockingConnection(pika.ConnectionParameters(host="localhost"))
     channel = connection.channel()
 
     channel.queue_declare(queue="cdn_updates")
