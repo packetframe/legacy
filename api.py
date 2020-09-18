@@ -81,7 +81,7 @@ def zones_delete():
         add_queue_message("refresh_zones", args=None)
         return jsonify({"success": True, "message": "Deleted " + zone})
     else:
-        return jsonify({"success": False, "message": "Zone " + zone + " doesn't exist"})  # TODO: Did this succeed?
+        return jsonify({"success": True, "message": "Zone " + zone + " doesn't exist"})
 
 
 # Record management
