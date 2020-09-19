@@ -135,6 +135,10 @@ def record_delete():
     return jsonify({"success": True, "message": "Deleted record index " + str(record_index) + " from " + zone})
 
 
+# Node
+
+# Debug
+
 if configuration["development"]:
     @app.route("/debug/refresh_zones")
     def refresh_zones():
