@@ -1,4 +1,5 @@
 import json
+from os import urandom
 
 import pika
 from flask import Flask, request, jsonify
@@ -10,16 +11,17 @@ from config import configuration
 import utils
 
 app = Flask(__name__)
-# if development:
-#     app.secret_key = b'0'
-# else:
-#     app.secret_key = urandom(12)
+if configuration["development"]:
+    app.secret_key = b'0'
+else:
+    app.secret_key = urandom(12)
 
 client = MongoClient("mongodb://localhost:27017")
 db = client["cdn"]
 
 # Collections
 zones = db["zones"]
+nodes = db["nodes"]
 zones.create_index([("zone", ASCENDING)], unique=True)
 
 connection = pika.BlockingConnection(pika.ConnectionParameters(host="localhost"))
@@ -136,6 +138,31 @@ def record_delete():
 
 
 # Node
+
+@app.route("/nodes/add", methods=["POST"])
+def nodes_add():
+    try:
+        name, provider, geoloc, location, management_ip, ipv4, ipv6 = get_args("name", "provider", "geoloc", "location", "management_ip", "ipv4", "ipv6")
+    except ValueError as e:
+        return jsonify({"success": False, "message": str(e)})
+
+    add_op = nodes.insert_one({
+        "name": name,
+        "provider": provider,
+        "geoloc": geoloc,
+        "location": location,
+        "management_ip": management_ip,
+        "ipv4": ipv4,
+        "ipv6": ipv6
+    })
+
+    print(add_op)
+
+    if add_op.acknowledged:
+        return jsonify({"success": True, "message": "Added " + name})
+    else:
+        return jsonify({"success": False, "message": "Unable to add node" + name})
+
 
 # Debug
 
