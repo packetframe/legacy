@@ -184,13 +184,13 @@ if configuration["development"]:
     @app.route("/debug/refresh_zones")
     def refresh_zones():
         add_queue_message("refresh_zones", args=None)
-        return "0"
+        return "Done"
 
 
     @app.route("/debug/refresh_single_zone/<zone>")
     def refresh_single_zone(zone):
         add_queue_message("refresh_single_zone", {"zone": zone})
-        return "0"
+        return "Done"
 
 if __name__ == "__main__":
     try:
