@@ -156,8 +156,6 @@ def nodes_add():
         "ipv6": ipv6
     })
 
-    print(add_op)
-
     if add_op.acknowledged:
         return jsonify({"success": True, "message": "Added " + name})
     else:
