@@ -110,7 +110,7 @@ def records_add():
     return jsonify({"success": True, "message": "Added " + record_domain + " to " + zone})
 
 
-@app.route("/records/list", methods=["POST"])
+@app.route("/records/list", methods=["GET"])
 def records_list():
     try:
         zone = get_args("zone")
