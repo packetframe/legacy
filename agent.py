@@ -15,3 +15,6 @@ def refresh_zones():
 def refresh_single_zone():
     with open(content_directory + "db." + request.json["zone"], "w") as zone_file:
         zone_file.write(request.json["zone_file"])
+
+
+app.run(port=8081)
