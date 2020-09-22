@@ -77,6 +77,15 @@ Request Body:
 
 
 
+##### /nodes/list
+
+List nodes
+
+Methods: GET
+
+Request Body: None
+
+
 ##### /nodes/delete
 
 Add  a node

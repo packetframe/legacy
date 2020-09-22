@@ -173,6 +173,11 @@ def nodes_add():
         return jsonify({"success": False, "message": "Unable to add node" + name})
 
 
+@app.route("/nodes/list", methods=["GET"])
+def nodes_list():
+    return nodes.find()
+
+
 # Debug
 
 if configuration["development"]:
