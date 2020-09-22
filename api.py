@@ -6,9 +6,8 @@ from flask import Flask, request, jsonify
 from pymongo import MongoClient, ASCENDING
 from pymongo.errors import DuplicateKeyError
 
-from config import configuration
-
 import utils
+from config import configuration
 
 app = Flask(__name__)
 if configuration["development"]:
@@ -109,6 +108,18 @@ def records_add():
     add_queue_message("refresh_single_zone", {"zone": zone})
 
     return jsonify({"success": True, "message": "Added " + record_domain + " to " + zone})
+
+
+@app.route("/records/list", methods=["POST"])
+def records_list():
+    try:
+        zone = get_args("zone")
+    except ValueError as e:
+        return jsonify({"success": False, "message": str(e)})
+
+    current_records = zones.find_one({"zone": zone})["records"]
+
+    return jsonify({"success": True, "message": current_records})
 
 
 @app.route("/records/delete", methods=["POST"])
