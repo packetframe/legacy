@@ -1,68 +1,92 @@
 - name: Install
   hosts: all
   tasks:
-    - name: Add debian sid repo
-      apt_repository:
-        repo: deb http://deb.debian.org/debian/ sid main
-        state: present
+    #    - name: Add debian sid repo
+    #      apt_repository:
+    #        repo: "{{ item }}"
+    #        state: present
+    #      with_items:
+    #        - deb http://deb.debian.org/debian/ sid main
+    #        - deb http://deb.debian.org/debian buster-backports main contrib non-free
+    #
+    #    - name: Set default release
+    #      copy:
+    #        content: APT::Default-Release "stable";
+    #        dest: /etc/apt/apt.conf.d/default-release
+    #
+    #    - name: Install rsync, bind9, dnsutils, wireguard
+    #      apt:
+    #        update_cache: yes
+    #        cache_valid_time: 36000 # 10 hours
+    #        pkg:
+    #          - rsync
+    #          - bind9
+    #          - curl
+    #          - dnsutils
+    #          - wireguard
+    #
+    #    - name: Install BIRD2 from sid
+    #      apt:
+    #        name: bird2
+    #        default_release: sid
 
-    - name: Set default release
-      copy:
-        content: APT::Default-Release "stable";
-        dest: /etc/apt/apt.conf.d/default-release
+    - name: Generate WireGuard credentials
+      shell:
+        cmd: umask 077; wg genkey | tee privatekey | wg pubkey > publickey
+        chdir: /etc/wireguard/
+        creates: privatekey
 
-    - name: Install rsync, bind9, dnsutils
-      apt:
-        update_cache: yes
-        cache_valid_time: 36000 # 10 hours
-        pkg:
-          - rsync
-          - bind9
-          - curl
-          - dnsutils
+    - name: Show WireGuard pubilc key
+      shell: cat /etc/wireguard/publickey
+      register: wireguard_key
+    - debug: msg="{{ wireguard_key.stdout }}"
 
-    - name: Install BIRD2 from sid
-      apt:
-        name: bird2
-        default_release: sid
-
-    - name: Apply network config
-      shell: bash /opt/network.sh
-      when: network_config.changed
-
-    - name: Create .bashrc aliases
+    - name: Create orchestrator peer configuration
       copy:
         content: |
-          alias bgpc="birdc conf"
-          alias bgps="birdc s p | column -t"
-          alias bgpe="nano /etc/bird/peers.conf"
-          alias b="birdc"
-        dest: /root/.bashrc
+          [Interface]
+          PrivateKey = {{ wireguard_key.stdout }}
+          Address = {{ internal_ip }}/24
 
-    - name: Create BIRD2 log file
-      copy:
-        content: ""
-        dest: /etc/bird/log.txt
-        force: no
-        owner: bird
-        group: bird
+          [Peer]
+          PublicKey = {{ orchestrator_publickey }}
+          AllowedIPs = 172.16.16.0/24
+          Endpoint = {{ orchestrator_address }}
+          PersistentKeepalive = 5
+        dest: /etc/wireguard/wg0.conf
+#        TODO: Check PersistentKeepailve
 
-    - name: Copy BIRD2 config
-      template:
-        src: bird.j2
-        dest: /etc/bird/bird.conf
-      register: bird_config
+    - name: Enable WireGuard service
+      systemd:
+        name: wg-quick@wg0
+        state: restarted
+        enabled: yes
 
-    - name: Apply BIRD config
-      shell: birdc config
-      when: bird_config.changed
+#    - name: Create BIRD2 log file
+#      copy:
+#        content: ""
+#        dest: /etc/bird/log.txt
+#        force: no
+#        owner: bird
+#        group: bird
+#
+#    - name: Copy BIRD2 config
+#      template:
+#        src: bird.j2
+#        dest: /etc/bird/bird.conf
+#      register: bird_config
+#
+#    - name: Apply BIRD config
+#      shell: birdc config
+#      when: bird_config.changed
+#
+#    - name: Create unique BIND config
+#      template:
+#        src: named.conf.options.j2
+#        dest: /etc/bind/named.conf.options
+#      register: bind_config
+#
+#    - name: Reload BIND config
+#      shell: rndc reload
+#      when: bind_config.changed
 
-    - name: Create unique BIND config
-      template:
-        src: named.conf.options.j2
-        dest: /etc/bind/named.conf.options
-      register: bind_config
-
-    - name: Reload BIND config
-      shell: rndc reload
-      when: bind_config.changed
