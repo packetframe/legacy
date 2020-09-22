@@ -1,0 +1,68 @@
+- name: Install
+  hosts: all
+  tasks:
+    - name: Add debian sid repo
+      apt_repository:
+        repo: deb http://deb.debian.org/debian/ sid main
+        state: present
+
+    - name: Set default release
+      copy:
+        content: APT::Default-Release "stable";
+        dest: /etc/apt/apt.conf.d/default-release
+
+    - name: Install rsync, bind9, dnsutils
+      apt:
+        update_cache: yes
+        cache_valid_time: 36000 # 10 hours
+        pkg:
+          - rsync
+          - bind9
+          - curl
+          - dnsutils
+
+    - name: Install BIRD2 from sid
+      apt:
+        name: bird2
+        default_release: sid
+
+    - name: Apply network config
+      shell: bash /opt/network.sh
+      when: network_config.changed
+
+    - name: Create .bashrc aliases
+      copy:
+        content: |
+          alias bgpc="birdc conf"
+          alias bgps="birdc s p | column -t"
+          alias bgpe="nano /etc/bird/peers.conf"
+          alias b="birdc"
+        dest: /root/.bashrc
+
+    - name: Create BIRD2 log file
+      copy:
+        content: ""
+        dest: /etc/bird/log.txt
+        force: no
+        owner: bird
+        group: bird
+
+    - name: Copy BIRD2 config
+      template:
+        src: bird.j2
+        dest: /etc/bird/bird.conf
+      register: bird_config
+
+    - name: Apply BIRD config
+      shell: birdc config
+      when: bird_config.changed
+
+    - name: Create unique BIND config
+      template:
+        src: named.conf.options.j2
+        dest: /etc/bind/named.conf.options
+      register: bind_config
+
+    - name: Reload BIND config
+      shell: rndc reload
+      when: bind_config.changed
