@@ -1,0 +1,252 @@
+# bird.conf
+
+define ASN = {{ asn }};
+router id {{ ansible_host }};
+
+define LOCAL4 = [
+  {{ ipv4_prefix }}
+];
+
+define LOCAL6 = [
+  {{ ipv6_prefix }}
+];
+
+protocol static static4 {
+  ipv4;
+  route {{ ipv4_prefix }} reject;
+}
+
+protocol static static6 {
+  ipv6;
+  route {{ ipv6_prefix }} reject;
+}
+
+# ---- Parameters ----
+
+timeformat base iso long;
+timeformat log iso long;
+timeformat protocol iso long;
+timeformat route iso long;
+
+log "/etc/bird/log.txt" all;
+
+protocol device {};
+
+protocol direct {
+  ipv4;
+  ipv6;
+}
+
+protocol kernel {
+  scan time 10;
+  ipv4 { export all; };
+}
+
+protocol kernel {
+  scan time 10;
+  ipv6 { export all; };
+}
+
+# ---- Filter Lists ----
+
+define TRANSIT_ASNS = [
+  174,                    # Cogent
+  209,                    # Qwest (HE carries this on IXPs IPv6 (Jul 12 2018))
+  701,                    # UUNET
+  702,                    # UUNET
+  1239,                   # Sprint
+  1299,                   # Telia
+  2914,                   # NTT Communications
+  3257,                   # GTT Backbone
+  3320,                   # Deutsche Telekom AG (DTAG)
+  3356,                   # Level3
+  3491,                   # PCCW
+  3549,                   # Level3
+  3561,                   # Savvis / CenturyLink
+  4134,                   # Chinanet
+  5511,                   # Orange opentransit
+  6453,                   # Tata Communications
+  6461,                   # Zayo Bandwidth
+  6762,                   # Seabone / Telecom Italia
+  6830,                   # Liberty Global
+  7018                    # AT&T
+];
+
+define BOGON_ASNS = [
+  0,                      # RFC 7607
+  23456,                  # RFC 4893 AS_TRANS
+  64496..64511,           # RFC 5398 and documentation/example ASNs
+  64512..65534,           # RFC 6996 Private ASNs
+  65535,                  # RFC 7300 Last 16 bit ASN
+  65536..65551,           # RFC 5398 and documentation/example ASNs
+  65552..131071,          # RFC IANA reserved ASNs
+  4200000000..4294967294, # RFC 6996 Private ASNs
+  4294967295              # RFC 7300 Last 32 bit ASN
+];
+
+define BOGONS4 = [
+  0.0.0.0/8+,             # RFC 1122 'this' network
+  10.0.0.0/8+,            # RFC 1918 private space
+  100.64.0.0/10+,         # RFC 6598 CG NAT space
+  127.0.0.0/8+,           # RFC 1122 localhost
+  169.254.0.0/16+,        # RFC 3927 link local
+  172.16.0.0/12+,         # RFC 1918 private space
+  192.0.2.0/24+,          # RFC 5737 TEST-NET-1
+  192.88.99.0/24+,        # RFC 7526 6to4 anycast relay
+  192.168.0.0/16+,        # RFC 1918 private space
+  198.18.0.0/15+,         # RFC 2544 benchmarking
+  198.51.100.0/24+,       # RFC 5737 TEST-NET-2
+  203.0.113.0/24+,        # RFC 5737 TEST-NET-3
+  224.0.0.0/4+,           # multicast
+  240.0.0.0/4+            # reserved
+];
+
+define BOGONS6 = [
+  ::/8+,                  # RFC 4291 IPv4-compatible, loopback, et al
+  0100::/64+,             # RFC 6666 Discard-Only
+  2001:2::/48+,           # RFC 5180 BMWG
+  2001:10::/28+,          # RFC 4843 ORCHID
+  2001:db8::/32+,         # RFC 3849 documentation
+  2002::/16+,             # RFC 7526 6to4 anycast relay
+  3ffe::/16+,             # RFC 3701 old 6bone
+  fc00::/7+,              # RFC 4193 unique local unicast
+  fe80::/10+,             # RFC 4291 link local unicast
+  fec0::/10+,             # RFC 3879 old site local unicast
+  ff00::/8+               # RFC 4291 multicast
+];
+
+# ---- Functions ----
+
+function honor_graceful_shutdown() {
+  if (65535, 0) ~ bgp_community then {
+    bgp_local_pref = 0;
+  }
+}
+
+function reject_transit_paths() {
+  if (bgp_path ~ TRANSIT_ASNS) then {
+    reject "REJECTED transit path (", bgp_path, ") from ", bgp_path.first, "[", net, "]";
+  }
+}
+
+function reject_bad() {
+  if (net.type = NET_IP4) then { # If IPv4 address
+    if (net.len > 24 || net.len < 8) then { # Reject smaller than /24 or larger than /8
+      reject "REJECTED out of bounds (24 > len > 8) prefix from ", bgp_path.first, " [", net, "]";
+    }
+
+    if (net ~ BOGONS4) then { # Reject bogons
+        reject "REJECTED bogon prefix from ", bgp_path.first, " [", net, "]";
+    }
+  }
+
+  if (net.type = NET_IP6) then { # If IPv6 address
+    if (net.len > 48 || net.len < 12) then { # Reject smaller than /48 or larger than /12
+      reject "REJECTED out of bounds (48 > len > 12) prefix from ", bgp_path.first, " [", net, "]";
+    }
+
+    if (net ~ BOGONS6) then { # Reject bogons
+        reject "REJECTED bogon prefix from ", bgp_path.first, " [", net, "]";
+    }
+  }
+
+  if (bgp_path ~ BOGON_ASNS) then { # Reject bogon ASNs
+    reject "REJECTED bogon AS_PATH path from ", bgp_path.first, " [", net, "]";
+  }
+}
+
+# ---- Templates ----
+
+function export_filter() {
+    if (net ~ LOCAL4 || net ~ LOCAL6) then {
+      bgp_community.add((ASN,110));
+      accept;
+    }
+    reject;
+}
+
+template bgp peer4 {
+    local as ASN;
+
+    ipv4 {
+        import filter {
+            reject_bad();
+            reject_transit_paths();
+            accept;
+        };
+
+        export where export_filter();
+    };
+}
+
+template bgp peer6 {
+    local as ASN;
+
+    ipv6 {
+        import filter {
+            reject_bad();
+            reject_transit_paths();
+            accept;
+        };
+
+        export where export_filter();
+    };
+}
+
+template bgp upstream4 {
+    local as ASN;
+
+    ipv4 {
+        import filter {
+            reject_bad();
+            accept;
+        };
+
+        export where export_filter();
+    };
+}
+
+template bgp upstream6 {
+    local as ASN;
+
+    ipv6 {
+        import filter {
+            reject_bad();
+            accept;
+        };
+
+        export where export_filter();
+    };
+}
+
+template bgp ibgp_upstream4 {
+    local as ASN;
+
+    ipv4 {
+        next hop self;
+        import filter {
+            reject_bad();
+            accept;
+        };
+
+        export where export_filter();
+    };
+}
+
+template bgp ibgp_upstream6 {
+    local as ASN;
+
+    ipv6 {
+        next hop self;
+        import filter {
+            reject_bad();
+            accept;
+        };
+
+        export where export_filter();
+    };
+}
+
+# ---- Peers ----
+
+include "peers.conf";
