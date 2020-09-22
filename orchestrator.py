@@ -44,6 +44,7 @@ def callback(ch, method, properties, body):
 
         zones_file = ""
 
+        # Assemble named.local.conf based on zones
         for zone in db["zones"].find():
             zones_file += local_template.render(zone=zone["zone"])
 
@@ -53,10 +54,6 @@ def callback(ch, method, properties, body):
 
             if update_response.status_code != 200:
                 print("ERR updating node " + node["name"], update_response.text)
-
-        # Pull all named.conf.local zones file
-        # If there are any zone files that don't have named.conf.local entries, delete them
-        # POST the object to each node
 
 
 def main():
