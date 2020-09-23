@@ -169,6 +169,7 @@ def nodes_add():
     })
 
     if add_op.acknowledged:
+        # TODO: Update orchestrator WG config file and `wg addconf wg0 <(wg-quick strip wg0)`
         return jsonify({"success": True, "message": "Added " + name})
     else:
         return jsonify({"success": False, "message": "Unable to add node" + name})
