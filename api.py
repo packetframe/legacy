@@ -153,7 +153,7 @@ def record_delete():
 @app.route("/nodes/add", methods=["POST"])
 def nodes_add():
     try:
-        name, provider, geoloc, location, management_ip, ipv4, ipv6 = get_args("name", "provider", "geoloc", "location", "management_ip", "ipv4", "ipv6")
+        name, provider, geoloc, location, management_ip, pubkey, ipv4, ipv6 = get_args("name", "provider", "geoloc", "location", "management_ip", "pubkey", "ipv4", "ipv6")
     except ValueError as e:
         return jsonify({"success": False, "message": str(e)})
 
@@ -163,6 +163,7 @@ def nodes_add():
         "geoloc": geoloc,
         "location": location,
         "management_ip": management_ip,
+        "pubkey": pubkey,
         "ipv4": ipv4,
         "ipv6": ipv6
     })
