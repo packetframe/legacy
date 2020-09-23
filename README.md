@@ -99,7 +99,8 @@ Request Body:
 | name  | string | Unique name of the node (FMT-US) |
 | provider | string    | Host datacenter |
 | geoloc | string    | Lat,Lon of datacenter |
-| locatoin | string    | Location in written form (Fremont, CA) |
+| pubkey | string    | WireGuard public key of node |
+| location | string    | Location in written form (Fremont, CA) |
 | management_ip | string    | VPN-Internal address of node |
 | ipv4 | string    | OOB IPv4 Address |
 | ipv6 | string    | OOB IPv6 Address |
