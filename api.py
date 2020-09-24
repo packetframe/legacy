@@ -177,7 +177,12 @@ def nodes_add():
 
 @app.route("/nodes/list", methods=["GET"])
 def nodes_list():
-    return nodes.find()
+    _nodes = list(nodes.find())
+
+    for node in _nodes:
+        del node["_id"]
+
+    return jsonify({"success": True, "message": _nodes})
 
 
 # Debug
