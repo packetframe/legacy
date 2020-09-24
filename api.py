@@ -71,6 +71,16 @@ def zones_add():
         return jsonify({"success": True, "message": "Added " + zone})
 
 
+@app.route("/zones/list", methods=["GET"])
+def zones_list():
+    _zones = list(zones.find())
+
+    for zone in _zones:
+        del zone["_id"]
+
+    return jsonify({"success": True, "message": _zones})
+
+
 @app.route("/zones/delete", methods=["POST"])
 def zones_delete():
     try:
