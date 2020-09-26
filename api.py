@@ -102,25 +102,62 @@ def zones_delete():
 
 # Record management
 
-@app.route("/records/add", methods=["POST"])
-def records_add():
+@app.route("/zone/<zone>/add/<rec_type>", methods=["POST"])
+def records_add(zone, rec_type):
+    if not valid_zone(zone):
+        return jsonify({"success": False, "message": "Invalid zone"})
+
     try:
-        zone, record_domain, record_ttl, record_type, record_value = get_args("zone", "domain", "ttl", "type", "value")
+        label, ttl = get_args("label", "ttl")
     except ValueError as e:
         return jsonify({"success": False, "message": str(e)})
 
-    zones.update_one({"zone": zone}, {"$push": {"records": {
-        "domain": record_domain,
-        "ttl": record_ttl,
-        "type": record_type,
-        "value": record_value
-    }}})
+    if type(ttl) != int or ttl < 1 or ttl > 2147483647:
+        return jsonify({"success": False, "message": "Invalid TTL !(0 > ttl > 2147483647)"})
 
-    zones.update_one({"zone": zone}, {"$set": {"serial": utils.get_current_serial()}})
+    if not valid_label(label):
+        return jsonify({"success": False, "message": "Invalid label"})
+
+    value = ""
+
+    if rec_type == "A":
+        try:
+            value = get_args("value")
+        except ValueError as e:
+            return jsonify({"success": False, "message": str(e)})
+
+        if not valid_ipv4(value):
+            return jsonify({"success": False, "message": "Invalid IPv4 address"})
+
+    elif rec_type == "AAAA":
+        try:
+            value = get_args("value")
+        except ValueError as e:
+            return jsonify({"success": False, "message": str(e)})
+
+        if not valid_ipv6(value):
+            return jsonify({"success": False, "message": "Invalid IPv6 address"})
+
+    else:
+        return jsonify({"success": False, "message": "Invalid record type (Allowed values are A/AAAA"})
+
+    zones.update_one({"zone": zone}, {
+        "$push": {
+            "records": {
+                "label": label,
+                "ttl": int(ttl),
+                "type": rec_type,
+                "value": value
+            }
+        },
+        "$set": {
+            "serial": utils.get_current_serial()
+        }
+    })
 
     add_queue_message("refresh_single_zone", {"zone": zone})
 
-    return jsonify({"success": True, "message": "Added " + record_domain + " to " + zone})
+    return jsonify({"success": True, "message": "Record added to " + zone})
 
 
 @app.route("/records/list", methods=["GET"])
