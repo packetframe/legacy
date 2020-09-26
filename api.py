@@ -179,14 +179,12 @@ def records_add(zone, rec_type):
     return jsonify({"success": True, "message": "Record added to " + zone})
 
 
-@app.route("/records/list", methods=["GET"])
-def records_list():
-    try:
-        zone = get_args("zone")
-    except ValueError as e:
-        return jsonify({"success": False, "message": str(e)})
+@app.route("/zone/<zone>/records", methods=["GET"])
+def records_list(zone):
+    if not valid_zone(zone):
+        return jsonify({"success": False, "message": "Invalid zone"})
 
-    current_records = zones.find_one({"zone": zone})["records"]
+    current_records = zones.find_one({"zone": zone}).get("records")
 
     return jsonify({"success": True, "message": current_records})
 
