@@ -33,6 +33,9 @@ def add_queue_message(operation, args):
 
 
 def get_args(*args):
+    if request.json is None:
+        raise ValueError("request body isn't valid JSON")
+
     payload = []
 
     for arg in args:
