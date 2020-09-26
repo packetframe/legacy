@@ -189,20 +189,26 @@ def records_list(zone):
     return jsonify({"success": True, "message": current_records})
 
 
-@app.route("/records/delete", methods=["POST"])
-def record_delete():
-    try:
-        zone, record_index = get_args("zone", "record_index")
-    except ValueError as e:
-        return jsonify({"success": False, "message": str(e)})
+@app.route("/zone/<zone>/delete_record/<index>", methods=["POST"])
+def record_delete(zone, index):
+    if not valid_zone(zone):
+        return jsonify({"success": False, "message": "Invalid zone"})
 
-    current_records = zones.find_one({"zone": zone})["records"]
+    try:
+        index = int(index)
+    except ValueError:
+        return jsonify({"success": False, "message": "Index must be a positive, nonzero integer"})
+
+    if index < 0:
+        return jsonify({"success": False, "message": "Index must be a positive, nonzero integer"})
+
+    current_records = zones.find_one({"zone": zone}).get("records")
 
     # Remove the record
     try:
-        current_records.pop(int(record_index))
+        current_records.pop(int(index))
     except IndexError:
-        return jsonify({"success": True, "message": "Record at index " + str(record_index) + " doesn't exist in " + zone})
+        return jsonify({"success": True, "message": "Record at index " + str(index) + " doesn't exist in " + zone})
 
     # Set the modified records
     zones.update_one({"zone": zone}, {"$set": {
@@ -212,7 +218,7 @@ def record_delete():
 
     add_queue_message("refresh_single_zone", {"zone": zone})
 
-    return jsonify({"success": True, "message": "Deleted record index " + str(record_index) + " from " + zone})
+    return jsonify({"success": True, "message": "Record deleted at index " + str(index) + " from " + zone})
 
 
 # Node
