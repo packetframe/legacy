@@ -71,12 +71,15 @@ def get_args(*args):
         return tuple(payload)
 
 
-@app.route("/zones/add", methods=["POST"])
+@app.route("/zone/add", methods=["POST"])
 def zones_add():
     try:
         zone = get_args("zone")
     except ValueError as e:
         return jsonify({"success": False, "message": str(e)})
+
+    if not valid_zone(zone):
+        return jsonify({"success": False, "message": "Invalid zone"})
 
     try:
         zones.insert_one({
