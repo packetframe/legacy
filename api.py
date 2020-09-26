@@ -137,8 +137,6 @@ def records_add(zone, rec_type):
     if not valid_label(label):
         return jsonify({"success": False, "message": "Invalid label"})
 
-    value = ""
-
     if rec_type == "A":
         try:
             value = get_args("value")
