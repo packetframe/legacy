@@ -61,6 +61,7 @@
         name: wg-quick@wg0
         state: restarted
         enabled: yes
+#        TODO: only restart if wirguard changed, otherwise make sure state=started
 
 #    - name: Create BIRD2 log file
 #      copy:
