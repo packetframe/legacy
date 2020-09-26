@@ -106,12 +106,10 @@ def zones_list():
     return jsonify({"success": True, "message": _zones})
 
 
-@app.route("/zones/delete", methods=["POST"])
-def zones_delete():
-    try:
-        zone = get_args("zone")
-    except ValueError as e:
-        return jsonify({"success": False, "message": str(e)})
+@app.route("/zone/<zone>/delete", methods=["POST"])
+def zones_delete(zone):
+    if not valid_zone(zone):
+        return jsonify({"success": False, "message": "Invalid zone"})
 
     delete_op = zones.delete_one({"zone": zone})
 
