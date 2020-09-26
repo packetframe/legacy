@@ -3,34 +3,42 @@
 #### API Documentation
 
 
-##### /zones/add
+
+
+##### /zone/add
 Create a zone
 
 Methods: POST
 
 Request Body:
 
-| Field | Type   | Description                                                  |
-| ----- | ------ | ------------------------------------------------------------ |
-| zone  | string | RFC 1035 DNS label of the zone (e.g. `example.com` or `2.0.192.in-addr.arpa`) |
+| POST Field | Type   | Description                                                  |
+| ---------- | ------ | ------------------------------------------------------------ |
+| zone       | string | RFC 1035 DNS label of the zone (e.g. `example.com` or `2.0.192.in-addr.arpa`) |
 
 
 
-##### /zones/delete
+##### /zones/list
+
+Create a zone
+
+Methods: GET
+
+
+
+##### /zone/<zone>/delete
 
 Delete a zone
 
 Methods: POST
 
-Request Body:
-
-| Field | Type   | Description                                                  |
-| ----- | ------ | ------------------------------------------------------------ |
-| zone  | string | RFC 1035 DNS label of the zone (e.g. `example.com` or `2.0.192.in-addr.arpa`) |
+| URL Field | Type   | Description                                                  |
+| --------- | ------ | ------------------------------------------------------------ |
+| zone      | string | RFC 1035 DNS label of the zone (e.g. `example.com` or `2.0.192.in-addr.arpa`) |
 
 
 
-##### /records/add
+##### /zone/<zone>/add/<record_type>
 
 Add  a record
 
@@ -38,31 +46,32 @@ Methods: POST
 
 Request Body:
 
-| Field  | Type   | Description                                                  |
+| URL Field | Type   | Description                                                  |
+| --------- | ------ | ------------------------------------------------------------ |
+| zone      | string | RFC 1035 DNS label of the zone (e.g. `example.com` or `2.0.192.in-addr.arpa`) |
+| record_type      | string | DNS record type (Supported values are A, AAAA) |
+
+
+| POST Field | Type   | Description                                                  |
 | ------ | ------ | ------------------------------------------------------------ |
-| zone   | string | RFC 1035 DNS label of the zone (e.g. `example.com` or `2.0.192.in-addr.arpa`) |
-| domain | string | Zone key (domain) (e.g. `1.2.0.192.in-addr.arpa.` or `www.example.com.`) |
-| ttl    | string | Record TTL (Time To Live)                                    |
-| type   | string | `A`, `AAAA`, `CNAME`, `PTR`                                  |
-| value  | string | Record value in RFC 1035 format (e.g. `192.0.2.1` or `example.com.`) |
+| ttl    | int | Record TTL (Time To Live)                                    |
+| zone | string | RFC 1035 DNS label of the zone (e.g. `example.com` or `2.0.192.in-addr.arpa`) |
 
 
 
-##### /records/list
+##### /zone/<zone>/records
 
 Get records
 
 Methods: GET
 
-Request Body:
-
-| Field | Type   | Description                                                  |
-| ----- | ------ | ------------------------------------------------------------ |
-| zone  | string | RFC 1035 DNS label of the zone (e.g. `example.com` or `2.0.192.in-addr.arpa`) |
+| URL Field | Type   | Description                                                  |
+| --------- | ------ | ------------------------------------------------------------ |
+| zone      | string | RFC 1035 DNS label of the zone (e.g. `example.com` or `2.0.192.in-addr.arpa`) |
 
 
 
-##### /records/delete
+##### /zone/<zone>/delete_record/<index>
 
 Delete a record
 
@@ -70,10 +79,10 @@ Methods: POST
 
 Request Body:
 
-| Field | Type   | Description                                                  |
-| ----- | ------ | ------------------------------------------------------------ |
-| zone  | string | RFC 1035 DNS label of the zone (e.g. `example.com` or `2.0.192.in-addr.arpa`) |
-| index | int    | Index of the record (To retrieve records, see `/records/list`) |
+| URL Field | Type   | Description                                                  |
+| --------- | ------ | ------------------------------------------------------------ |
+| zone      | string | RFC 1035 DNS label of the zone (e.g. `example.com` or `2.0.192.in-addr.arpa`) |
+| index     | int    | Index of the record (To retrieve records, see `/records/list`) |
 
 
 
@@ -84,6 +93,8 @@ List nodes
 Methods: GET
 
 Request Body: None
+
+
 
 
 ##### /nodes/delete
