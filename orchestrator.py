@@ -60,15 +60,21 @@ def callback(ch, method, properties, body):
             named_file.write(zones_file)
 
         for node in db["nodes"].find():
-            print("Sending updated zone file to " + node["name"] + " " + node["management_ip"])
+            print("... now updating " + node["name"] + " " + node["management_ip"] + " " + node["location"])
 
+            print("    - sending updated zone file")
             ssh.connect(node["management_ip"], username="root", port=34553, key_filename="./ssh-key2")
             with SCPClient(ssh.get_transport()) as scp:
-                scp.put("/tmp/named.conf.local", "zones.conf")
+                scp.put("/tmp/named.conf.local", "/etc/bind/named.conf.local")
+
+            print("    - reloading DNS config",end="", flush=True)
             stdin, stdout, stderr = ssh.exec_command("rndc reload")
             for line in stdout:
-                print('... ' + line.strip('\n'))
+                print(" - " + line.strip('\n'))
+            for line in stderr:
+                print(" - ERR " + line.strip('\n'))
             ssh.close()
+        print("finished sending updates")
 
 
 def main():
