@@ -225,7 +225,7 @@ def record_delete(zone, index):
 @app.route("/nodes/add", methods=["POST"])
 def nodes_add():
     try:
-        name, provider, geoloc, location, management_ip, pubkey, ipv4, ipv6 = get_args("name", "provider", "geoloc", "location", "management_ip", "pubkey", "ipv4", "ipv6")
+        name, provider, geoloc, location, ipv4, ipv6 = get_args("name", "provider", "geoloc", "location", "ipv4", "ipv6")
     except ValueError as e:
         return jsonify({"success": False, "message": str(e)})
 
@@ -234,14 +234,11 @@ def nodes_add():
         "provider": provider,
         "geoloc": geoloc,
         "location": location,
-        "management_ip": management_ip,
-        "pubkey": pubkey,
         "ipv4": ipv4,
         "ipv6": ipv6
     })
 
     if add_op.acknowledged:
-        # TODO: Update orchestrator WG config file and `wg addconf wg0 <(wg-quick strip wg0)`
         return jsonify({"success": True, "message": "Added " + name})
     else:
         return jsonify({"success": False, "message": "Unable to add node" + name})
