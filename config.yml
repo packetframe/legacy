@@ -4,3 +4,8 @@ nameservers:
   - ns2.cdn.natesales.net
 
 development: true
+
+nodes:
+  username: root
+  port: 34553
+  key: ssh-key2
