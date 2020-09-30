@@ -1,13 +1,13 @@
 import json
 import re
 from os import urandom
+from time import strftime
 
 import pika
 from flask import Flask, request, jsonify
 from pymongo import MongoClient, ASCENDING
 from pymongo.errors import DuplicateKeyError
 
-import utils
 from config import configuration
 
 app = Flask(__name__)
@@ -45,6 +45,12 @@ def valid_ipv4(ipv4) -> bool:
 
 def valid_ipv6(ipv6) -> bool:
     return re.match(r"(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))", ipv6) is not None
+
+
+# Helpers
+
+def get_current_serial():
+    return strftime("%Y%m%d%S")
 
 
 def add_queue_message(operation, args):
@@ -85,7 +91,7 @@ def zones_add():
         zones.insert_one({
             "zone": zone,
             "records": [],
-            "serial": utils.get_current_serial()
+            "serial": get_current_serial()
         })
     except DuplicateKeyError:
         return jsonify({"success": False, "message": "Zone already exists"})
@@ -169,7 +175,7 @@ def records_add(zone):
             }
         },
         "$set": {
-            "serial": utils.get_current_serial()
+            "serial": get_current_serial()
         }
     })
 
@@ -212,7 +218,7 @@ def record_delete(zone, index):
     # Set the modified records
     zones.update_one({"zone": zone}, {"$set": {
         "records": current_records,
-        "serial": utils.get_current_serial()
+        "serial": get_current_serial()
     }})
 
     add_queue_message("refresh_single_zone", {"zone": zone})
