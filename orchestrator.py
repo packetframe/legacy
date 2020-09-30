@@ -3,19 +3,20 @@ import os
 import sys
 
 import pika
-import requests
 from jinja2 import Template
 from pymongo import MongoClient
 
 from config import configuration
 
-client = MongoClient("mongodb://localhost:27017")
-db = client["cdn"]
+db_client = MongoClient("mongodb://localhost:27017")
+db = db_client["cdn"]
 
 with open("templates/local.j2", "r") as local_template_file:
+    # noinspection JinjaAutoinspect
     local_template = Template(local_template_file.read())
 
 with open("templates/zone.j2") as zone_template_file:
+    # noinspection JinjaAutoinspect
     zone_template = Template(zone_template_file.read())
 
 
@@ -50,10 +51,8 @@ def callback(ch, method, properties, body):
 
         for node in db["nodes"].find():
             print("Sending updated zone file to " + node["name"])
-            update_response = requests.post("http://" + node["internal_ip"] + ":8081/refresh_zones", json={"payload": zones_file})
-
-            if update_response.status_code != 200:
-                print("ERR updating node " + node["name"], update_response.text)
+            # TODO: Convert this to an SSH call
+            print(zones_file)
 
 
 def main():
@@ -61,7 +60,7 @@ def main():
     channel = connection.channel()
 
     channel.queue_declare(queue="cdn_updates")
-    channel.basic_consume(queue="cdn_updates", on_message_callback=callback, auto_ack=True)
+    channel.basic_consume(queue="cdn_updates", on_message_callback=callback, auto_ack=True)  # TODO: what is auto ack?
 
     print("Waiting for messages.")
     channel.start_consuming()
