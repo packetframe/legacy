@@ -1,0 +1,10 @@
+localhost:80
+
+root * public/
+file_server
+
+
+route /api/* {
+	uri strip_prefix /api
+	reverse_proxy localhost:5000
+}
