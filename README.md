@@ -40,22 +40,18 @@ Methods: POST
 
 ##### /zone/<zone>/add/<record_type>
 
-Add  a record
+Add a record to zone
 
 Methods: POST
 
 Request Body:
 
-| URL Field | Type   | Description                                                  |
-| --------- | ------ | ------------------------------------------------------------ |
-| zone      | string | RFC 1035 DNS label of the zone (e.g. `example.com` or `2.0.192.in-addr.arpa`) |
-| record_type      | string | DNS record type (Supported values are A, AAAA) |
-
-
 | POST Field | Type   | Description                                                  |
 | ------ | ------ | ------------------------------------------------------------ |
 | ttl    | int | Record TTL (Time To Live)                                    |
-| zone | string | RFC 1035 DNS label of the zone (e.g. `example.com` or `2.0.192.in-addr.arpa`) |
+| label | string | RFC 1035 DNS label of the zone (e.g. `example.com` or `2.0.192.in-addr.arpa`) |
+| type      | string | DNS record type (Supported values are A, AAAA) |
+| value      | string | Value of record (IP address, name, etc) |
 
 
 

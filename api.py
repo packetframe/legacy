@@ -122,13 +122,13 @@ def zones_delete(zone):
 
 # Record management
 
-@app.route("/zone/<zone>/add/<rec_type>", methods=["POST"])
-def records_add(zone, rec_type):
+@app.route("/zone/<zone>/add", methods=["POST"])
+def records_add(zone):
     if not valid_zone(zone):
         return jsonify({"success": False, "message": "Invalid zone"})
 
     try:
-        label, ttl = get_args("label", "ttl")
+        label, rec_type, ttl = get_args("label", "type", "ttl")
     except ValueError as e:
         return jsonify({"success": False, "message": str(e)})
 
