@@ -9,5 +9,5 @@ $TTL	86400
 @	IN	NS	{{ nameserver }}.
 {% endfor %}
 {% for record in records -%}
-{{ record["domain"] }}    {{ record["ttl"] }}    IN    {{ record["type"] }}    {{ record["value"] }}
+{{ record["label"] }}    {{ record["ttl"] }}    IN    {{ record["type"] }}    {{ record["value"] }}
 {% endfor %}
