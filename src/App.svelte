@@ -1,8 +1,20 @@
 <script>
     import Navbar from "./components/Navbar.svelte";
     import RecordTable from "./components/RecordTable.svelte";
+    import Dropdown from "./components/Dropdown.svelte";
+    import {onMount} from "svelte";
 
-    let zone = document.location.toString().split('=')[1];
+    let zones;
+    let selected_zone = "";
+
+    onMount(() => {
+        fetch("http://localhost/api/zones/list")
+            .then(response => response.json())
+            .then(data => {
+                zones = data["message"];
+                selected_zone = data["message"][0]["zone"];
+            });
+    });
 </script>
 
 <main>
@@ -12,12 +24,24 @@
     </Navbar>
 
     <div class="body">
-        {#if zone !== ""}
-            <h1>Dashboard for {zone}</h1>
-            <br>
-            <RecordTable/>
+        <div class="header-container">
+            <h1 class="header-text">CDN Dashboard</h1>
+
+            {#if zones}
+                <Dropdown width="100%" bind:content={selected_zone}>
+                    {#each zones as zone}
+                        <option value="{zone['zone']}">{zone['zone']}</option>
+                    {/each}
+                </Dropdown>
+            {:else}
+                <p style="padding-left: 10px">Loading...</p>
+            {/if}
+        </div>
+
+        {#if selected_zone !== ""}
+            <RecordTable zone={selected_zone}/>
         {:else}
-            <h1>No zone specified</h1>
+            <p style="padding-left: 10px">Loading...</p>
         {/if}
     </div>
 </main>
@@ -31,11 +55,19 @@
     }
 
     .body {
-        width: 75%;
+        width: clamp(70%, 300px, 100%);
         margin: auto;
     }
 
-    h1 {
-        padding-left: 1.6vw;
+    .header-container {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        width: 100%;
+        flex-wrap: wrap;
+    }
+
+    .header-text {
+        flex-grow: 1;
     }
 </style>
