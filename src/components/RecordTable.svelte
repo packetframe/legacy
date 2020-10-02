@@ -118,7 +118,6 @@
 
 <style>
     main {
-        width: 95%;
         margin: auto;
         border: 2px solid white;
         border-radius: 15px;
