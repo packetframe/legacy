@@ -26,7 +26,7 @@
         -moz-appearance: none;
         appearance: none;
         cursor: pointer;
-        width: 50%;
+        width: calc(100% - 3px);
     }
 
     @media screen and (-webkit-min-device-pixel-ratio: 0) {
@@ -47,9 +47,9 @@
         -moz-transform: rotate(90deg);
         -ms-transform: rotate(90deg);
         transform: rotate(90deg);
-        right: 8px;
+        right: 2px;
         top: 2px;
-        padding: 0 0 2px;
+        padding: 0;
         border-bottom: 1px solid #ddd;
         position: absolute;
         pointer-events: none;
