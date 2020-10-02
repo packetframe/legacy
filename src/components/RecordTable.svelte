@@ -37,7 +37,7 @@
         })
             .then((response) => response.json())
             .then((data) => {
-                snackbarColor = data["success"] ? "red" : "green";
+                snackbarColor = data["success"] ? "green" : "red";
                 snackbarMessage = data["message"];
                 snackbarEnabled = true;
             })
