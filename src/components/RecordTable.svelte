@@ -3,6 +3,7 @@
     import TextInput from "./TextInput.svelte";
     import Dropdown from "./Dropdown.svelte";
     import {onMount} from "svelte";
+    import Snackbar from "./Snackbar.svelte";
 
     let showAddRecord = true;
 
@@ -11,6 +12,11 @@
 
     let type, label, value;
     type = "A";
+
+    let snackbarEnabled = false;
+    let snackbarColor = "green";
+    let snackbarMessage = "";
+    let snackbarTitle = "";
 
     function toggleForm() {
         showAddRecord = !showAddRecord;
@@ -31,9 +37,9 @@
         })
             .then((response) => response.json())
             .then((data) => {
-                if (!data["success"]) {
-                    alert(data["message"])
-                }
+                snackbarColor = data["success"] ? "red" : "green";
+                snackbarMessage = data["message"];
+                snackbarEnabled = true;
             })
             .then(() => loadRecords());
     }
@@ -114,6 +120,14 @@
             <p style="padding-left: 10px">Loading...</p>
         {/if}
     </table>
+
+    <Snackbar
+            open={snackbarEnabled}
+            color={snackbarColor}
+            handleClose={() => {snackbarEnabled = false}}
+            message={snackbarMessage}
+            status={snackbarTitle}
+    />
 </main>
 
 <style>
