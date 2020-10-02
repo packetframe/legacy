@@ -6,11 +6,11 @@
 
     let showAddRecord = true;
 
-    let zone = document.location.toString().split('=')[1];
+    export let zone;
     let records;
 
     let type, label, value;
-    type = "A"
+    type = "A";
 
     function toggleForm() {
         showAddRecord = !showAddRecord;
@@ -20,7 +20,7 @@
         fetch("http://localhost/api/zone/" + zone + "/add", {
             method: "POST",
             headers: {
-                'Content-Type': 'application/json'
+                "Content-Type": "application/json"
             },
             body: JSON.stringify({
                 type: type,
@@ -28,16 +28,20 @@
                 value: value,
                 ttl: 13336
             })
-        }).then(data => console.log(data));
-        loadRecords();
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                if (!data["success"]) {
+                    alert(data["message"])
+                }
+            })
+            .then(() => loadRecords());
     }
 
     function deleteRecord(index) {
         fetch("http://localhost/api/zone/" + zone + "/delete_record/" + index, {
             method: "POST"
-        })
-
-        loadRecords();
+        }).then(() => loadRecords());
     }
 
     function loadRecords() {
@@ -56,36 +60,32 @@
         <div>
             <h2>Records</h2>
             <span>
-                <Button icon="add" inverted=true size="1rem" onclick={() => toggleForm()}>Add Record</Button>
+                <Button icon="add" inverted=true onclick={() => toggleForm()} size="1rem">Add Record</Button>
             </span>
         </div>
 
         {#if showAddRecord}
-            <table class="record-add-form">
-                <tr>
-                    <th>Type</th>
-                    <th>Label</th>
-                    <th>Value</th>
-                    <th></th>
-                </tr>
-                <tr>
-                    <td>
-                        <Dropdown id="add-type" bind:content={type}>
-                            <option value="A">A</option>
-                            <option value="AAAA">AAAA</option>
-                        </Dropdown>
-                    </td>
-                    <td>
-                        <TextInput placeholder="Label" id="add-label" bind:content={label}/>
-                    </td>
-                    <td>
-                        <TextInput placeholder="Value" id="add-value" bind:content={value}/>
-                    </td>
-                    <td style="padding-left:15px">
-                        <Button icon="check" onclick={() => submitForm()}>Submit</Button>
-                    </td>
-                </tr>
-            </table>
+            <div class="record-add-container">
+                <div class="record-add-element">
+                    <Dropdown id="add-type" bind:content={type}>
+                        <option value="A">A</option>
+                        <option value="AAAA">AAAA</option>
+                    </Dropdown>
+                </div>
+
+                <div class="record-add-element">
+                    <TextInput placeholder="Label" id="add-label" bind:content={label}/>
+                </div>
+
+                <div class="record-add-element">
+                    <TextInput placeholder="Value" id="add-value" bind:content={value}/>
+                </div>
+
+                <div class="record-add-element">
+                    <Button icon="check" onclick={() => submitForm()}>Submit</Button>
+                </div>
+            </div>
+
         {/if}
     </div>
 
@@ -105,7 +105,7 @@
                     <td>{record["type"]}</td>
                     <td>{record["ttl"]}</td>
                     <td>{record["value"]}</td>
-                    <td style="padding-right: 0px">
+                    <td style="padding-right: 0">
                         <Button color="red" icon="delete" size="1.25rem" onclick={() => {deleteRecord(i)}}/>
                     </td>
                 </tr>
@@ -134,7 +134,7 @@
     }
 
     h2 {
-        margin: 10px 10px 10px 20px;
+        margin: 15px;
     }
 
     :global(.sethjs-table) {
@@ -150,7 +150,7 @@
         background-color: #202020;
         border-bottom: 1px solid #555555;
         color: white;
-        margin: 0px;
+        margin: 0;
     }
 
     :global(.sethjs-table tr) {
@@ -172,18 +172,19 @@
         flex-direction: column;
     }
 
-    .record-add-form {
-        margin-left: 19px;
-        margin-bottom: 20px;
+    .record-add-container {
+        display: flex;
+        width: clamp(0%, 750px, 95%);
+        align-content: center;
+        flex-wrap: wrap;
+        margin: 5px 8px 20px;
     }
 
-    .record-add-form th {
-        text-align: left;
-        padding-bottom: 10px;
-        padding-left: 3px;
-    }
-
-    option {
-        width: 125px;
+    .record-add-element {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        margin: 5px;
+        justify-content: center;
     }
 </style>
