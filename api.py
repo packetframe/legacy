@@ -3,7 +3,7 @@ import re
 from os import urandom
 from time import strftime
 
-import pika
+from pystalk import BeanstalkClient
 from flask import Flask, request, jsonify
 from pymongo import MongoClient, ASCENDING
 from pymongo.errors import DuplicateKeyError
@@ -24,9 +24,7 @@ zones = db["zones"]
 nodes = db["nodes"]
 zones.create_index([("zone", ASCENDING)], unique=True)
 
-connection = pika.BlockingConnection(pika.ConnectionParameters(host="localhost"))
-channel = connection.channel()
-channel.queue_declare(queue="cdn_updates")
+queue = BeanstalkClient("localhost", 11300)
 
 
 # Validators
@@ -54,7 +52,7 @@ def get_current_serial():
 
 
 def add_queue_message(operation, args):
-    channel.basic_publish(exchange="", routing_key="cdn_updates", body=json.dumps({"operation": operation, "args": args}))
+    queue.put_job(json.dumps({"operation": operation, "args": args}))
 
 
 def get_args(*args):
@@ -273,8 +271,4 @@ if configuration["development"]:
         add_queue_message("refresh_single_zone", {"zone": zone})
         return "Done"
 
-if __name__ == "__main__":
-    try:
-        app.run(debug=configuration["development"])
-    except KeyboardInterrupt:
-        connection.close()
+app.run(debug=configuration["development"])

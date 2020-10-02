@@ -1,18 +1,18 @@
 import json
-import os
-import sys
+import time
 
-import pika
 from jinja2 import Template
+from paramiko import SSHClient, AutoAddPolicy
 from pymongo import MongoClient
+from pystalk import BeanstalkClient
+from scp import SCPClient
 
 from config import configuration
 
-from paramiko import SSHClient, AutoAddPolicy
-from scp import SCPClient
-
 db_client = MongoClient("mongodb://localhost:27017")
 db = db_client["cdn"]
+
+queue = BeanstalkClient("localhost", 11300)
 
 ssh = SSHClient()
 ssh.load_system_host_keys()
@@ -24,75 +24,59 @@ with open("templates/local.j2", "r") as local_template_file:
 with open("templates/zone.j2") as zone_template_file:
     zone_template = Template(zone_template_file.read())
 
+print("Starting main loop")
 
-def callback(ch, method, properties, body):
-    content = json.loads(body)
+while True:
+    for job in queue.reserve_iter():
+        content = json.loads(job.job_data)
 
-    operation = content["operation"]
-    args = content["args"]
+        operation = content["operation"]
+        args = content["args"]
 
-    if operation == "refresh_single_zone":
-        print("refreshing " + args["zone"])
+        if operation == "refresh_single_zone":
+            print("refreshing " + args["zone"])
 
-        zone = db["zones"].find_one({"zone": args["zone"]})
+            zone = db["zones"].find_one({"zone": args["zone"]})
 
-        print(zone_template.render(
-            nameservers=configuration["nameservers"],
-            soa_root=configuration["soa_root"],
-            records=zone["records"],
-            serial=zone["serial"]
-        ))
+            print(zone_template.render(
+                nameservers=configuration["nameservers"],
+                soa_root=configuration["soa_root"],
+                records=zone["records"],
+                serial=zone["serial"]
+            ))
 
-        # TODO: Pull data out of the database and assemble the zone file into a file and send it over
-    elif operation == "refresh_zones":
-        print("refreshing local zones file")
+            # TODO: Pull data out of the database and assemble the zone file into a file and send it over
+        elif operation == "refresh_zones":
+            print("refreshing local zones file")
 
-        zones_file = ""
+            zones_file = ""
 
-        # Assemble named.local.conf based on zones
-        for zone in db["zones"].find():
-            zones_file += local_template.render(zone=zone["zone"])
+            # Assemble named.local.conf based on zones
+            for zone in db["zones"].find():
+                zones_file += local_template.render(zone=zone["zone"])
 
-        # Write the named.conf.local tmp file
-        with open("/tmp/named.conf.local", "w") as named_file:
-            named_file.write(zones_file)
+            # Write the named.conf.local tmp file
+            with open("/tmp/named.conf.local", "w") as named_file:
+                named_file.write(zones_file)
 
-        # Loop over the nodes and send the updated zone file to each one, then reload the configuration
-        for node in db["nodes"].find():
-            print("... now updating " + node["name"] + " " + node["management_ip"] + " " + node["location"])
+            # Loop over the nodes and send the updated zone file to each one, then reload the configuration
+            for node in db["nodes"].find():
+                print("... now updating " + node["name"] + " " + node["management_ip"] + " " + node["location"])
 
-            print("    - sending updated zone file")
-            ssh.connect(node["management_ip"], username="root", port=34553, key_filename="./ssh-key2")
-            with SCPClient(ssh.get_transport()) as scp:
-                scp.put("/tmp/named.conf.local", "/etc/bind/named.conf.local")
+                print("    - sending updated zone file")
+                ssh.connect(node["management_ip"], username="root", port=34553, key_filename="./ssh-key2")
+                with SCPClient(ssh.get_transport()) as scp:
+                    scp.put("/tmp/named.conf.local", "/etc/bind/named.conf.local")
 
-            print("    - reloading DNS config", end="", flush=True)
-            stdin, stdout, stderr = ssh.exec_command("rndc reload")
-            for line in stdout:
-                print(" - " + line.strip('\n'))
-            for line in stderr:
-                print(" - ERR " + line.strip('\n'))
-            ssh.close()
-        print("finished sending updates")
+                print("    - reloading DNS config", end="", flush=True)
+                stdin, stdout, stderr = ssh.exec_command("rndc reload")
+                for line in stdout:
+                    print(" - " + line.strip('\n'))
+                for line in stderr:
+                    print(" - ERR " + line.strip('\n'))
+                ssh.close()
+            print("finished sending updates")
 
+            queue.delete_job(job.job_id)
 
-def main():
-    connection = pika.BlockingConnection(pika.ConnectionParameters(host="localhost"))
-    channel = connection.channel()
-
-    channel.queue_declare(queue="cdn_updates")
-    channel.basic_consume(queue="cdn_updates", on_message_callback=callback, auto_ack=True)
-
-    print("Waiting for messages.")
-    channel.start_consuming()
-
-
-if __name__ == "__main__":
-    try:
-        main()
-    except KeyboardInterrupt:
-        print("Interrupted")
-        try:
-            sys.exit(0)
-        except SystemExit:
-            os._exit(0)
+    time.sleep(0.5)
