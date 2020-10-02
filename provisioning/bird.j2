@@ -1,5 +1,7 @@
 # bird.conf
 
+define ACCEPT_ROUTES = false;
+
 define ASN = {{ asn }};
 router id {{ ansible_host }};
 
@@ -172,7 +174,11 @@ template bgp peer4 {
         import filter {
             reject_bad();
             reject_transit_paths();
-            accept;
+            if (ACCEPT_ROUTES) {
+              accept;
+            } else {
+              reject;
+            }
         };
 
         export where export_filter();
@@ -186,7 +192,11 @@ template bgp peer6 {
         import filter {
             reject_bad();
             reject_transit_paths();
-            accept;
+            if (ACCEPT_ROUTES) {
+              accept;
+            } else {
+              reject;
+            }
         };
 
         export where export_filter();
@@ -199,7 +209,11 @@ template bgp upstream4 {
     ipv4 {
         import filter {
             reject_bad();
-            accept;
+            if (ACCEPT_ROUTES) {
+              accept;
+            } else {
+              reject;
+            }
         };
 
         export where export_filter();
@@ -212,7 +226,11 @@ template bgp upstream6 {
     ipv6 {
         import filter {
             reject_bad();
-            accept;
+            if (ACCEPT_ROUTES) {
+              accept;
+            } else {
+              reject;
+            }
         };
 
         export where export_filter();
@@ -226,7 +244,11 @@ template bgp ibgp_upstream4 {
         next hop self;
         import filter {
             reject_bad();
-            accept;
+            if (ACCEPT_ROUTES) {
+              accept;
+            } else {
+              reject;
+            }
         };
 
         export where export_filter();
@@ -240,7 +262,11 @@ template bgp ibgp_upstream6 {
         next hop self;
         import filter {
             reject_bad();
-            accept;
+            if (ACCEPT_ROUTES) {
+              accept;
+            } else {
+              reject;
+            }
         };
 
         export where export_filter();
