@@ -77,6 +77,6 @@ while True:
                 ssh.close()
             print("finished sending updates")
 
-            queue.delete_job(job.job_id)
+        queue.delete_job(job.job_id)
 
     time.sleep(0.5)
