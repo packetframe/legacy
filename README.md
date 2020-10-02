@@ -26,7 +26,7 @@ Methods: GET
 
 
 
-##### /zone/<zone>/delete
+##### /zone/[ZONE]/delete
 
 Delete a zone
 
@@ -38,7 +38,7 @@ Methods: POST
 
 
 
-##### /zone/<zone>/add/<record_type>
+##### /zone/[ZONE]/add/<record_type>
 
 Add a record to zone
 
@@ -55,7 +55,7 @@ Request Body:
 
 
 
-##### /zone/<zone>/records
+##### /zone/[ZONE]/records
 
 Get records
 
@@ -67,7 +67,7 @@ Methods: GET
 
 
 
-##### /zone/<zone>/delete_record/<index>
+##### /zone/[ZONE]/delete_record/<index>
 
 Delete a record
 
