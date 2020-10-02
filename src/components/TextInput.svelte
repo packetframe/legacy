@@ -6,7 +6,7 @@
 
 <main>
     <label>
-        <input type="text" name={name} placeholder={placeholder} id={id} bind:value={content}>
+        <input bind:value={content} id={id} name={name} placeholder={placeholder} type="text">
     </label>
 </main>
 
@@ -18,5 +18,6 @@
         padding: 10px;
         background: transparent;
         color: white;
+        width: calc(100% - 25px);
     }
 </style>
