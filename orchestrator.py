@@ -24,6 +24,16 @@ with open("templates/local.j2", "r") as local_template_file:
 with open("templates/zone.j2") as zone_template_file:
     zone_template = Template(zone_template_file.read())
 
+
+def reload_dns():
+    print("    - reloading DNS config", end="", flush=True)
+    stdin, stdout, stderr = ssh.exec_command("rndc reload")
+    for line in stdout:
+        print(" - " + line.strip('\n'))
+    for line in stderr:
+        print(" - ERR " + line.strip('\n'))
+
+
 print("Starting main loop")
 
 while True:
@@ -38,14 +48,29 @@ while True:
 
             zone = db["zones"].find_one({"zone": args["zone"]})
 
-            print(zone_template.render(
+            zone_file = zone_template.render(
                 nameservers=configuration["nameservers"],
                 soa_root=configuration["soa_root"],
                 records=zone["records"],
                 serial=zone["serial"]
-            ))
+            )
 
-            # TODO: Pull data out of the database and assemble the zone file into a file and send it over
+            with open("/tmp/db." + zone["zone"], "w") as zone_file_writer:
+                zone_file_writer.write(zone_file)
+
+            # Loop over the nodes and send the updated zone file to each one, then reload the configuration
+            for node in db["nodes"].find():
+                print("... now updating " + node["name"] + " " + node["management_ip"] + " " + node["location"])
+
+                print("    - sending updated zone file")
+                ssh.connect(node["management_ip"], username="root", port=34553, key_filename="./ssh-key2")
+                with SCPClient(ssh.get_transport()) as scp:
+                    scp.put("/tmp/db." + zone["zone"], "/etc/bind/db." + zone["zone"])
+
+                reload_dns()
+                ssh.close()
+            print("finished sending updates")
+
         elif operation == "refresh_zones":
             print("refreshing local zones file")
 
@@ -68,12 +93,7 @@ while True:
                 with SCPClient(ssh.get_transport()) as scp:
                     scp.put("/tmp/named.conf.local", "/etc/bind/named.conf.local")
 
-                print("    - reloading DNS config", end="", flush=True)
-                stdin, stdout, stderr = ssh.exec_command("rndc reload")
-                for line in stdout:
-                    print(" - " + line.strip('\n'))
-                for line in stderr:
-                    print(" - ERR " + line.strip('\n'))
+                reload_dns()
                 ssh.close()
             print("finished sending updates")
 
