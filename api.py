@@ -119,6 +119,7 @@ def zones_delete(zone):
 
     if delete_op.deleted_count > 0:
         add_queue_message("delete_zone", args={"zone": zone})
+        add_queue_message("refresh_zones", args=None)
         return jsonify({"success": True, "message": "Deleted " + zone})
     else:
         return jsonify({"success": True, "message": "Zone " + zone + " doesn't exist"})
