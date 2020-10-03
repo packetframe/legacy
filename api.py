@@ -170,6 +170,15 @@ def records_add(zone):
         if not valid_label(value):
             return jsonify({"success": False, "message": "Invalid MX server"})
 
+    elif rec_type == "CNAME":
+        try:
+            value = get_args("value")
+        except ValueError as e:
+            return jsonify({"success": False, "message": str(e)})
+
+        if not valid_label(value):
+            return jsonify({"success": False, "message": "Invalid CNAME label"})
+
     elif rec_type == "TXT":
         try:
             value = get_args("value")
