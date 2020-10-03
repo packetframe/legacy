@@ -1,5 +1,5 @@
 <script>
-    import Button from './Button.svelte'
+    import Button from "./Button.svelte";
     import TextInput from "./TextInput.svelte";
     import Dropdown from "./Dropdown.svelte";
     import {onMount} from "svelte";
@@ -50,13 +50,15 @@
         }).then(() => loadRecords());
     }
 
-    function loadRecords() {
+    function loadRecords(nothing) {
         fetch("http://localhost/api/zone/" + zone + "/records")
             .then(response => response.json())
             .then(data => {
                 records = data["message"];
             });
     }
+
+    $:loadRecords(zone)
 
     onMount(() => loadRecords());
 </script>
@@ -122,10 +124,10 @@
     </table>
 
     <Snackbar
-            open={snackbarEnabled}
             color={snackbarColor}
             handleClose={() => {snackbarEnabled = false}}
             message={snackbarMessage}
+            open={snackbarEnabled}
             status={snackbarTitle}
     />
 </main>
