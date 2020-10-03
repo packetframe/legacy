@@ -16,6 +16,7 @@
     "svelte": "^3.0.0"
   },
   "dependencies": {
+    "leaflet": "^1.7.1",
     "sirv-cli": "^1.0.0"
   }
 }

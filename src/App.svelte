@@ -3,6 +3,7 @@
     import RecordTable from "./components/RecordTable.svelte";
     import Dropdown from "./components/Dropdown.svelte";
     import {onMount} from "svelte";
+    import NetworkMap from "./components/NetworkMap.svelte";
 
     let zones;
     let selected_zone = "";
@@ -47,6 +48,7 @@
             {/if}
         </div>
 
+        <NetworkMap/>
 
         {#if selected_zone !== ""}
             <RecordTable zone={selected_zone}/>
