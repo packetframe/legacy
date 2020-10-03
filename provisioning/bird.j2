@@ -3,22 +3,16 @@
 define ACCEPT_ROUTES = false;
 
 define ASN = {{ asn }};
-router id {{ ansible_host }};
 
-define LOCAL4 = [
-  {{ ipv4_prefix }}
-];
+define LOCAL_v4 = [{{ ipv4_prefix }}];
+define LOCAL_v6 = [{{ ipv6_prefix }}];
 
-define LOCAL6 = [
-  {{ ipv6_prefix }}
-];
-
-protocol static static4 {
+protocol static {
   ipv4;
   route {{ ipv4_prefix }} reject;
 }
 
-protocol static static6 {
+protocol static {
   ipv6;
   route {{ ipv6_prefix }} reject;
 }
@@ -32,6 +26,8 @@ timeformat route iso long;
 
 log "/etc/bird/log.txt" all;
 
+router id {{ ansible_host }};
+
 protocol device {};
 
 protocol direct {
@@ -41,19 +37,40 @@ protocol direct {
 
 protocol kernel {
   scan time 10;
-  ipv4 { export all; };
+  ipv4 {
+    export all;
+  };
 }
 
 protocol kernel {
   scan time 10;
-  ipv6 { export all; };
+  ipv6 {
+    export all;
+  };
+}
+
+# ---- RPKI ----
+
+roa4 table rpki4;
+roa6 table rpki6;
+
+protocol rpki {
+  roa4 { table rpki4; };
+  roa6 { table rpki6; };
+
+  transport tcp;
+  remote "127.0.0.1" port 8282;
+
+  retry keep 90;
+  refresh keep 900;
+  expire keep 172800;
 }
 
 # ---- Filter Lists ----
 
 define TRANSIT_ASNS = [
   174,                    # Cogent
-  209,                    # Qwest (HE carries this on IXPs IPv6 (Jul 12 2018))
+#  209,                    # Qwest (HE carries this on IXPs IPv6 (Jul 12 2018))
   701,                    # UUNET
   702,                    # UUNET
   1239,                   # Sprint
@@ -61,7 +78,7 @@ define TRANSIT_ASNS = [
   2914,                   # NTT Communications
   3257,                   # GTT Backbone
   3320,                   # Deutsche Telekom AG (DTAG)
-  3356,                   # Level3
+  3356,                   # Level3 / Lumen
   3491,                   # PCCW
   3549,                   # Level3
   3561,                   # Savvis / CenturyLink
@@ -74,93 +91,105 @@ define TRANSIT_ASNS = [
   7018                    # AT&T
 ];
 
+define BOGONS_v4 = [
+  0.0.0.0/0,              # Default route
+  0.0.0.0/8{8,32},        # IANA - Local Identification
+  10.0.0.0/8{8,32},       # RFC 1918 - Private Use
+  100.64.0.0/10{10,32},   # RFC 6598 - Shared Address Space
+  127.0.0.0/8{8,32},      # IANA - Loopback
+  169.254.0.0/16{16,32},  # RFC 3927 - Link Local
+  172.16.0.0/12{12,32},   # RFC 1918 - Private Use
+  192.0.2.0/24{24,32},    # RFC 5737 - TEST-NET-1
+  192.88.99.0/24{24,32},  # RFC 3068 - 6to4 prefix
+  192.168.0.0/16{16,32},  # RFC 1918 - Private Use
+  198.18.0.0/15{15,32},   # RFC 2544 - Network Interconnect Device Benchmark Testing
+  198.51.100.0/24{24,32}, # RFC 5737 - TEST-NET-2
+  203.0.113.0/24{24,32},  # RFC 5737 - TEST-NET-3
+  224.0.0.0/3{3,32}       # RFC 5771 - Multcast (formerly Class D)
+];
+
+define BOGONS_v6 = [
+  ::/0,                     # Default route
+  ::/8{8,128},              # loopback, unspecified, v4-mapped
+  64:ff9b::/96{96,128},     # RFC 6052 - IPv4-IPv6 Translation
+  100::/8{8,128},           # RFC 6666 - reserved for Discard-Only Address Block
+  200::/7{7,128},           # RFC 4048 - Reserved by IETF
+  400::/6{6,128},           # RFC 4291 - Reserved by IETF
+  800::/5{5,128},           # RFC 4291 - Reserved by IETF
+  1000::/4{4,128},          # RFC 4291 - Reserved by IETF
+  2001::/33{33,128},        # RFC 4380 - Teredo prefix
+  2001:0:8000::/33{33,128}, # RFC 4380 - Teredo prefix
+  2001:2::/48{48,128},      # RFC 5180 - Benchmarking
+  2001:3::/32{32,128},      # RFC 7450 - Automatic Multicast Tunneling
+  2001:10::/28{28,128},     # RFC 4843 - Deprecated ORCHID
+  2001:20::/28{28,128},     # RFC 7343 - ORCHIDv2
+  2001:db8::/32{32,128},    # RFC 3849 - NON-ROUTABLE range to be used for documentation purpose
+  2002::/16{16,128},        # RFC 3068 - 6to4 prefix
+  3ffe::/16{16,128},        # RFC 5156 - used for the 6bone but was returned
+  4000::/3{3,128},          # RFC 4291 - Reserved by IETF
+  5f00::/8{8,128},          # RFC 5156 - used for the 6bone but was returned
+  6000::/3{3,128},          # RFC 4291 - Reserved by IETF
+  8000::/3{3,128},          # RFC 4291 - Reserved by IETF
+  a000::/3{3,128},          # RFC 4291 - Reserved by IETF
+  c000::/3{3,128},          # RFC 4291 - Reserved by IETF
+  e000::/4{4,128},          # RFC 4291 - Reserved by IETF
+  f000::/5{5,128},          # RFC 4291 - Reserved by IETF
+  f800::/6{6,128},          # RFC 4291 - Reserved by IETF
+  fc00::/7{7,128},          # RFC 4193 - Unique Local Unicast
+  fe80::/10{10,128},        # RFC 4291 - Link Local Unicast
+  fec0::/10{10,128},        # RFC 4291 - Reserved by IETF
+  ff00::/8{8,128}           # RFC 4291 - Multicast
+];
+
 define BOGON_ASNS = [
-  0,                      # RFC 7607
-  23456,                  # RFC 4893 AS_TRANS
-  64496..64511,           # RFC 5398 and documentation/example ASNs
-  64512..65534,           # RFC 6996 Private ASNs
-  65535,                  # RFC 7300 Last 16 bit ASN
-  65536..65551,           # RFC 5398 and documentation/example ASNs
-  65552..131071,          # RFC IANA reserved ASNs
-  4200000000..4294967294, # RFC 6996 Private ASNs
-  4294967295              # RFC 7300 Last 32 bit ASN
-];
-
-define BOGONS4 = [
-  0.0.0.0/8+,             # RFC 1122 'this' network
-  10.0.0.0/8+,            # RFC 1918 private space
-  100.64.0.0/10+,         # RFC 6598 CG NAT space
-  127.0.0.0/8+,           # RFC 1122 localhost
-  169.254.0.0/16+,        # RFC 3927 link local
-  172.16.0.0/12+,         # RFC 1918 private space
-  192.0.2.0/24+,          # RFC 5737 TEST-NET-1
-  192.88.99.0/24+,        # RFC 7526 6to4 anycast relay
-  192.168.0.0/16+,        # RFC 1918 private space
-  198.18.0.0/15+,         # RFC 2544 benchmarking
-  198.51.100.0/24+,       # RFC 5737 TEST-NET-2
-  203.0.113.0/24+,        # RFC 5737 TEST-NET-3
-  224.0.0.0/4+,           # multicast
-  240.0.0.0/4+            # reserved
-];
-
-define BOGONS6 = [
-  ::/8+,                  # RFC 4291 IPv4-compatible, loopback, et al
-  0100::/64+,             # RFC 6666 Discard-Only
-  2001:2::/48+,           # RFC 5180 BMWG
-  2001:10::/28+,          # RFC 4843 ORCHID
-  2001:db8::/32+,         # RFC 3849 documentation
-  2002::/16+,             # RFC 7526 6to4 anycast relay
-  3ffe::/16+,             # RFC 3701 old 6bone
-  fc00::/7+,              # RFC 4193 unique local unicast
-  fe80::/10+,             # RFC 4291 link local unicast
-  fec0::/10+,             # RFC 3879 old site local unicast
-  ff00::/8+               # RFC 4291 multicast
+  0,                      # Reserved. RFC7607
+  23456,                  # AS_TRANS. RFC6793
+  64496..64511,           # Reserved for use in documentation and sample code. RFC5398
+  64512..65534,           # Reserved for Private Use. RFC6996
+  65535,                  # Reserved. RFC7300
+  65536..65551,           # Reserved for use in documentation and sample code. RFC5398
+  65552..131071,          # Reserved.
+  4200000000..4294967294, # Reserved for Private Use. [RFC6996]
+  4294967295              # Reserved. RFC7300
 ];
 
 # ---- Functions ----
 
+function _reject(string reason) {
+  print "REJECTED [", reason, "] pfx ", net, " session ", proto, " path ", bgp_path, " pathlen ", bgp_path.len, " origin ", bgp_path.last;
+}
+
 function honor_graceful_shutdown() {
-  if (65535, 0) ~ bgp_community then {
-    bgp_local_pref = 0;
-  }
+  if (65535, 0) ~ bgp_community then bgp_local_pref = 0;
 }
 
 function reject_transit_paths() {
-  if (bgp_path ~ TRANSIT_ASNS) then {
-    reject "REJECTED transit path (", bgp_path, ") from ", bgp_path.first, "[", net, "]";
-  }
+  if (bgp_path ~ TRANSIT_ASNS) then _reject("transit path");
 }
 
 function reject_bad() {
-  if (net.type = NET_IP4) then { # If IPv4 address
-    if (net.len > 24 || net.len < 8) then { # Reject smaller than /24 or larger than /8
-      reject "REJECTED out of bounds (24 > len > 8) prefix from ", bgp_path.first, " [", net, "]";
-    }
+  if (net ~ LOCAL_v4 || net ~ LOCAL_v6) then _reject("own prefix");
 
-    if (net ~ BOGONS4) then { # Reject bogons
-        reject "REJECTED bogon prefix from ", bgp_path.first, " [", net, "]";
-    }
+  if (net.type = NET_IP4) then {
+    if (net.len > 24 || net.len < 8) then _reject("out of bounds (24 > len > 8)");
+    if (net ~ BOGONS_v4) then _reject("bogon prefix");
+    if (roa_check(rpki6, net, bgp_path.last_nonaggregated) = ROA_INVALID) then _reject("RPKI invalid");
   }
 
-  if (net.type = NET_IP6) then { # If IPv6 address
-    if (net.len > 48 || net.len < 12) then { # Reject smaller than /48 or larger than /12
-      reject "REJECTED out of bounds (48 > len > 12) prefix from ", bgp_path.first, " [", net, "]";
-    }
-
-    if (net ~ BOGONS6) then { # Reject bogons
-        reject "REJECTED bogon prefix from ", bgp_path.first, " [", net, "]";
-    }
+  if (net.type = NET_IP6) then {
+    if (net.len > 48 || net.len < 12) then _reject("out of bounds (48 > len > 12)");
+    if (net ~ BOGONS_v6) then _reject("bogon prefix");
+    if (roa_check(rpki4, net, bgp_path.last_nonaggregated) = ROA_INVALID) then _reject("RPKI invalid");
   }
 
-  if (bgp_path ~ BOGON_ASNS) then { # Reject bogon ASNs
-    reject "REJECTED bogon AS_PATH path from ", bgp_path.first, " [", net, "]";
-  }
+  if (bgp_path ~ BOGON_ASNS) then _reject("bogon ASN in path");
+  if (bgp_path.len > 100) then _reject("long AS_PATH");
 }
 
 # ---- Templates ----
 
 function export_filter() {
-    if (net ~ LOCAL4 || net ~ LOCAL6) then {
+    if (net ~ LOCAL_v4 || net ~ LOCAL_v6) then {
       bgp_community.add((ASN,110));
       accept;
     }
@@ -174,11 +203,7 @@ template bgp peer4 {
         import filter {
             reject_bad();
             reject_transit_paths();
-            if (ACCEPT_ROUTES) {
-              accept;
-            } else {
-              reject;
-            }
+            accept;
         };
 
         export where export_filter();
@@ -192,11 +217,7 @@ template bgp peer6 {
         import filter {
             reject_bad();
             reject_transit_paths();
-            if (ACCEPT_ROUTES) {
-              accept;
-            } else {
-              reject;
-            }
+            accept;
         };
 
         export where export_filter();
@@ -209,11 +230,7 @@ template bgp upstream4 {
     ipv4 {
         import filter {
             reject_bad();
-            if (ACCEPT_ROUTES) {
-              accept;
-            } else {
-              reject;
-            }
+            accept;
         };
 
         export where export_filter();
@@ -226,11 +243,7 @@ template bgp upstream6 {
     ipv6 {
         import filter {
             reject_bad();
-            if (ACCEPT_ROUTES) {
-              accept;
-            } else {
-              reject;
-            }
+            accept;
         };
 
         export where export_filter();
@@ -244,11 +257,7 @@ template bgp ibgp_upstream4 {
         next hop self;
         import filter {
             reject_bad();
-            if (ACCEPT_ROUTES) {
-              accept;
-            } else {
-              reject;
-            }
+            accept;
         };
 
         export where export_filter();
@@ -262,11 +271,7 @@ template bgp ibgp_upstream6 {
         next hop self;
         import filter {
             reject_bad();
-            if (ACCEPT_ROUTES) {
-              accept;
-            } else {
-              reject;
-            }
+            accept;
         };
 
         export where export_filter();
