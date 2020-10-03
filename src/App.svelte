@@ -6,13 +6,18 @@
 
     let zones;
     let selected_zone = "";
+    let no_zones = false;
 
     onMount(() => {
         fetch("http://localhost/api/zones/list")
             .then(response => response.json())
             .then(data => {
-                zones = data["message"];
-                selected_zone = data["message"][0]["zone"];
+                if (data["message"].length > 0) {
+                    zones = data["message"];
+                    selected_zone = data["message"][0]["zone"];
+                } else {
+                    no_zones = true;
+                }
             });
     });
 </script>
@@ -34,15 +39,25 @@
                     {/each}
                 </Dropdown>
             {:else}
-                <p style="padding-left: 10px">Loading...</p>
+                {#if no_zones}
+                    <p style="padding-left: 10px">No zones</p>
+                {:else}
+                    <p style="padding-left: 10px">Loading...</p>
+                {/if}
             {/if}
         </div>
+
 
         {#if selected_zone !== ""}
             <RecordTable zone={selected_zone}/>
         {:else}
-            <p style="padding-left: 10px">Loading...</p>
+            {#if no_zones}
+                <p style="padding-left: 10px">No zones</p>
+            {:else}
+                <p style="padding-left: 10px">Loading...</p>
+            {/if}
         {/if}
+
     </div>
 </main>
 
