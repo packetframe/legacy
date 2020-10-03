@@ -4,10 +4,12 @@
     import Dropdown from "./components/Dropdown.svelte";
     import {onMount} from "svelte";
     import NetworkMap from "./components/NetworkMap.svelte";
+    import Button from "./components/Button.svelte";
 
     let zones;
     let selected_zone = "";
     let no_zones = false;
+    let showMap = false;
 
     onMount(() => {
         fetch("http://localhost/api/zones/list")
@@ -33,6 +35,7 @@
         <div class="header-container">
             <h1 class="header-text">CDN Dashboard</h1>
 
+            <Button padded=true onclick={() => showMap = !showMap}>Toggle Map</Button>
             {#if zones}
                 <Dropdown width="100%" bind:content={selected_zone}>
                     {#each zones as zone}
@@ -48,7 +51,9 @@
             {/if}
         </div>
 
-        <NetworkMap/>
+        {#if showMap}
+            <NetworkMap/>
+        {/if}
 
         {#if selected_zone !== ""}
             <RecordTable zone={selected_zone}/>
