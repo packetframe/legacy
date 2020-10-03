@@ -3,7 +3,7 @@ import yaml
 
 db_client = MongoClient("mongodb://localhost:27017")
 
-with open("config.yml", "r") as config_file:
+with open("../config.yml", "r") as config_file:
     config = yaml.safe_load(config_file.read())
 
 _config = {
@@ -22,5 +22,7 @@ for node in db_client["cdn"]["nodes"].find():
         "ansible_host": node["management_ip"]
     }
 
-with open("provisioning/hosts.yml", "w") as hosts_file:
+    print("+ " + node["name"])
+
+with open("hosts.yml", "w") as hosts_file:
     hosts_file.write(yaml.dump(_config, default_flow_style=False))
