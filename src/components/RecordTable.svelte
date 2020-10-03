@@ -32,7 +32,7 @@
                 type: type,
                 label: label,
                 value: value,
-                ttl: 13336
+                ttl: 3600
             })
         })
             .then((response) => response.json())
