@@ -5,11 +5,12 @@
     export let disabled = false;
     export let size = ".9rem";
     export let onclick = undefined;
+    export let padded = false;
     $: isSlotFilled = $$slots["default"];
 </script>
 
 <main>
-    <button class:inverted style="--buttonColor:{color}; --fontSize:{size}" class:icon-button={!isSlotFilled} disabled={disabled} class:disabled={disabled} on:click={onclick}>
+    <button class:padded={padded} class:inverted style="--buttonColor:{color}; --fontSize:{size}" class:icon-button={!isSlotFilled} disabled={disabled} class:disabled={disabled} on:click={onclick}>
         {#if icon !== ""}
         <span class="material-icons" class:icon-button-icon={!isSlotFilled}>
             {icon}
@@ -100,5 +101,9 @@
         background-color: var(--buttonColor);
         color: black;
         opacity: 1;
+    }
+
+    .padded {
+        margin: 10px;
     }
 </style>
