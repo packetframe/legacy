@@ -97,6 +97,22 @@ while True:
                 ssh.close()
             print("finished sending updates")
 
+        elif operation == "delete_zone":
+            print("deleting " + args["zone"])
+
+            for node in db["nodes"].find():
+                print("... now updating " + node["name"] + " " + node["management_ip"] + " " + node["location"])
+
+                ssh.connect(node["management_ip"], username="root", port=34553, key_filename="./ssh-key2")
+
+                stdin, stdout, stderr = ssh.exec_command("rm /etc/bind/db." + args["zone"])
+                for line in stdout:
+                    print(" - " + line.strip('\n'))
+                for line in stderr:
+                    print(" - ERR " + line.strip('\n'))
+                ssh.close()
+            print("finished deleting " + args["zone"])
+
         queue.delete_job(job.job_id)
 
     time.sleep(0.5)
