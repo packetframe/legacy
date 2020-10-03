@@ -78,7 +78,7 @@
                     <Dropdown id="add-type" bind:content={type}>
                         <option value="A">A</option>
                         <option value="AAAA">AAAA</option>
-                        <option value="MX">MX</option>
+                        <option value="CNAME">CNAME</option>
                         <option value="TXT">TXT</option>
                     </Dropdown>
                 </div>
