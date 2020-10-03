@@ -272,4 +272,13 @@ if configuration["development"]:
         add_queue_message("refresh_single_zone", {"zone": zone})
         return "Done"
 
+
+    @app.route("/debug/refresh_all_zones")
+    def refresh_all_zones():
+        for zone in zones.find():
+            add_queue_message("refresh_single_zone", {"zone": zone["zone"]})
+
+        add_queue_message("refresh_zones", args=None)
+        return "Done"
+
 app.run(debug=configuration["development"])
