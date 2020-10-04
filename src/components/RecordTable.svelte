@@ -72,6 +72,24 @@
         }
     }
 
+    function exportRecords() {
+        fetch("http://localhost/api/zones/" + zone + "/export")
+            .then(response => response.json())
+            .then(data => {
+                if (data["success"]) {
+                    let hiddenElement = document.createElement('a');
+                    hiddenElement.href = 'data:attachment/text,' + encodeURI(data["message"]);
+                    hiddenElement.target = '_blank';
+                    hiddenElement.download = "db." + zone;
+                    hiddenElement.click();
+                } else {
+                    snackbarColor = data["success"] ? "green" : "red";
+                    snackbarMessage = data["message"];
+                    snackbarEnabled = true;
+                }
+            });
+    }
+
     $:loadRecords(zone);
 
     onMount(() => loadRecords());
@@ -81,9 +99,15 @@
     <div class="header-container">
         <div>
             <h2>Records</h2>
-            <span>
-                <Button icon="add" inverted=true onclick={() => toggleForm()} size="1rem">Add Record</Button>
-            </span>
+            <div>
+                <span>
+                    <Button icon="get_app" onclick={() => exportRecords()} size="1rem">Export</Button>
+                </span>
+
+                <span>
+                    <Button icon="add" inverted=true onclick={() => toggleForm()} size="1rem">Add Record</Button>
+                </span>
+            </div>
         </div>
 
         {#if showAddRecord}
