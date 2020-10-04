@@ -216,6 +216,15 @@ def records_add(zone):
 
         value = str(priority) + " " + str(weight) + " " + str(port) + " " + value
 
+    elif rec_type == "CNAME":
+        try:
+            value = get_args("value")
+        except ValueError as e:
+            return jsonify({"success": False, "message": str(e)})
+
+        if not valid_label(value):
+            return jsonify({"success": False, "message": "Invalid CNAME value"})
+
     else:
         return jsonify({"success": False, "message": "Invalid record type (Allowed values are A/AAAA"})
 
