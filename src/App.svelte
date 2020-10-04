@@ -35,7 +35,7 @@
         <div class="header-container">
             <h1 class="header-text">CDN Dashboard</h1>
 
-            <Button padded=true onclick={() => showMap = !showMap}>Toggle Map</Button>
+            <Button onclick={() => showMap = !showMap} padded=true>Toggle Map</Button>
             {#if zones}
                 <Dropdown width="100%" bind:content={selected_zone}>
                     {#each zones as zone}
@@ -64,8 +64,11 @@
                 <p style="padding-left: 10px">Loading...</p>
             {/if}
         {/if}
-
     </div>
+
+    <footer>
+        CDN v2
+    </footer>
 </main>
 
 <style>
@@ -91,5 +94,13 @@
 
     .header-text {
         flex-grow: 1;
+    }
+
+    footer {
+        position: fixed;
+        left: 0;
+        bottom: 10px;
+        width: 100%;
+        text-align: center;
     }
 </style>
