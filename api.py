@@ -168,7 +168,7 @@ def records_add(zone):
             return jsonify({"success": False, "message": str(e)})
 
         if not valid_label(value):
-            return jsonify({"success": False, "message": "Invalid CNAME label"})
+            return jsonify({"success": False, "message": "Invalid CNAME value"})
 
     elif rec_type == "TXT":
         try:
@@ -179,6 +179,24 @@ def records_add(zone):
         # TODO: Check for TXT validity
         # if not valid_label(value):
         #     return jsonify({"success": False, "message": "Invalid MX server"})
+
+    elif rec_type == "MX":
+        try:
+            value, priority = get_args("value", "priority")
+        except ValueError as e:
+            return jsonify({"success": False, "message": str(e)})
+
+        if not valid_label(value):
+            return jsonify({"success": False, "message": "Invalid MX server label"})
+
+        try:
+            # TODO: What is in bound here?
+            if int(priority) < 1:
+                raise TypeError
+        except TypeError:
+            return jsonify({"success": False, "message": "MX priority must be an integer"})
+
+        value = str(priority) + " " + value
 
     else:
         return jsonify({"success": False, "message": "Invalid record type (Allowed values are A/AAAA"})
