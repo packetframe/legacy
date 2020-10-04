@@ -334,6 +334,7 @@ def zones_export(zone):
         return jsonify({"success": False, "message": "Invalid zone"})
 
     zone = zones.find_one({"zone": zone})
+    current_time = strftime("%b %d %Y %H:%M")
 
     if not zone:
         return jsonify({"success": False, "message": "Zone doesn't exist"})
@@ -345,7 +346,7 @@ def zones_export(zone):
         serial=zone["serial"]
     )
 
-    return jsonify({"success": True, "message": zone_file})
+    return jsonify({"success": True, "message": "; " + zone["zone"] + " exported from delivr.dev at " + current_time + "\n\n" + zone_file})
 
 
 # Debug
