@@ -252,9 +252,11 @@ def records_list(zone):
     if not valid_zone(zone):
         return jsonify({"success": False, "message": "Invalid zone"})
 
-    current_records = zones.find_one({"zone": zone}).get("records")
-
-    return jsonify({"success": True, "message": current_records})
+    zone_doc = zones.find_one({"zone": zone})
+    if zone_doc:
+        return jsonify({"success": True, "message": zone_doc.get("records")})
+    else:
+        return jsonify({"success": False, "message": "zone " + zone + " doesn't exit"}), 400
 
 
 @app.route("/zone/<zone>/delete_record/<index>", methods=["POST"])
