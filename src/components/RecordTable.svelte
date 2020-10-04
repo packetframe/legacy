@@ -88,7 +88,7 @@
 
         {#if showAddRecord}
             <div class="record-add-container">
-                <div class="record-add-element">
+                <div class="record-add-element-select">
                     <Dropdown id="add-type" bind:content={type}>
                         <option value="A">A</option>
                         <option value="AAAA">AAAA</option>
@@ -245,6 +245,15 @@
         justify-content: center;
         width: 25%;
         flex: 0.5 0 150px;
+    }
+
+    .record-add-element-select {
+        display: flex;
+        flex-direction: column;
+        margin: 5px;
+        justify-content: center;
+        width: 25%;
+        flex: 0 0 content;
     }
 
     .table-wrapper {
