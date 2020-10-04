@@ -18,6 +18,6 @@
         padding: 10px;
         background: transparent;
         color: white;
-        width: calc(100% - 200px);
+        width: calc(100% - 25px);
     }
 </style>

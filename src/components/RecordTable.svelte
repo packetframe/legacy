@@ -11,7 +11,7 @@
     export let zone;
     let records;
 
-    let type, label, value, priority;
+    let type, label, value, priority, port, weight;
     type = "A";
 
     let snackbarEnabled = false;
@@ -34,6 +34,8 @@
                 label: label,
                 value: value,
                 priority: priority,
+                port: port,
+                weight: weight,
                 ttl: 3600
             })
         })
@@ -83,6 +85,7 @@
                         <option value="CNAME">CNAME</option>
                         <option value="TXT">TXT</option>
                         <option value="MX">MX</option>
+                        <option value="SRV">SRV</option>
                     </Dropdown>
                 </div>
 
@@ -93,6 +96,18 @@
                 {#if type === "MX" }
                     <div class="record-add-element">
                         <NumberInput placeholder="Priority" id="add-value" bind:content={priority}/>
+                    </div>
+                {/if}
+
+                {#if type === "SRV" }
+                    <div class="record-add-element">
+                        <NumberInput placeholder="Priority" id="add-value" bind:content={priority}/>
+                    </div>
+                    <div class="record-add-element">
+                        <NumberInput placeholder="Weight" id="add-value" bind:content={weight}/>
+                    </div>
+                    <div class="record-add-element">
+                        <NumberInput placeholder="Port" id="add-value" bind:content={port}/>
                     </div>
                 {/if}
 
