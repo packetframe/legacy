@@ -3,6 +3,7 @@ import re
 from os import urandom
 from time import strftime
 
+from jinja2 import Template
 from pystalk import BeanstalkClient
 from flask import Flask, request, jsonify
 from pymongo import MongoClient, ASCENDING
@@ -25,6 +26,9 @@ nodes = db["nodes"]
 zones.create_index([("zone", ASCENDING)], unique=True)
 
 queue = BeanstalkClient("localhost", 11300)
+
+with open("templates/zone.j2") as zone_template_file:
+    zone_template = Template(zone_template_file.read())
 
 
 # Validators
@@ -322,6 +326,26 @@ def nodes_list():
         del node["_id"]
 
     return jsonify({"success": True, "message": _nodes})
+
+
+@app.route("/zones/<zone>/export", methods=["GET"])
+def zones_export(zone):
+    if not valid_zone(zone):
+        return jsonify({"success": False, "message": "Invalid zone"})
+
+    zone = zones.find_one({"zone": zone})
+
+    if not zone:
+        return jsonify({"success": False, "message": "Zone doesn't exist"})
+
+    zone_file = zone_template.render(
+        nameservers=configuration["nameservers"],
+        soa_root=configuration["soa_root"],
+        records=zone["records"],
+        serial=zone["serial"]
+    )
+
+    return jsonify({"success": True, "message": zone_file})
 
 
 # Debug
