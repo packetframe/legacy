@@ -198,6 +198,24 @@ def records_add(zone):
 
         value = str(priority) + " " + value
 
+    elif rec_type == "SRV":
+        try:
+            value, priority, weight, port = get_args("value", "priority", "weight", "port")
+        except ValueError as e:
+            return jsonify({"success": False, "message": str(e)})
+
+        if not valid_label(value):
+            return jsonify({"success": False, "message": "Invalid SRV target"})
+
+        try:
+            # TODO: What is in bound here?
+            if int(priority) < 0 or int(weight) < 0 or int(port) < 0:
+                raise TypeError
+        except TypeError:
+            return jsonify({"success": False, "message": "SRV priority, weight, and port must be a positive integer"})
+
+        value = str(priority) + " " + str(weight) + " " + str(port) + " " + value
+
     else:
         return jsonify({"success": False, "message": "Invalid record type (Allowed values are A/AAAA"})
 
