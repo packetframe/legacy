@@ -3,8 +3,9 @@
     import TextInput from "./TextInput.svelte";
     import Dropdown from "./Dropdown.svelte";
     import {onMount} from "svelte";
-    import Snackbar from "./Snackbar.svelte";
     import NumberInput from "./NumberInput.svelte";
+    import SnackbarGroup from "./SnackbarGroup.svelte";
+    import {SnackBars} from "../stores";
 
     let showAddRecord = true;
 
@@ -21,6 +22,11 @@
 
     function toggleForm() {
         showAddRecord = !showAddRecord;
+    }
+
+    function addSnackbar(status, message, color, timeout) {
+        let id = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5);
+        $SnackBars[id] = {status, message, color, timeout}
     }
 
     function submitForm() {
@@ -40,18 +46,16 @@
             })
         })
             .then((response) => response.json())
-            .then((data) => {
-                snackbarColor = data["success"] ? "green" : "red";
-                snackbarMessage = data["message"];
-                snackbarEnabled = true;
-            })
+            .then((data) => addSnackbar("200", data["message"], data["success"] ? "green" : "red"))
             .then(() => loadRecords());
     }
 
     function deleteRecord(index) {
         fetch("http://localhost/api/zone/" + zone + "/delete_record/" + index, {
             method: "POST"
-        }).then(() => loadRecords());
+        })
+            .then((data) => addSnackbar("200", data["message"], data["success"] ? "green" : "red"))
+            .then(() => loadRecords());
     }
 
     function loadRecords(nothing) {
@@ -59,12 +63,9 @@
             fetch("http://localhost/api/zone/" + zone + "/records")
                 .then(response => response.json())
                 .then(data => {
+                    addSnackbar("200", data["message"], data["success"] ? "green" : "red");
                     if (data["success"]) {
                         records = data["message"];
-                    } else {
-                        snackbarColor = data["success"] ? "green" : "red";
-                        snackbarMessage = data["message"];
-                        snackbarEnabled = true;
                     }
                 });
         } else {
@@ -76,16 +77,13 @@
         fetch("http://localhost/api/zones/" + zone + "/export")
             .then(response => response.json())
             .then(data => {
+                addSnackbar("200", data["message"], data["success"] ? "green" : "red");
                 if (data["success"]) {
                     let hiddenElement = document.createElement('a');
                     hiddenElement.href = 'data:attachment/text,' + encodeURI(data["message"]);
                     hiddenElement.target = '_blank';
                     hiddenElement.download = "db." + zone;
                     hiddenElement.click();
-                } else {
-                    snackbarColor = data["success"] ? "green" : "red";
-                    snackbarMessage = data["message"];
-                    snackbarEnabled = true;
                 }
             });
     }
@@ -181,13 +179,7 @@
         </table>
     </div>
 
-    <Snackbar
-            color={snackbarColor}
-            handleClose={() => {snackbarEnabled = false}}
-            message={snackbarMessage}
-            open={snackbarEnabled}
-            status={snackbarTitle}
-    />
+    <SnackbarGroup/>
 </main>
 
 <style>
