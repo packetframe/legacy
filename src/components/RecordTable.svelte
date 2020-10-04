@@ -86,6 +86,7 @@
                         <option value="TXT">TXT</option>
                         <option value="MX">MX</option>
                         <option value="SRV">SRV</option>
+                        <option value="CNAME">CNAME</option>
                     </Dropdown>
                 </div>
 
