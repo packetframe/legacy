@@ -278,6 +278,22 @@ template bgp ibgp_upstream6 {
     };
 }
 
+template bgp default_route_upstream4 {
+  local as ASN;                               
+    ipv4 {
+        import where (net = 0.0.0.0);
+        export where export_filter();
+    };
+}
+
+template bgp default_route_upstream6 {
+  local as ASN;                               
+    ipv6 {
+        import where (net = ::/0);
+        export where export_filter();
+    };
+}
+
 # ---- Peers ----
 
 include "peers.conf";
