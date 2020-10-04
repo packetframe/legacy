@@ -4,13 +4,14 @@
     import Dropdown from "./Dropdown.svelte";
     import {onMount} from "svelte";
     import Snackbar from "./Snackbar.svelte";
+    import NumberInput from "./NumberInput.svelte";
 
     let showAddRecord = true;
 
     export let zone;
     let records;
 
-    let type, label, value;
+    let type, label, value, priority;
     type = "A";
 
     let snackbarEnabled = false;
@@ -80,12 +81,19 @@
                         <option value="AAAA">AAAA</option>
                         <option value="CNAME">CNAME</option>
                         <option value="TXT">TXT</option>
+                        <option value="MX">MX</option>
                     </Dropdown>
                 </div>
 
                 <div class="record-add-element">
                     <TextInput placeholder="Label" id="add-label" bind:content={label}/>
                 </div>
+
+                {#if type === "MX" }
+                    <div class="record-add-element">
+                        <NumberInput placeholder="Priority" id="add-value" bind:content={priority}/>
+                    </div>
+                {/if}
 
                 <div class="record-add-element">
                     <TextInput placeholder="Value" id="add-value" bind:content={value}/>
@@ -192,7 +200,7 @@
 
     .record-add-container {
         display: flex;
-        width: clamp(0%, 750px, 95%);
+        width: clamp(0%, 750px, 75%);
         align-content: center;
         flex-wrap: wrap;
         margin: 5px 8px 20px;
