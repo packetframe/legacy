@@ -11,6 +11,10 @@
 </main>
 
 <style>
+    main {
+        width: calc(100% - 25px);
+    }
+
     input {
         border: 1px solid white;
         border-radius: 5px;
@@ -18,6 +22,6 @@
         padding: 10px;
         background: transparent;
         color: white;
-        width: calc(100% - 25px);
+        width: 100%;
     }
 </style>

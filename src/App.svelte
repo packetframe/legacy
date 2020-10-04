@@ -7,7 +7,7 @@
     import Button from "./components/Button.svelte";
 
     let zones;
-    let selected_zone = "";
+    let selected_zone = window.location.toString().split("zone=")[1];
     let no_zones = false;
     let showMap = false;
 
@@ -17,7 +17,10 @@
             .then(data => {
                 if (data["message"].length > 0) {
                     zones = data["message"];
-                    selected_zone = data["message"][0]["zone"];
+
+                    if (selected_zone === undefined) {
+                        selected_zone = data["message"][0]["zone"];
+                    }
                 } else {
                     no_zones = true;
                 }
@@ -35,7 +38,7 @@
         <div class="header-container">
             <h1 class="header-text">CDN Dashboard</h1>
 
-            <Button onclick={() => showMap = !showMap} padded=true>Toggle Map</Button>
+            <Button onclick={() => showMap = !showMap} padded={true}>Toggle Map</Button>
             {#if zones}
                 <Dropdown width="100%" bind:content={selected_zone}>
                     {#each zones as zone}

@@ -2,11 +2,12 @@
     export let name = "";
     export let id;
     export let content = "";
+    export let onchange;
 </script>
 
 <main>
     <label>
-        <select name={name} id={id} bind:value={content}>
+        <select name={name} id={id} bind:value={content} on:blur={onchange}>
             <slot/>
         </select>
     </label>

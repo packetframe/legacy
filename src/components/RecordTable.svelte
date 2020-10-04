@@ -55,14 +55,24 @@
     }
 
     function loadRecords(nothing) {
-        fetch("http://localhost/api/zone/" + zone + "/records")
-            .then(response => response.json())
-            .then(data => {
-                records = data["message"];
-            });
+        if (zone !== undefined) {
+            fetch("http://localhost/api/zone/" + zone + "/records")
+                .then(response => response.json())
+                .then(data => {
+                    if (data["success"]) {
+                        records = data["message"];
+                    } else {
+                        snackbarColor = data["success"] ? "green" : "red";
+                        snackbarMessage = data["message"];
+                        snackbarEnabled = true;
+                    }
+                });
+        } else {
+            console.log("Zone undefined, holding.")
+        }
     }
 
-    $:loadRecords(zone)
+    $:loadRecords(zone);
 
     onMount(() => loadRecords());
 </script>
@@ -86,7 +96,6 @@
                         <option value="TXT">TXT</option>
                         <option value="MX">MX</option>
                         <option value="SRV">SRV</option>
-                        <option value="CNAME">CNAME</option>
                     </Dropdown>
                 </div>
 
@@ -94,20 +103,17 @@
                     <TextInput placeholder="Label" id="add-label" bind:content={label}/>
                 </div>
 
-                {#if type === "MX" }
-                    <div class="record-add-element">
+                {#if type === "MX" || type === "SRV" }
+                    <div class="record-add-element-number">
                         <NumberInput placeholder="Priority" id="add-value" bind:content={priority}/>
                     </div>
                 {/if}
 
                 {#if type === "SRV" }
-                    <div class="record-add-element">
-                        <NumberInput placeholder="Priority" id="add-value" bind:content={priority}/>
-                    </div>
-                    <div class="record-add-element">
+                    <div class="record-add-element-number">
                         <NumberInput placeholder="Weight" id="add-value" bind:content={weight}/>
                     </div>
-                    <div class="record-add-element">
+                    <div class="record-add-element-number">
                         <NumberInput placeholder="Port" id="add-value" bind:content={port}/>
                     </div>
                 {/if}
@@ -124,31 +130,32 @@
         {/if}
     </div>
 
-    <table class="sethjs-table">
-        <tr>
-            <th>Label</th>
-            <th>Type</th>
-            <th>TTL</th>
-            <th>Value</th>
-            <th></th>
-        </tr>
+    <div class="table-wrapper">
+        <table class="sethjs-table">
+            <tr>
+                <th>Label</th>
+                <th>Type</th>
+                <th>TTL</th>
+                <th>Value</th>
+            </tr>
 
-        {#if records}
-            {#each records as record, i }
-                <tr>
-                    <td>{record["label"]}</td>
-                    <td>{record["type"]}</td>
-                    <td>{record["ttl"]}</td>
-                    <td>{record["value"]}</td>
-                    <td style="padding-right: 0">
-                        <Button color="red" icon="delete" size="1.25rem" onclick={() => {deleteRecord(i)}}/>
-                    </td>
-                </tr>
-            {/each}
-        {:else}
-            <p style="padding-left: 10px">Loading...</p>
-        {/if}
-    </table>
+            {#if records}
+                {#each records as record, i }
+                    <tr>
+                        <td>{record["label"]}</td>
+                        <td>{record["type"]}</td>
+                        <td>{record["ttl"]}</td>
+                        <td class="flex-value">
+                            {record["value"]}
+                            <Button color="red" icon="delete" size="1.25rem" onclick={() => {deleteRecord(i)}} floatRight={true}/>
+                        </td>
+                    </tr>
+                {/each}
+            {:else}
+                <p style="padding-left: 10px">Loading...</p>
+            {/if}
+        </table>
+    </div>
 
     <Snackbar
             color={snackbarColor}
@@ -217,17 +224,37 @@
 
     .record-add-container {
         display: flex;
-        width: clamp(0%, 750px, 75%);
+        width: calc(100% - 15px);
         align-content: center;
         flex-wrap: wrap;
         margin: 5px 8px 20px;
     }
 
     .record-add-element {
-        flex-grow: 1;
         display: flex;
         flex-direction: column;
         margin: 5px;
         justify-content: center;
+        flex: 1 1 auto;
+    }
+
+    .record-add-element-number {
+        display: flex;
+        flex-direction: column;
+        margin: 5px;
+        justify-content: center;
+        width: 25%;
+        flex: 0.5 0 150px;
+    }
+
+    .table-wrapper {
+        overflow-x: auto;
+        width: 100%;
+    }
+
+    .flex-value {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
     }
 </style>
