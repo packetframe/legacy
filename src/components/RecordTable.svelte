@@ -33,6 +33,7 @@
                 type: type,
                 label: label,
                 value: value,
+                priority: priority,
                 ttl: 3600
             })
         })
