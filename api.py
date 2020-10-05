@@ -1,11 +1,16 @@
+import base64
+import hmac
 import json
 import re
 from os import urandom
 from time import strftime
+from argon2 import PasswordHasher
 
 from jinja2 import Template
-from pystalk import BeanstalkClient
 from flask import Flask, request, jsonify
+
+from pystalk import BeanstalkClient
+
 from pymongo import MongoClient, ASCENDING
 from pymongo.errors import DuplicateKeyError
 
@@ -27,7 +32,10 @@ db = client["cdn"]
 # Collections
 zones = db["zones"]
 nodes = db["nodes"]
+users = db["users"]
 zones.create_index([("zone", ASCENDING)], unique=True)
+
+argon = PasswordHasher()
 
 queue = BeanstalkClient("localhost", 11300)
 
@@ -85,6 +93,43 @@ def get_args(*args):
         return payload[0]
     else:
         return tuple(payload)
+
+
+@app.route("/auth/signup", methods=["POST"])
+def auth_signup():
+    try:
+        username, password = get_args("username", "password")
+    except ValueError as e:
+        return jsonify({"success": False, "message": str(e)})
+
+    user_doc = users.find_one({"username": username})
+    if not user_doc:
+        return jsonify({"success": False, "message": "User already exists"})
+
+    users.insert_one({
+        "username": username,
+        "password": argon.hash(password),
+        "apikey": base64.b64encode(urandom(16))
+    })
+
+    return jsonify({"success": False, "message": "Signup success"})
+
+
+@app.route("/auth/login", methods=["POST"])
+def auth_login():
+    try:
+        username, password = get_args("username", "password")
+    except ValueError as e:
+        return jsonify({"success": False, "message": str(e)})
+
+    user_doc = users.find_one({"username": username})
+    if not user_doc:
+        return jsonify({"success": False, "message": "Invalid username or password"})
+
+    if argon.verify(user_doc["password"], password):
+        return jsonify({"success": True, "message": user_doc["apikey"]})
+    else:
+        return jsonify({"success": False, "message": "Invalid username or password"})
 
 
 @app.route("/zone/add", methods=["POST"])
