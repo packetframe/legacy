@@ -1,5 +1,12 @@
 #!/bin/bash
 
+if [[ "$1" -eq "list" ]]; then
+  echo -n "Nodes: "
+  mongo --quiet --eval 'db.nodes.count({});' cdn
+  mongo --quiet --eval 'db.nodes.find().forEach(function(node) {print(node.name, node.location);});' cdn
+  exit
+fi
+
 node="$1"
 
 echo -n Jumping to $node
