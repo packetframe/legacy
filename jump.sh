@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [[ "$1" -eq "list" ]]; then
+if [[ "$1" == "list" ]]; then
   echo -n "Nodes: "
   mongo --quiet --eval 'db.nodes.count({});' cdn
   mongo --quiet --eval 'db.nodes.find().forEach(function(node) {print(node.name, node.location);});' cdn
