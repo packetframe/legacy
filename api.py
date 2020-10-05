@@ -359,7 +359,15 @@ def zones_export(zone):
 
 @app.route("/zones/<zone>/import", methods=["POST"])
 def zone_import(domain):
-    zone = dns.zone.from_file("db." + domain, domain)
+    if not valid_zone(domain):
+        return jsonify({"success": False, "message": "Invalid zone"})
+
+    try:
+        file = get_args("file")
+    except ValueError as e:
+        return jsonify({"success": False, "message": str(e)})
+
+    zone = dns.zone.from_text(file, domain)
 
     for name, node in zone.items():
         if str(name) == "@":
