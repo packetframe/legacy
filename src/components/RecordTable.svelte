@@ -46,7 +46,7 @@
             })
         })
             .then((response) => response.json())
-            .then((data) => addSnackbar("200", data["message"], data["success"] ? "green" : "red"))
+            .then((data) => addSnackbar("zone_add", data["message"], data["success"] ? "green" : "red"))
             .then(() => loadRecords());
     }
 
@@ -54,7 +54,7 @@
         fetch("http://localhost/api/zone/" + zone + "/delete_record/" + index, {
             method: "POST"
         })
-            .then((data) => addSnackbar("200", data["message"], data["success"] ? "green" : "red"))
+            .then((data) => addSnackbar("delete_record", data["message"], data["success"] ? "green" : "red"))
             .then(() => loadRecords());
     }
 
@@ -63,9 +63,10 @@
             fetch("http://localhost/api/zone/" + zone + "/records")
                 .then(response => response.json())
                 .then(data => {
-                    addSnackbar("200", data["message"], data["success"] ? "green" : "red");
                     if (data["success"]) {
                         records = data["message"];
+                    } else {
+                        addSnackbar("zone_records", data["message"], "red");
                     }
                 });
         } else {
@@ -77,7 +78,7 @@
         fetch("http://localhost/api/zones/" + zone + "/export")
             .then(response => response.json())
             .then(data => {
-                addSnackbar("200", data["message"], data["success"] ? "green" : "red");
+                addSnackbar("zone_export", data["message"], data["success"] ? "green" : "red");
                 if (data["success"]) {
                     let hiddenElement = document.createElement('a');
                     hiddenElement.href = 'data:attachment/text,' + encodeURI(data["message"]);
