@@ -25,9 +25,9 @@ with open("templates/zone.j2") as zone_template_file:
     zone_template = Template(zone_template_file.read())
 
 
-def reload_dns():
-    print("    - reloading DNS config", end="", flush=True)
-    stdin, stdout, stderr = ssh.exec_command("rndc reload")
+def run_ssh_command(command):
+    print("    - running " + command, end="", flush=True)
+    stdin, stdout, stderr = ssh.exec_command(command)
     for line in stdout:
         print(" - " + line.strip('\n'))
     for line in stderr:
@@ -63,12 +63,18 @@ while True:
                 print("... now updating " + node["name"] + " " + node["management_ip"] + " " + node["location"])
 
                 print("    - sending updated zone file")
-                ssh.connect(node["management_ip"], username="root", port=34553, key_filename="./ssh-key2")
-                with SCPClient(ssh.get_transport()) as scp:
-                    scp.put("/tmp/db." + zone["zone"], "/etc/bind/db." + zone["zone"])
+                try:
+                    ssh.connect(node["management_ip"], username="root", port=34553, key_filename="./ssh-key2")
+                except TimeoutError:
+                    error = "- ERROR: " + node["name"] + " timed out."
+                    print(error)
+                else:
+                    with SCPClient(ssh.get_transport()) as scp:
+                        scp.put("/tmp/db." + zone["zone"], "/etc/bind/db." + zone["zone"])
 
-                reload_dns()
-                ssh.close()
+                    run_ssh_command("rndc reload")
+                    ssh.close()
+
             print("finished sending updates")
 
         elif operation == "refresh_zones":
@@ -89,12 +95,19 @@ while True:
                 print("... now updating " + node["name"] + " " + node["management_ip"] + " " + node["location"])
 
                 print("    - sending updated zone file")
-                ssh.connect(node["management_ip"], username="root", port=34553, key_filename="./ssh-key2")
-                with SCPClient(ssh.get_transport()) as scp:
-                    scp.put("/tmp/named.conf.local", "/etc/bind/named.conf.local")
 
-                reload_dns()
-                ssh.close()
+                try:
+                    ssh.connect(node["management_ip"], username="root", port=34553, key_filename="./ssh-key2")
+                except TimeoutError:
+                    error = "- ERROR: " + node["name"] + " timed out."
+                    print(error)
+                else:
+                    with SCPClient(ssh.get_transport()) as scp:
+                        scp.put("/tmp/named.conf.local", "/etc/bind/named.conf.local")
+
+                    run_ssh_command("rndc reload")
+                    ssh.close()
+
             print("finished sending updates")
 
         elif operation == "delete_zone":
@@ -103,14 +116,15 @@ while True:
             for node in db["nodes"].find():
                 print("... now updating " + node["name"] + " " + node["management_ip"] + " " + node["location"])
 
-                ssh.connect(node["management_ip"], username="root", port=34553, key_filename="./ssh-key2")
+                try:
+                    ssh.connect(node["management_ip"], username="root", port=34553, key_filename="./ssh-key2")
+                except TimeoutError:
+                    error = "- ERROR: " + node["name"] + " timed out."
+                    print(error)
+                else:
+                    run_ssh_command("rm /etc/bind/db." + args["zone"])
+                    ssh.close()
 
-                stdin, stdout, stderr = ssh.exec_command("rm /etc/bind/db." + args["zone"])
-                for line in stdout:
-                    print(" - " + line.strip('\n'))
-                for line in stderr:
-                    print(" - ERR " + line.strip('\n'))
-                ssh.close()
             print("finished deleting " + args["zone"])
 
         queue.delete_job(job.job_id)
