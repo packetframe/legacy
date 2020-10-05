@@ -1,5 +1,4 @@
 import base64
-import hmac
 import json
 import re
 from os import urandom
