@@ -535,7 +535,7 @@ def zone_import(domain):
 # Node
 
 @app.route("/nodes/add", methods=["POST"])
-@admin_authentication_required
+@authentication_required(protected=True)
 def nodes_add():
     # Add a node
 
@@ -559,7 +559,7 @@ def nodes_add():
 
 
 @app.route("/nodes/list", methods=["GET"])
-@admin_authentication_required
+@authentication_required(protected=True)
 def nodes_list():
     # Get a list of all nodes
 
@@ -575,7 +575,7 @@ def nodes_list():
 
 if configuration["development"]:
     @app.route("/debug/refresh_zones")
-    @admin_authentication_required
+    @authentication_required(protected=True)
     def refresh_zones():
         # Refresh the named.conf.local file
         add_queue_message("refresh_zones", args=None)
@@ -583,7 +583,7 @@ if configuration["development"]:
 
 
     @app.route("/debug/refresh_single_zone/<zone>")
-    @admin_authentication_required
+    @authentication_required(protected=True)
     def refresh_single_zone(zone):
         # Refresh the db.<zone> file
         add_queue_message("refresh_single_zone", {"zone": zone})
@@ -591,7 +591,7 @@ if configuration["development"]:
 
 
     @app.route("/debug/refresh_all_zones")
-    @admin_authentication_required
+    @authentication_required(protected=True)
     def refresh_all_zones():
         # Refresh all db.<zone> files and the named.conf.local file
         for zone in zones.find():
