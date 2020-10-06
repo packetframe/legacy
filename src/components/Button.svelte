@@ -7,11 +7,12 @@
     export let onclick = undefined;
     export let padded = false;
     export let floatRight = false;
+    export let centered = false;
     $: isSlotFilled = $$slots["default"];
 </script>
 
 <main>
-    <button class:padded={padded} class:inverted style="--buttonColor:{color}; --fontSize:{size}" class:icon-button={!isSlotFilled} disabled={disabled} class:disabled={disabled} on:click={onclick} class:float-right={floatRight}>
+    <button class:padded={padded} class:inverted style="--buttonColor:{color}; --fontSize:{size}" class:icon-button={!isSlotFilled} disabled={disabled} class:disabled={disabled} on:click={onclick} class:float-right={floatRight} class:centered>
         {#if icon !== ""}
         <span class="material-icons" class:icon-button-icon={!isSlotFilled}>
             {icon}
@@ -111,5 +112,9 @@
     .float-right {
         float: right;
         margin-right: 15px;
+    }
+
+    .centered {
+        margin: auto;
     }
 </style>
