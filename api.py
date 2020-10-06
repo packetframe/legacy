@@ -1,21 +1,19 @@
 import base64
 import json
 import re
+from functools import wraps
 from os import urandom
 from time import strftime
-from argon2 import PasswordHasher
-
-from jinja2 import Template
-from flask import Flask, request, jsonify
-
-from pystalk import BeanstalkClient
-
-from pymongo import MongoClient, ASCENDING
-from pymongo.errors import DuplicateKeyError
 
 import dns.zone
 import requests
+from argon2 import PasswordHasher
 from dns.rdatatype import RdataType
+from flask import Flask, request, jsonify
+from jinja2 import Template
+from pymongo import MongoClient, ASCENDING
+from pymongo.errors import DuplicateKeyError
+from pystalk import BeanstalkClient
 
 from config import configuration
 
@@ -64,6 +62,10 @@ def valid_ipv6(ipv6) -> bool:
     return re.match(r"(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]+|::(ffff(:0{1,4})?:)?((25[0-5]|(2[0-4]|1?[0-9])?[0-9])\.){3}(25[0-5]|(2[0-4]|1?[0-9])?[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1?[0-9])?[0-9])\.){3}(25[0-5]|(2[0-4]|1?[0-9])?[0-9]))", ipv6) is not None
 
 
+def valid_email(email) -> bool:
+    return re.match(r"^[a-z0-9]+[._]?[a-z0-9]+[@]\w+[.]\w{2,3}$", email) is not None
+
+
 # Helpers
 
 def get_current_serial():
@@ -93,6 +95,8 @@ def get_args(*args):
     else:
         return tuple(payload)
 
+
+# Routes
 
 @app.route("/auth/signup", methods=["POST"])
 def auth_signup():
