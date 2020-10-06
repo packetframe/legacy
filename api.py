@@ -113,10 +113,10 @@ def zone_authentication_required(f):
 
         user_doc = users.find_one({"key": api_key})
         if not user_doc:
-            return jsonify({"success": False, "message": "user with this key doesn't exist"})
+            return jsonify({"success": False, "message": "Access Denied"})
 
         if user_doc["username"] not in zone_doc["users"]:
-            return jsonify({"success": False, "message": "access denied"})
+            return jsonify({"success": False, "message": "Access Denied"})
 
         return f(*args, **kwargs)
 
@@ -246,6 +246,7 @@ def zones_delete(zone):
 # Record management
 
 @app.route("/zone/<zone>/add", methods=["POST"])
+@zone_authentication_required
 def records_add(zone):
     if not valid_zone(zone):
         return jsonify({"success": False, "message": "Invalid zone"})
@@ -294,7 +295,7 @@ def records_add(zone):
         except ValueError as e:
             return jsonify({"success": False, "message": str(e)})
 
-        # TODO: Check for TXT validity
+        # TODO: Check for TXT validity and maybe put quotes around the TXT record?
         # if not valid_label(value):
         #     return jsonify({"success": False, "message": "Invalid MX server"})
 
