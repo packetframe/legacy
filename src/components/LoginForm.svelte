@@ -3,21 +3,34 @@
     import TextInput from "./TextInput.svelte";
 
     let username, password;
+
+    function submitLogin() {
+        fetch("http://localhost/api/auth/login", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({
+                username: username,
+                password: password
+            })
+        })
+            .then(response => response.json())
+            .then(data => alert(data["message"]));
+    }
 </script>
 
 <main>
     <div class="title">Login</div>
     <div class="container">
         <div class="form-element">
-            <TextInput placeholder="Username"/>
+            <TextInput placeholder="Username" bind:content={username}/>
         </div>
 
         <div class="form-element">
-            <TextInput placeholder="Password"/>
+            <TextInput password placeholder="Password" bind:content={password}/>
         </div>
 
         <div class="form-element">
-            <Button inverted centered>Login</Button>
+            <Button centered inverted onclick={() => submitLogin()}>Login</Button>
         </div>
     </div>
 </main>
