@@ -128,6 +128,12 @@ def auth_signup():
     except ValueError as e:
         return jsonify({"success": False, "message": str(e)})
 
+    if not valid_email(username) or len(username) > 100:
+        return jsonify({"success": False, "message": "Invalid username"})
+
+    if len(password) > 200:
+        return jsonify({"success": False, "message": "Password must not be longer than 200 characters"})
+
     user_doc = users.find_one({"username": username})
     if not user_doc:
         return jsonify({"success": False, "message": "User already exists"})
@@ -135,7 +141,7 @@ def auth_signup():
     users.insert_one({
         "username": username,
         "password": argon.hash(password),
-        "apikey": base64.b64encode(urandom(16))
+        "key": base64.b64encode(urandom(16))
     })
 
     return jsonify({"success": False, "message": "Signup success"})
