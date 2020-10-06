@@ -208,8 +208,14 @@ def zones_add(username):
 
 
 @app.route("/zones/list", methods=["GET"])
-def zones_list():
-    _zones = list(zones.find())
+@authentication_required
+def zones_list(username):
+    # Find all zones that have username in their users list
+    _zones = list(zones.find({
+        "users": {
+            "$in": [username]
+        }
+    }))
 
     for zone in _zones:
         del zone["_id"]
