@@ -73,7 +73,7 @@ def valid_email(email) -> bool:
 
 # Helpers
 
-def get_current_serial():
+def _get_current_serial():
     return strftime("%Y%m%d%S")
 
 
@@ -235,7 +235,7 @@ def zones_add(username):
         zones.insert_one({
             "zone": zone,
             "records": [],
-            "serial": get_current_serial(),
+            "serial": _get_current_serial(),
             "users": [username]
         })
     except DuplicateKeyError:
@@ -398,7 +398,7 @@ def records_add(zone):
             }
         },
         "$set": {
-            "serial": get_current_serial()
+            "serial": _get_current_serial()
         }
     })
 
@@ -449,7 +449,7 @@ def record_delete(zone, index):
     # Set the modified records
     zones.update_one({"zone": zone}, {"$set": {
         "records": current_records,
-        "serial": get_current_serial()
+        "serial": _get_current_serial()
     }})
 
     add_queue_message("refresh_single_zone", {"zone": zone})
