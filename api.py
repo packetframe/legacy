@@ -135,13 +135,13 @@ def auth_signup():
         return jsonify({"success": False, "message": "Password must not be longer than 200 characters"})
 
     user_doc = users.find_one({"username": username})
-    if not user_doc:
+    if user_doc:
         return jsonify({"success": False, "message": "User already exists"})
 
     users.insert_one({
         "username": username,
         "password": argon.hash(password),
-        "key": base64.b64encode(urandom(16))
+        "key": base64.b64encode(urandom(32)).decode().replace("=", "")
     })
 
     return jsonify({"success": True, "message": "Signup success"})
