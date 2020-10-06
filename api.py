@@ -180,7 +180,7 @@ def auth_login():
         return jsonify({"success": False, "message": "Invalid username or password"})
 
 
-@app.route("/zone/add", methods=["POST"])
+@app.route("/zones/add", methods=["POST"])
 @authentication_required
 def zones_add(username):
     try:
