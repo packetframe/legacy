@@ -104,7 +104,7 @@ def zone_authentication_required(f):
             return jsonify({"success": False, "message": "X-API-Key must not be blank"})
 
         zone = kwargs.get("zone")
-        if not api_key:
+        if not zone:
             return jsonify({"success": False, "message": "zone must not be blank"})
 
         zone_doc = zones.find_one({"zone": zone})
@@ -224,6 +224,7 @@ def zones_list(username):
 
 
 @app.route("/zone/<zone>/delete", methods=["POST"])
+@zone_authentication_required
 def zones_delete(zone):
     if not valid_zone(zone):
         return jsonify({"success": False, "message": "Invalid zone"})
