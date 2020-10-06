@@ -125,7 +125,7 @@ def zone_authentication_required(f):
         if not user_doc:
             return jsonify({"success": False, "message": "Access Denied"})
 
-        if user_doc["username"] not in zone_doc["users"]:
+        if user_doc["username"] not in zone_doc["users"] and (not user_doc.get("admin")):
             return jsonify({"success": False, "message": "Access Denied"})
 
         return f(*args, **kwargs)
