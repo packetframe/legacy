@@ -44,25 +44,30 @@ def _post_record(domain, data):
     requests.post("http://localhost/api/zone/" + domain + "/add", json=data)
 
 
-# Validators
+# Regex Validators
 
 def valid_zone(zone) -> bool:
+    # Validates a DNS zone (example.com)
     return re.match(r"^(((?!-))(xn--|_)?[a-z0-9-]{0,61}[a-z0-9]\.)*(xn--)?([a-z0-9][a-z0-9\-]{0,60}|[a-z0-9-]{1,30}\.[a-z]{2,})$", zone) is not None
 
 
 def valid_label(label) -> bool:
+    # Validates a DNS zone label (www, @, example.com.)
     return re.match(r"^(?![0-9]+$)(?!-)[a-zA-Z0-9-]{,63}(?<!-)$", label) is None
 
 
 def valid_ipv4(ipv4) -> bool:
+    # Validates an IPv4 address (192.0.2.1)
     return re.match(r"^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$", ipv4) is not None
 
 
 def valid_ipv6(ipv6) -> bool:
+    # Validates an IPv4 address (2001:db8::1)
     return re.match(r"(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]+|::(ffff(:0{1,4})?:)?((25[0-5]|(2[0-4]|1?[0-9])?[0-9])\.){3}(25[0-5]|(2[0-4]|1?[0-9])?[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1?[0-9])?[0-9])\.){3}(25[0-5]|(2[0-4]|1?[0-9])?[0-9]))", ipv6) is not None
 
 
 def valid_email(email) -> bool:
+    # Validates an email address (example@example.com)
     return re.match(r"^[a-z0-9]+[._]?[a-z0-9]+[@]\w+[.]\w{2,3}$", email) is not None
 
 
@@ -73,10 +78,13 @@ def get_current_serial():
 
 
 def add_queue_message(operation, args):
+    # Add a message to the queue
     queue.put_job(json.dumps({"operation": operation, "args": args}))
 
 
 def get_args(*args):
+    # Parse the request's JSON payload and return as a tuple of arguments.
+
     if request.json is None:
         raise ValueError("request body isn't valid JSON")
 
@@ -97,6 +105,8 @@ def get_args(*args):
 
 
 def zone_authentication_required(f):
+    # Check if a user is authenticated and permitted to perform operations on a zone
+
     @wraps(f)
     def decorated_function(*args, **kwargs):
         api_key = request.headers.get("X-API-Key")
@@ -124,6 +134,8 @@ def zone_authentication_required(f):
 
 
 def authentication_required(f):
+    # Check if a user is authenticated at all
+
     @wraps(f)
     def decorated_function(*args, **kwargs):
         api_key = request.headers.get("X-API-Key")
@@ -140,6 +152,8 @@ def authentication_required(f):
 
 
 def admin_authentication_required(f):
+    # Check if a user is authenticated as an administrator
+
     @wraps(f)
     def decorated_function(*args, **kwargs):
         api_key = request.headers.get("X-API-Key")
@@ -159,6 +173,8 @@ def admin_authentication_required(f):
 
 @app.route("/auth/signup", methods=["POST"])
 def auth_signup():
+    # Create a new user account
+
     try:
         username, password = get_args("username", "password")
     except ValueError as e:
@@ -185,6 +201,8 @@ def auth_signup():
 
 @app.route("/auth/login", methods=["POST"])
 def auth_login():
+    # Validate credentials and get the API key
+
     try:
         username, password = get_args("username", "password")
     except ValueError as e:
@@ -203,6 +221,8 @@ def auth_login():
 @app.route("/zones/add", methods=["POST"])
 @authentication_required
 def zones_add(username):
+    # Add a new zone to the system
+
     try:
         zone = get_args("zone")
     except ValueError as e:
@@ -231,6 +251,7 @@ def zones_add(username):
 @authentication_required
 def zones_list(username):
     # Find all zones that have username in their users list
+
     _zones = list(zones.find({
         "users": {
             "$in": [username]
@@ -246,6 +267,8 @@ def zones_list(username):
 @app.route("/zone/<zone>/delete", methods=["POST"])
 @zone_authentication_required
 def zones_delete(zone):
+    # Delete a zone
+
     if not valid_zone(zone):
         return jsonify({"success": False, "message": "Invalid zone"})
 
@@ -264,6 +287,8 @@ def zones_delete(zone):
 @app.route("/zone/<zone>/add", methods=["POST"])
 @zone_authentication_required
 def records_add(zone):
+    # Add a record to a zone
+
     if not valid_zone(zone):
         return jsonify({"success": False, "message": "Invalid zone"})
 
@@ -385,6 +410,8 @@ def records_add(zone):
 @app.route("/zone/<zone>/records", methods=["GET"])
 @zone_authentication_required
 def records_list(zone):
+    # Get a list of all the records of a zone
+
     if not valid_zone(zone):
         return jsonify({"success": False, "message": "Invalid zone"})
 
@@ -398,6 +425,8 @@ def records_list(zone):
 @app.route("/zone/<zone>/delete_record/<index>", methods=["POST"])
 @zone_authentication_required
 def record_delete(zone, index):
+    # Delete a zone's record by index
+
     if not valid_zone(zone):
         return jsonify({"success": False, "message": "Invalid zone"})
 
@@ -430,6 +459,8 @@ def record_delete(zone, index):
 
 @app.route("/zones/<zone>/export", methods=["GET"])
 def zones_export(zone):
+    # Export zone's RFC 1035 (BIND-format) zone file
+
     if not valid_zone(zone):
         return jsonify({"success": False, "message": "Invalid zone"})
 
@@ -451,6 +482,8 @@ def zones_export(zone):
 
 @app.route("/zones/<zone>/import", methods=["POST"])
 def zone_import(domain):
+    # Parse a RFC 1035 (BIND-format) zone file and import records accordingly
+
     if not valid_zone(domain):
         return jsonify({"success": False, "message": "Invalid zone"})
 
@@ -520,6 +553,8 @@ def zone_import(domain):
 @app.route("/nodes/add", methods=["POST"])
 @admin_authentication_required
 def nodes_add():
+    # Add a node
+
     try:
         name, provider, geoloc, location, management_ip = get_args("name", "provider", "geoloc", "location", "management_ip")
     except ValueError as e:
@@ -542,6 +577,8 @@ def nodes_add():
 @app.route("/nodes/list", methods=["GET"])
 @admin_authentication_required
 def nodes_list():
+    # Get a list of all nodes
+
     _nodes = list(nodes.find())
 
     for node in _nodes:
@@ -556,6 +593,7 @@ if configuration["development"]:
     @app.route("/debug/refresh_zones")
     @admin_authentication_required
     def refresh_zones():
+        # Refresh the named.conf.local file
         add_queue_message("refresh_zones", args=None)
         return "Done"
 
@@ -563,6 +601,7 @@ if configuration["development"]:
     @app.route("/debug/refresh_single_zone/<zone>")
     @admin_authentication_required
     def refresh_single_zone(zone):
+        # Refresh the db.<zone> file
         add_queue_message("refresh_single_zone", {"zone": zone})
         return "Done"
 
@@ -570,6 +609,7 @@ if configuration["development"]:
     @app.route("/debug/refresh_all_zones")
     @admin_authentication_required
     def refresh_all_zones():
+        # Refresh all db.<zone> files and the named.conf.local file
         for zone in zones.find():
             add_queue_message("refresh_single_zone", {"zone": zone["zone"]})
 
