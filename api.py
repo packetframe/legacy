@@ -111,7 +111,11 @@ def zone_authentication_required(f):
         if not zone_doc:
             return jsonify({"success": False, "message": "zone doesn't exist"})
 
-        if api_key not in zone_doc["keys"]:
+        user_doc = users.find_one({"key": api_key})
+        if not user_doc:
+            return jsonify({"success": False, "message": "user with this key doesn't exist"})
+
+        if user_doc["username"] not in zone_doc["users"]:
             return jsonify({"success": False, "message": "access denied"})
 
         return f(*args, **kwargs)
