@@ -96,6 +96,29 @@ def get_args(*args):
         return tuple(payload)
 
 
+def zone_authentication_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        api_key = request.headers.get("X-API-Key")
+        if not api_key:
+            return jsonify({"success": False, "message": "X-API-Key must not be blank"})
+
+        zone = kwargs.get("zone")
+        if not api_key:
+            return jsonify({"success": False, "message": "zone must not be blank"})
+
+        zone_doc = zones.find_one({"zone": zone})
+        if not zone_doc:
+            return jsonify({"success": False, "message": "zone doesn't exist"})
+
+        if api_key not in zone_doc["keys"]:
+            return jsonify({"success": False, "message": "access denied"})
+
+        return f(*args, **kwargs)
+
+    return decorated_function
+
+
 # Routes
 
 @app.route("/auth/signup", methods=["POST"])
