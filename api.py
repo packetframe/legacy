@@ -144,7 +144,7 @@ def auth_signup():
         "key": base64.b64encode(urandom(16))
     })
 
-    return jsonify({"success": False, "message": "Signup success"})
+    return jsonify({"success": True, "message": "Signup success"})
 
 
 @app.route("/auth/login", methods=["POST"])
