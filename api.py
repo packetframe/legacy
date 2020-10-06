@@ -554,18 +554,21 @@ def nodes_list():
 
 if configuration["development"]:
     @app.route("/debug/refresh_zones")
+    @admin_authentication_required
     def refresh_zones():
         add_queue_message("refresh_zones", args=None)
         return "Done"
 
 
     @app.route("/debug/refresh_single_zone/<zone>")
+    @admin_authentication_required
     def refresh_single_zone(zone):
         add_queue_message("refresh_single_zone", {"zone": zone})
         return "Done"
 
 
     @app.route("/debug/refresh_all_zones")
+    @admin_authentication_required
     def refresh_all_zones():
         for zone in zones.find():
             add_queue_message("refresh_single_zone", {"zone": zone["zone"]})
