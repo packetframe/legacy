@@ -146,25 +146,7 @@ def authentication_required(f):
         if not user_doc:
             return jsonify({"success": False, "message": "Not authenticated"})
 
-        return f(*args, **kwargs, username=user_doc["username"])
-
-    return decorated_function
-
-
-def admin_authentication_required(f):
-    # Check if a user is authenticated as an administrator
-
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        api_key = request.headers.get("X-API-Key")
-        if not api_key:
-            return jsonify({"success": False, "message": "X-API-Key must not be blank"})
-
-        user_doc = users.find_one({"key": api_key})
-        if (not user_doc) or (user_doc.get("admin")):
-            return jsonify({"success": False, "message": "Not authenticated"})
-
-        return f(*args, **kwargs, username=user_doc["username"])
+        return f(*args, **kwargs, username=user_doc["username"], is_admin=bool(user_doc.get("is_admin")))
 
     return decorated_function
 
