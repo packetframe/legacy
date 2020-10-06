@@ -135,20 +135,18 @@ def zone_authentication_required(f):
 
 def authentication_required(f):
     # Check if a user is authenticated at all
-    # if protected, the route requires user to be an administrator
 
     @wraps(f)
-    def decorated_function(protected=False, *args, **kwargs):
+    def decorated_function(*args, **kwargs):
         api_key = request.headers.get("X-API-Key")
         if not api_key:
             return jsonify({"success": False, "message": "X-API-Key must not be blank"})
 
         user_doc = users.find_one({"key": api_key})
-        is_admin = bool(user_doc.get("is_admin"))
-        if not user_doc or (not is_admin and protected):
+        if not user_doc:
             return jsonify({"success": False, "message": "Not authenticated"})
 
-        return f(*args, **kwargs, username=user_doc["username"], is_admin=is_admin)
+        return f(*args, **kwargs, username=user_doc["username"], is_admin=bool(user_doc.get("admin")))
 
     return decorated_function
 
@@ -535,9 +533,12 @@ def zone_import(domain):
 # Node
 
 @app.route("/nodes/add", methods=["POST"])
-@authentication_required(protected=True)
-def nodes_add():
+@authentication_required
+def nodes_add(is_admin):
     # Add a node
+
+    if not is_admin:
+        return 404
 
     try:
         name, provider, geoloc, location, management_ip = get_args("name", "provider", "geoloc", "location", "management_ip")
@@ -559,9 +560,12 @@ def nodes_add():
 
 
 @app.route("/nodes/list", methods=["GET"])
-@authentication_required(protected=True)
-def nodes_list():
+@authentication_required
+def nodes_list(is_admin):
     # Get a list of all nodes
+
+    if not is_admin:
+        return 404
 
     _nodes = list(nodes.find())
 
@@ -575,25 +579,37 @@ def nodes_list():
 
 if configuration["development"]:
     @app.route("/debug/refresh_zones")
-    @authentication_required(protected=True)
-    def refresh_zones():
+    @authentication_required
+    def refresh_zones(is_admin):
         # Refresh the named.conf.local file
+
+        if not is_admin:
+            return 404
+
         add_queue_message("refresh_zones", args=None)
         return "Done"
 
 
     @app.route("/debug/refresh_single_zone/<zone>")
-    @authentication_required(protected=True)
-    def refresh_single_zone(zone):
+    @authentication_required
+    def refresh_single_zone(zone, is_admin):
         # Refresh the db.<zone> file
+
+        if not is_admin:
+            return 404
+
         add_queue_message("refresh_single_zone", {"zone": zone})
         return "Done"
 
 
     @app.route("/debug/refresh_all_zones")
-    @authentication_required(protected=True)
-    def refresh_all_zones():
+    @authentication_required
+    def refresh_all_zones(is_admin):
         # Refresh all db.<zone> files and the named.conf.local file
+
+        if not is_admin:
+            return 404
+
         for zone in zones.find():
             add_queue_message("refresh_single_zone", {"zone": zone["zone"]})
 
