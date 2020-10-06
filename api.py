@@ -139,6 +139,22 @@ def authentication_required(f):
     return decorated_function
 
 
+def admin_authentication_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        api_key = request.headers.get("X-API-Key")
+        if not api_key:
+            return jsonify({"success": False, "message": "X-API-Key must not be blank"})
+
+        user_doc = users.find_one({"key": api_key})
+        if (not user_doc) or (user_doc.get("admin")):
+            return jsonify({"success": False, "message": "Not authenticated"})
+
+        return f(*args, **kwargs, username=user_doc["username"])
+
+    return decorated_function
+
+
 # Routes
 
 @app.route("/auth/signup", methods=["POST"])
@@ -379,7 +395,7 @@ def records_list(zone):
         return jsonify({"success": False, "message": "zone " + zone + " doesn't exit"}), 400
 
 
-@app.route("/zone/<zone>/delete_record/<index>", methods=["POST"])\
+@app.route("/zone/<zone>/delete_record/<index>", methods=["POST"])
 @zone_authentication_required
 def record_delete(zone, index):
     if not valid_zone(zone):
