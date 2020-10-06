@@ -367,6 +367,7 @@ def records_add(zone):
 
 
 @app.route("/zone/<zone>/records", methods=["GET"])
+@zone_authentication_required
 def records_list(zone):
     if not valid_zone(zone):
         return jsonify({"success": False, "message": "Invalid zone"})
@@ -378,7 +379,8 @@ def records_list(zone):
         return jsonify({"success": False, "message": "zone " + zone + " doesn't exit"}), 400
 
 
-@app.route("/zone/<zone>/delete_record/<index>", methods=["POST"])
+@app.route("/zone/<zone>/delete_record/<index>", methods=["POST"])\
+@zone_authentication_required
 def record_delete(zone, index):
     if not valid_zone(zone):
         return jsonify({"success": False, "message": "Invalid zone"})
