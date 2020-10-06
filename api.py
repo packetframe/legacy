@@ -119,6 +119,22 @@ def zone_authentication_required(f):
     return decorated_function
 
 
+def authentication_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        api_key = request.headers.get("X-API-Key")
+        if not api_key:
+            return jsonify({"success": False, "message": "X-API-Key must not be blank"})
+
+        user_doc = users.find_one({"key": api_key})
+        if not user_doc:
+            return jsonify({"success": False, "message": "Not authenticated"})
+
+        return f(*args, **kwargs)
+
+    return decorated_function
+
+
 # Routes
 
 @app.route("/auth/signup", methods=["POST"])
