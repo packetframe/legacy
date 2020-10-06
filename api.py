@@ -135,18 +135,20 @@ def zone_authentication_required(f):
 
 def authentication_required(f):
     # Check if a user is authenticated at all
+    # if protected, the route requires user to be an administrator
 
     @wraps(f)
-    def decorated_function(*args, **kwargs):
+    def decorated_function(protected=False, *args, **kwargs):
         api_key = request.headers.get("X-API-Key")
         if not api_key:
             return jsonify({"success": False, "message": "X-API-Key must not be blank"})
 
         user_doc = users.find_one({"key": api_key})
-        if not user_doc:
+        is_admin = bool(user_doc.get("is_admin"))
+        if not user_doc or (not is_admin and protected):
             return jsonify({"success": False, "message": "Not authenticated"})
 
-        return f(*args, **kwargs, username=user_doc["username"], is_admin=bool(user_doc.get("is_admin")))
+        return f(*args, **kwargs, username=user_doc["username"], is_admin=is_admin)
 
     return decorated_function
 
