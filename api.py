@@ -159,7 +159,7 @@ def auth_login():
         return jsonify({"success": False, "message": "Invalid username or password"})
 
     if argon.verify(user_doc["password"], password):
-        return jsonify({"success": True, "message": user_doc["apikey"]})
+        return jsonify({"success": True, "message": user_doc["key"]})
     else:
         return jsonify({"success": False, "message": "Invalid username or password"})
 
