@@ -130,7 +130,7 @@ def authentication_required(f):
         if not user_doc:
             return jsonify({"success": False, "message": "Not authenticated"})
 
-        return f(*args, **kwargs)
+        return f(*args, **kwargs, username=user_doc["username"])
 
     return decorated_function
 
@@ -181,7 +181,8 @@ def auth_login():
 
 
 @app.route("/zone/add", methods=["POST"])
-def zones_add():
+@authentication_required
+def zones_add(username):
     try:
         zone = get_args("zone")
     except ValueError as e:
@@ -194,7 +195,8 @@ def zones_add():
         zones.insert_one({
             "zone": zone,
             "records": [],
-            "serial": get_current_serial()
+            "serial": get_current_serial(),
+            "users": [username]
         })
     except DuplicateKeyError:
         return jsonify({"success": False, "message": "Zone already exists"})
