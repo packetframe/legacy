@@ -431,6 +431,7 @@ def record_delete(zone, index):
 # Node
 
 @app.route("/nodes/add", methods=["POST"])
+@admin_authentication_required
 def nodes_add():
     try:
         name, provider, geoloc, location, management_ip = get_args("name", "provider", "geoloc", "location", "management_ip")
@@ -452,6 +453,7 @@ def nodes_add():
 
 
 @app.route("/nodes/list", methods=["GET"])
+@admin_authentication_required
 def nodes_list():
     _nodes = list(nodes.find())
 
