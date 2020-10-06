@@ -428,41 +428,6 @@ def record_delete(zone, index):
     return jsonify({"success": True, "message": "Record deleted at index " + str(index) + " from " + zone})
 
 
-# Node
-
-@app.route("/nodes/add", methods=["POST"])
-@admin_authentication_required
-def nodes_add():
-    try:
-        name, provider, geoloc, location, management_ip = get_args("name", "provider", "geoloc", "location", "management_ip")
-    except ValueError as e:
-        return jsonify({"success": False, "message": str(e)})
-
-    add_op = nodes.insert_one({
-        "name": name,
-        "provider": provider,
-        "geoloc": geoloc,
-        "location": location,
-        "management_ip": management_ip,
-    })
-
-    if add_op.acknowledged:
-        return jsonify({"success": True, "message": "Added " + name})
-    else:
-        return jsonify({"success": False, "message": "Unable to add node" + name})
-
-
-@app.route("/nodes/list", methods=["GET"])
-@admin_authentication_required
-def nodes_list():
-    _nodes = list(nodes.find())
-
-    for node in _nodes:
-        del node["_id"]
-
-    return jsonify({"success": True, "message": _nodes})
-
-
 @app.route("/zones/<zone>/export", methods=["GET"])
 def zones_export(zone):
     if not valid_zone(zone):
@@ -548,6 +513,41 @@ def zone_import(domain):
                     })
 
     return "Done"
+
+
+# Node
+
+@app.route("/nodes/add", methods=["POST"])
+@admin_authentication_required
+def nodes_add():
+    try:
+        name, provider, geoloc, location, management_ip = get_args("name", "provider", "geoloc", "location", "management_ip")
+    except ValueError as e:
+        return jsonify({"success": False, "message": str(e)})
+
+    add_op = nodes.insert_one({
+        "name": name,
+        "provider": provider,
+        "geoloc": geoloc,
+        "location": location,
+        "management_ip": management_ip,
+    })
+
+    if add_op.acknowledged:
+        return jsonify({"success": True, "message": "Added " + name})
+    else:
+        return jsonify({"success": False, "message": "Unable to add node" + name})
+
+
+@app.route("/nodes/list", methods=["GET"])
+@admin_authentication_required
+def nodes_list():
+    _nodes = list(nodes.find())
+
+    for node in _nodes:
+        del node["_id"]
+
+    return jsonify({"success": True, "message": _nodes})
 
 
 # Debug
