@@ -1,1 +1,4 @@
 .idea/
+ssh-key*
+provisioning/hosts.yml
+provisioning/*.retry
