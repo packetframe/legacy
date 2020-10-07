@@ -4,8 +4,8 @@
     import Dropdown from "./Dropdown.svelte";
     import {onMount} from "svelte";
     import NumberInput from "./NumberInput.svelte";
-    import SnackbarGroup from "./SnackbarGroup.svelte";
     import {SnackBars} from "../stores";
+    import {APIKey} from "../stores";
 
     let showAddRecord = true;
 
@@ -33,7 +33,8 @@
         fetch("http://localhost/api/zone/" + zone + "/add", {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "X-API-Key": $APIKey
             },
             body: JSON.stringify({
                 type: type,
@@ -52,15 +53,23 @@
 
     function deleteRecord(index) {
         fetch("http://localhost/api/zone/" + zone + "/delete_record/" + index, {
-            method: "POST"
+            method: "POST",
+            headers: {
+                "X-API-Key": $APIKey
+            }
         })
-            .then((data) => addSnackbar("delete_record", data["message"], data["success"] ? "green" : "red"))
+            .then(response => response.json())
+            .then(data => addSnackbar("delete_record", data["message"], data["success"] ? "green" : "red"))
             .then(() => loadRecords());
     }
 
     function loadRecords(nothing) {
         if (zone !== undefined) {
-            fetch("http://localhost/api/zone/" + zone + "/records")
+            fetch("http://localhost/api/zone/" + zone + "/records", {
+                headers: {
+                    "X-API-Key": $APIKey
+                }
+            })
                 .then(response => response.json())
                 .then(data => {
                     if (data["success"]) {
@@ -75,7 +84,11 @@
     }
 
     function exportRecords() {
-        fetch("http://localhost/api/zones/" + zone + "/export")
+        fetch("http://localhost/api/zones/" + zone + "/export", {
+            headers: {
+                "X-API-Key": $APIKey
+            }
+        })
             .then(response => response.json())
             .then(data => {
                 addSnackbar("zone_export", data["message"], data["success"] ? "green" : "red");
@@ -179,8 +192,6 @@
             {/if}
         </table>
     </div>
-
-    <SnackbarGroup/>
 </main>
 
 <style>

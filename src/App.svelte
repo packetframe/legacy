@@ -5,18 +5,35 @@
     import {onMount} from "svelte";
     import NetworkMap from "./components/NetworkMap.svelte";
     import Button from "./components/Button.svelte";
-    import LoginForm from "./components/LoginForm.svelte";
+    import EntryForm from "./components/EntryForm.svelte";
+    import SnackbarGroup from "./components/SnackbarGroup.svelte";
+    import {Page} from "./stores";
+    import {APIKey} from "./stores";
+    import {IsAdmin} from "./stores";
 
     let zones;
     let selected_zone = window.location.toString().split("zone=")[1];
     let no_zones = false;
     let showMap = false;
 
-    let loggedIn = false;
+    function loadRecordDropdown(page) {
+        fetch("http://localhost/api/nodes/list", {
+            headers: {"X-API-Key": $APIKey},
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data["success"]) {
+                    $IsAdmin = true;
+                }
+            })
 
-    onMount(() => {
-        if (loggedIn) {
-            fetch("http://localhost/api/zones/list")
+        if (page === "dashboard") {
+            fetch("http://localhost/api/zones/list", {
+                method: "GET",
+                headers: {
+                    "X-API-Key": $APIKey
+                },
+            })
                 .then(response => response.json())
                 .then(data => {
                     if (data["message"].length > 0) {
@@ -30,21 +47,27 @@
                     }
                 });
         }
-    });
+    }
+
+    $: loadRecordDropdown($Page)
 </script>
 
 <main>
     <Navbar>
         <div slot="left-side">CDN</div>
-        <div slot="right-side">Logout</div>
+        <div class="nav-item" on:click={() => {$APIKey = ""; $Page = "login"}} slot="right-side">Logout</div>
+        <div class="nav-item" on:click={() => {$Page = "signup"}} slot="right-side">Signup</div>
     </Navbar>
 
     <div class="body">
-        {#if loggedIn}
+        {#if $Page === "dashboard"}
             <div class="header-container">
                 <h1 class="header-text">CDN Dashboard</h1>
 
-                <Button onclick={() => showMap = !showMap} padded={true}>Toggle Map</Button>
+                {#if $IsAdmin}
+                    <Button onclick={() => showMap = !showMap} padded={true}>Toggle Map</Button>
+                {/if}
+
                 {#if zones}
                     <Dropdown width="100%" bind:content={selected_zone}>
                         {#each zones as zone}
@@ -60,7 +83,7 @@
                 {/if}
             </div>
 
-            {#if showMap}
+            {#if showMap && $IsAdmin}
                 <NetworkMap/>
             {/if}
 
@@ -73,9 +96,13 @@
                     <p style="padding-left: 10px">Loading...</p>
                 {/if}
             {/if}
-        {:else}
-            <LoginForm/>
+        {:else if $Page === "login"}
+            <EntryForm type="login"/>
+        {:else if $Page === "signup"}
+            <EntryForm type="signup"/>
         {/if}
+
+        <SnackbarGroup/>
     </div>
 
     <footer>
@@ -112,5 +139,9 @@
         margin-top: 20px;
         margin-bottom: 15px;
         text-align: center;
+    }
+
+    .nav-item {
+        padding: 2px;
     }
 </style>
