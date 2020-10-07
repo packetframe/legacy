@@ -14,6 +14,7 @@
 
     let type, label, value, priority, port, weight;
     type = "A";
+    let ttl = 86400;
 
     let snackbarEnabled = false;
     let snackbarColor = "green";
@@ -43,7 +44,7 @@
                 priority: priority,
                 port: port,
                 weight: weight,
-                ttl: 3600
+                ttl: ttl
             })
         })
             .then((response) => response.json())
@@ -133,6 +134,10 @@
                         <option value="MX">MX</option>
                         <option value="SRV">SRV</option>
                     </Dropdown>
+                </div>
+
+                <div class="record-add-element-number">
+                    <NumberInput placeholder="TTL" id="add-value" bind:content={ttl}/>
                 </div>
 
                 <div class="record-add-element">
