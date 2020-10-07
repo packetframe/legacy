@@ -172,7 +172,7 @@
     </div>
 
     <footer>
-        CDN v2
+        &copy; Nate Sales 2020.
     </footer>
 </main>
 
