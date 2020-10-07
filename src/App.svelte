@@ -23,6 +23,7 @@
     function loadRecordDropdown(page) {
         fetch("https://delivr.dev/api/nodes/list", {
             headers: {"X-API-Key": $APIKey},
+            credentials: "include"
         })
             .then(response => response.json())
             .then(data => {
@@ -98,6 +99,7 @@
                 addSnackbar("refresh_single_zone", data["message"], data["success"] ? "green" : "red")
             });
     }
+
     function clearQueue() {
         fetch("https://delivr.dev/api/debug/clear_queue", {
             method: "GET",
@@ -162,8 +164,6 @@
                     <Button padded onclick={() => {showMap = !showMap}}>Toggle map</Button>
                 </ButtonBar>
             {/if}
-
-
 
             {#if selected_zone !== ""}
                 <RecordTable zone={selected_zone}/>
