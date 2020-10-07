@@ -42,7 +42,7 @@ queue = BeanstalkClient("localhost", 11300)
 with open("templates/zone.j2") as zone_template_file:
     zone_template = Template(zone_template_file.read())
 
-with open("new_domain.j2", "r") as new_domain_template_file:
+with open("mail/new_domain.j2", "r") as new_domain_template_file:
     new_domain_template = Template(new_domain_template_file.read())
 
 
