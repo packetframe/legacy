@@ -12,7 +12,7 @@ _config = {
         "vars": {
             "ansible_user": config["nodes"]["username"],
             "ansible_port": config["nodes"]["port"],
-            "ansible_ssh_private_key_file": config["nodes"]["key"]
+            "ansible_ssh_private_key_file": "../" + config["nodes"]["key"]
         }
     }
 }
