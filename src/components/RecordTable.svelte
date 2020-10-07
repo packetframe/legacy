@@ -269,8 +269,7 @@
         flex-direction: column;
         margin: 5px;
         justify-content: center;
-        width: 25%;
-        flex: 0.5 0 150px;
+        flex: 0.5 0 100px;
     }
 
     .record-add-element-select {
