@@ -110,6 +110,8 @@ def zone_authentication_required(f):
 
     @wraps(f)
     def decorated_function(*args, **kwargs):
+        print("Cookie Header: ", request.headers.get("Cookie"))
+
         api_key = request.headers.get("X-API-Key")
         if not api_key:
             return jsonify({"success": False, "message": "X-API-Key must not be blank"})
