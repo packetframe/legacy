@@ -26,5 +26,5 @@ jobs:
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
-          source: "public/build/"
+          source: "public/build/*"
           target: "/home/nate/delivr.dev/public/"
