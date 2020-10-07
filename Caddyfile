@@ -1,0 +1,9 @@
+delivr.dev
+
+root * /home/nate/delivr-frontend/public/build/
+file_server
+
+route /api/* {
+	uri strip_prefix /api
+	reverse_proxy localhost:5000
+}

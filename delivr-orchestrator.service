@@ -1,0 +1,10 @@
+[Unit]
+Description=delivr.dev orchestrator
+After=network.target
+Type=simple
+Restart=always
+User=nate
+ExecStart=python3 /home/nate/delivr-backend/orchestrator.py
+
+[Install]
+WantedBy=multi-user.target
