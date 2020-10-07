@@ -1,7 +1,6 @@
 <script defer>
     import L from 'leaflet';
     import {onMount} from "svelte";
-    import {APIKey} from "../stores";
 
     onMount(() => {
         let mymap = L.map("netmap").setView([51.505, -0.09], 13);
@@ -14,9 +13,7 @@
         mymap.setView([50, -25], 1.5);
 
         fetch("https://delivr.dev/api/nodes/list", {
-            headers: {
-                "X-API-Key": $APIKey
-            }
+            credentials: "include"
         })
             .then(response => response.json())
             .then((data) => {

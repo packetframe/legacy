@@ -5,7 +5,6 @@
     import {onMount} from "svelte";
     import NumberInput from "./NumberInput.svelte";
     import {SnackBars} from "../stores";
-    import {APIKey} from "../stores";
 
     let showAddRecord = true;
 
@@ -35,8 +34,8 @@
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "X-API-Key": $APIKey
             },
+            credentials: "include",
             body: JSON.stringify({
                 type: type,
                 label: label,
@@ -55,9 +54,7 @@
     function deleteRecord(index) {
         fetch("https://delivr.dev/api/zone/" + zone + "/delete_record/" + index, {
             method: "POST",
-            headers: {
-                "X-API-Key": $APIKey
-            }
+            credentials: "include"
         })
             .then(response => response.json())
             .then(data => addSnackbar("delete_record", data["message"], data["success"] ? "green" : "red"))
@@ -67,9 +64,7 @@
     function loadRecords(nothing) {
         if (zone !== undefined) {
             fetch("https://delivr.dev/api/zone/" + zone + "/records", {
-                headers: {
-                    "X-API-Key": $APIKey
-                }
+                credentials: "include"
             })
                 .then(response => response.json())
                 .then(data => {
@@ -86,9 +81,7 @@
 
     function exportRecords() {
         fetch("https://delivr.dev/api/zones/" + zone + "/export", {
-            headers: {
-                "X-API-Key": $APIKey
-            }
+            credentials: "include"
         })
             .then(response => response.json())
             .then(data => {

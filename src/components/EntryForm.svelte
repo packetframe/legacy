@@ -1,7 +1,6 @@
 <script>
     import Button from "./Button.svelte";
     import TextInput from "./TextInput.svelte";
-    import {APIKey} from "../stores";
     import {SnackBars} from "../stores";
     import {Page} from "../stores";
 
@@ -30,7 +29,6 @@
                     addSnackbar(type.charAt(0).toUpperCase() + type.slice(1), data["message"], data["success"] ? "green" : "red");
                 } else {
                     if (type === "login") {
-                        APIKey.set(data["message"]);
                         Page.set("dashboard");
                     } else {
                         Page.set("login");

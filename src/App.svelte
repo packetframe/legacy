@@ -8,7 +8,6 @@
     import EntryForm from "./components/EntryForm.svelte";
     import SnackbarGroup from "./components/SnackbarGroup.svelte";
     import {Page} from "./stores";
-    import {APIKey} from "./stores";
     import {IsAdmin} from "./stores";
     import {SnackBars} from "./stores"
     import ButtonBar from "./components/ButtonBar.svelte";
@@ -22,7 +21,6 @@
 
     function loadRecordDropdown(page) {
         fetch("https://delivr.dev/api/nodes/list", {
-            headers: {"X-API-Key": $APIKey},
             credentials: "include"
         })
             .then(response => response.json())
@@ -35,9 +33,7 @@
         if (page === "dashboard") {
             fetch("https://delivr.dev/api/zones/list", {
                 method: "GET",
-                headers: {
-                    "X-API-Key": $APIKey
-                },
+                credentials: "include"
             })
                 .then(response => response.json())
                 .then(data => {
@@ -64,9 +60,7 @@
     function refreshZoneRegistry() {
         fetch("https://delivr.dev/api/debug/refresh_zones", {
             method: "GET",
-            headers: {
-                "X-API-Key": $APIKey
-            },
+            credentials: "include"
         })
             .then(response => response.json())
             .then(data => {
@@ -77,9 +71,7 @@
     function refreshAllZones() {
         fetch("https://delivr.dev/api/debug/refresh_all_zones", {
             method: "GET",
-            headers: {
-                "X-API-Key": $APIKey
-            },
+            credentials: "include"
         })
             .then(response => response.json())
             .then(data => {
@@ -90,9 +82,7 @@
     function refreshSingleZone() {
         fetch("https://delivr.dev/api/debug/refresh_single_zone/" + prompt("Which zone do you want to refresh?"), {
             method: "GET",
-            headers: {
-                "X-API-Key": $APIKey
-            },
+            credentials: "include"
         })
             .then(response => response.json())
             .then(data => {
@@ -103,9 +93,7 @@
     function clearQueue() {
         fetch("https://delivr.dev/api/debug/clear_queue", {
             method: "GET",
-            headers: {
-                "X-API-Key": $APIKey
-            },
+            credentials: "include"
         })
             .then(response => response.json())
             .then(data => {
@@ -119,11 +107,6 @@
         <Navbar>
             <div slot="left-side">delivr.dev</div>
             <div class="nav-item" on:click={() => {$Page = "signup"}} slot="right-side">Signup</div>
-        </Navbar>
-    {:else if $Page === "dashboard"}
-        <Navbar>
-            <div slot="left-side">delivr.dev</div>
-            <div class="nav-item" on:click={() => {$APIKey = ""; $Page = "login"}} slot="right-side">Logout</div>
         </Navbar>
     {/if}
 
