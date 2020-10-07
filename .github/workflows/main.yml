@@ -27,4 +27,4 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
           source: "public/"
-          target: "/home/nate/delivr.dev/"
+          target: "/home/nate/delivr-frontend/"
