@@ -29,7 +29,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
-          script: systemctl restart delivr-orchestrator
+          script: sudo systemctl restart delivr-orchestrator
 
       - name: Restart API process
         uses: appleboy/ssh-action@master
@@ -38,4 +38,4 @@ jobs:
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
-          script: systemctl restart delivr-api
+          script: sudo systemctl restart delivr-api
