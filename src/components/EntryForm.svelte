@@ -3,15 +3,11 @@
     import TextInput from "./TextInput.svelte";
     import {SnackBars} from "../stores";
     import {Page} from "../stores";
+    import {addSnackbar} from "../utils";
 
     export let type;
 
     let username, password;
-
-    function addSnackbar(status, message, color, timeout) {
-        let id = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5);
-        $SnackBars[id] = {status, message, color, timeout}
-    }
 
     function submitForm() {
         fetch("https://delivr.dev/api/auth/" + type, {

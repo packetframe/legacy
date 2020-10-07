@@ -1,6 +1,8 @@
 <script defer>
     import L from 'leaflet';
     import {onMount} from "svelte";
+    import {addSnackbar} from "../utils";
+    import {SnackBars} from "../stores"
 
     onMount(() => {
         let mymap = L.map("netmap").setView([51.505, -0.09], 13);
@@ -11,6 +13,18 @@
             zoomOffset: -1
         }).addTo(mymap);
         mymap.setView([50, -25], 1.5);
+
+        function stopNode(node) {
+            fetch("https://delivr.dev/api/nodes/stop", {
+                method: "POST",
+                credentials: "include",
+                body: JSON.stringify({
+                    node: node
+                })
+            })
+                .then(response => response.json())
+                .then(data => addSnackbar("stop_node", data["message"], data["success"] ? "green" : "red"))
+        }
 
         fetch("https://delivr.dev/api/nodes/list", {
             credentials: "include"

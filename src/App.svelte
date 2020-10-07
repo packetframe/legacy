@@ -12,6 +12,7 @@
     import {SnackBars} from "./stores"
     import ButtonBar from "./components/ButtonBar.svelte";
     import TextInput from "./components/TextInput.svelte";
+    import {addSnackbar} from "./utils"
 
     let zones;
     let selected_zone = window.location.toString().split("zone=")[1];
@@ -51,11 +52,6 @@
     }
 
     $: loadRecordDropdown($Page)
-
-    function addSnackbar(status, message, color, timeout) {
-        let id = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5);
-        $SnackBars[id] = {status, message, color, timeout}
-    }
 
     function refreshZoneRegistry() {
         fetch("https://delivr.dev/api/debug/refresh_zones", {

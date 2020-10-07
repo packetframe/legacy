@@ -5,6 +5,7 @@
     import {onMount} from "svelte";
     import NumberInput from "./NumberInput.svelte";
     import {SnackBars} from "../stores";
+    import {addSnackbar} from '../utils'
 
     let showAddRecord = true;
 
@@ -22,11 +23,6 @@
 
     function toggleForm() {
         showAddRecord = !showAddRecord;
-    }
-
-    function addSnackbar(status, message, color, timeout) {
-        let id = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5);
-        $SnackBars[id] = {status, message, color, timeout}
     }
 
     function submitForm() {
