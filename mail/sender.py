@@ -3,7 +3,7 @@ import yaml
 from smtplib import SMTP_SSL as SMTP
 from email.mime.text import MIMEText
 
-with open("../config.yml", "r") as config_file:
+with open("config.yml", "r") as config_file:
     config = yaml.safe_load(config_file)
 
 
