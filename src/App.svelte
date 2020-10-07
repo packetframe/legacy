@@ -105,12 +105,12 @@
 <main>
     {#if $Page === "login"}
         <Navbar>
-            <div slot="left-side" on:click={() => {$Page = "dashboard"}}{/if}>delivr.dev</div>
+            <div slot="left-side" on:click={() => {$Page = "dashboard"}}>delivr.dev</div>
             <div class="nav-item" on:click={() => {$Page = "signup"}} slot="right-side">Signup</div>
         </Navbar>
     {:else}
         <Navbar>
-            <div slot="left-side" on:click={() => {$Page = "dashboard"}>delivr.dev</div>
+            <div slot="left-side" on:click={() => {$Page = "dashboard"}}>delivr.dev</div>
             <div class="nav-item" on:click={() => {$Page = "login"}} slot="right-side">Login</div>
         </Navbar>
     {/if}
