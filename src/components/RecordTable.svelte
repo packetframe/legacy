@@ -30,7 +30,7 @@
     }
 
     function submitForm() {
-        fetch("http://localhost/api/zone/" + zone + "/add", {
+        fetch("https://delivr.dev/api/zone/" + zone + "/add", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -52,7 +52,7 @@
     }
 
     function deleteRecord(index) {
-        fetch("http://localhost/api/zone/" + zone + "/delete_record/" + index, {
+        fetch("https://delivr.dev/api/zone/" + zone + "/delete_record/" + index, {
             method: "POST",
             headers: {
                 "X-API-Key": $APIKey
@@ -65,7 +65,7 @@
 
     function loadRecords(nothing) {
         if (zone !== undefined) {
-            fetch("http://localhost/api/zone/" + zone + "/records", {
+            fetch("https://delivr.dev/api/zone/" + zone + "/records", {
                 headers: {
                     "X-API-Key": $APIKey
                 }
@@ -84,7 +84,7 @@
     }
 
     function exportRecords() {
-        fetch("http://localhost/api/zones/" + zone + "/export", {
+        fetch("https://delivr.dev/api/zones/" + zone + "/export", {
             headers: {
                 "X-API-Key": $APIKey
             }

@@ -20,7 +20,7 @@
     let showAdmin = false;
 
     function loadRecordDropdown(page) {
-        fetch("http://localhost/api/nodes/list", {
+        fetch("https://delivr.dev/api/nodes/list", {
             headers: {"X-API-Key": $APIKey},
         })
             .then(response => response.json())
@@ -31,7 +31,7 @@
             })
 
         if (page === "dashboard") {
-            fetch("http://localhost/api/zones/list", {
+            fetch("https://delivr.dev/api/zones/list", {
                 method: "GET",
                 headers: {
                     "X-API-Key": $APIKey
@@ -60,7 +60,7 @@
     }
 
     function refreshZoneRegistry() {
-        fetch("http://localhost/api/debug/refresh_zones", {
+        fetch("https://delivr.dev/api/debug/refresh_zones", {
             method: "GET",
             headers: {
                 "X-API-Key": $APIKey
@@ -73,7 +73,7 @@
     }
 
     function refreshAllZones() {
-        fetch("http://localhost/api/debug/refresh_all_zones", {
+        fetch("https://delivr.dev/api/debug/refresh_all_zones", {
             method: "GET",
             headers: {
                 "X-API-Key": $APIKey
@@ -86,7 +86,7 @@
     }
 
     function refreshSingleZone() {
-        fetch("http://localhost/api/debug/refresh_single_zone/" + prompt("Which zone do you want to refresh?"), {
+        fetch("https://delivr.dev/api/debug/refresh_single_zone/" + prompt("Which zone do you want to refresh?"), {
             method: "GET",
             headers: {
                 "X-API-Key": $APIKey
@@ -98,7 +98,7 @@
             });
     }
     function clearQueue() {
-        fetch("http://localhost/api/debug/clear_queue", {
+        fetch("https://delivr.dev/api/debug/clear_queue", {
             method: "GET",
             headers: {
                 "X-API-Key": $APIKey

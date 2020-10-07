@@ -13,7 +13,7 @@
         }).addTo(mymap);
         mymap.setView([50, -25], 1.5);
 
-        fetch("http://localhost/api/nodes/list", {
+        fetch("https://delivr.dev/api/nodes/list", {
             headers: {
                 "X-API-Key": $APIKey
             }

@@ -15,7 +15,7 @@
     }
 
     function submitForm() {
-        fetch("http://localhost/api/auth/" + type, {
+        fetch("https://delivr.dev/api/auth/" + type, {
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({
