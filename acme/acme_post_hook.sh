@@ -4,5 +4,5 @@ nodes=$(mongo --quiet --eval 'db.nodes.find().forEach(function(node) {print(node
 
 for line in $nodes ; do
 	echo "Removing file from $line"
-	ssh -p 34553 -i delivr-backend/ssh-key root@$line "rm -rf /usr/share/caddy/*"
+	ssh -p 34553 -i /home/nate/delivr-backend/ssh-key root@$line "rm -rf /usr/share/caddy/*"
 done
