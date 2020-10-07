@@ -1,0 +1,11 @@
+soa_root: root.cdn.example.com
+nameservers:
+    - ns1.cdn.example.com
+    - ns2.cdn.example.com
+
+development: true
+
+nodes:
+    username: root
+port: 22
+key: my-ssh-key
