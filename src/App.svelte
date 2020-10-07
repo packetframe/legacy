@@ -19,6 +19,13 @@
     let showAdmin = false;
     let showMap = true;
 
+    onMount(() => {
+        const pageSelection = window.location.toString().split("page=");
+        if (pageSelection.length === 1) {
+            $Page = pageSelection;
+        }
+    });
+
     function loadRecordDropdown(page) {
         fetch("https://delivr.dev/api/nodes/list", {
             credentials: "include"
