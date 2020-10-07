@@ -113,11 +113,17 @@
 </script>
 
 <main>
-    <Navbar>
-        <div slot="left-side">CDN</div>
-        <div class="nav-item" on:click={() => {$APIKey = ""; $Page = "login"}} slot="right-side">Logout</div>
-        <div class="nav-item" on:click={() => {$Page = "signup"}} slot="right-side">Signup</div>
-    </Navbar>
+    {#if $Page === "login"}
+        <Navbar>
+            <div slot="left-side">delivr.dev</div>
+            <div class="nav-item" on:click={() => {$Page = "signup"}} slot="right-side">Signup</div>
+        </Navbar>
+    {:else if $Page === "dashboard"}
+        <Navbar>
+            <div slot="left-side">delivr.dev</div>
+            <div class="nav-item" on:click={() => {$APIKey = ""; $Page = "login"}} slot="right-side">Logout</div>
+        </Navbar>
+    {/if}
 
     <div class="body">
         {#if $Page === "dashboard"}
