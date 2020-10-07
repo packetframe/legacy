@@ -10,11 +10,14 @@
     import {Page} from "./stores";
     import {APIKey} from "./stores";
     import {IsAdmin} from "./stores";
+    import {SnackBars} from "./stores"
+    import ButtonBar from "./components/ButtonBar.svelte";
+    import TextInput from "./components/TextInput.svelte";
 
     let zones;
     let selected_zone = window.location.toString().split("zone=")[1];
     let no_zones = false;
-    let showMap = false;
+    let showAdmin = false;
 
     function loadRecordDropdown(page) {
         fetch("http://localhost/api/nodes/list", {
@@ -50,6 +53,62 @@
     }
 
     $: loadRecordDropdown($Page)
+
+    function addSnackbar(status, message, color, timeout) {
+        let id = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5);
+        $SnackBars[id] = {status, message, color, timeout}
+    }
+
+    function refreshZoneRegistry() {
+        fetch("http://localhost/api/debug/refresh_zones", {
+            method: "GET",
+            headers: {
+                "X-API-Key": $APIKey
+            },
+        })
+            .then(response => response.json())
+            .then(data => {
+                addSnackbar("refresh_zone_registry", data["message"], data["success"] ? "green" : "red")
+            });
+    }
+
+    function refreshAllZones() {
+        fetch("http://localhost/api/debug/refresh_all_zones", {
+            method: "GET",
+            headers: {
+                "X-API-Key": $APIKey
+            },
+        })
+            .then(response => response.json())
+            .then(data => {
+                addSnackbar("refresh_all_zones", data["message"], data["success"] ? "green" : "red")
+            });
+    }
+
+    function refreshSingleZone() {
+        fetch("http://localhost/api/debug/refresh_single_zone/" + prompt("Which zone do you want to refresh?"), {
+            method: "GET",
+            headers: {
+                "X-API-Key": $APIKey
+            },
+        })
+            .then(response => response.json())
+            .then(data => {
+                addSnackbar("refresh_single_zone", data["message"], data["success"] ? "green" : "red")
+            });
+    }
+    function clearQueue() {
+        fetch("http://localhost/api/debug/clear_queue", {
+            method: "GET",
+            headers: {
+                "X-API-Key": $APIKey
+            },
+        })
+            .then(response => response.json())
+            .then(data => {
+                addSnackbar("clear_queue", data["message"], data["success"] ? "green" : "red")
+            });
+    }
 </script>
 
 <main>
@@ -65,7 +124,7 @@
                 <h1 class="header-text">CDN Dashboard</h1>
 
                 {#if $IsAdmin}
-                    <Button onclick={() => showMap = !showMap} padded={true}>Toggle Map</Button>
+                    <Button onclick={() => showAdmin = !showAdmin} padded={true}>Toggle Admin Tools</Button>
                 {/if}
 
                 {#if zones}
@@ -83,9 +142,19 @@
                 {/if}
             </div>
 
-            {#if showMap && $IsAdmin}
+            {#if showAdmin && $IsAdmin}
                 <NetworkMap/>
+
+                <ButtonBar>
+                    <Button padded onclick={() => refreshZoneRegistry()}>Refresh zone registry</Button>
+                    <Button padded onclick={() => refreshAllZones()}>Refresh all zones</Button>
+                    <Button padded onclick={() => clearQueue()}>Clear queue</Button>
+                    <Button padded onclick={() => refreshSingleZone()}>Refresh single zone</Button>
+                    <!--                <Button padded onclick={() => reprovision()}>Reprovision</Button>-->
+                </ButtonBar>
             {/if}
+
+
 
             {#if selected_zone !== ""}
                 <RecordTable zone={selected_zone}/>
