@@ -1,9 +1,12 @@
 [Unit]
 Description=delivr.dev orchestrator
 After=network.target
+
+[Service]
 Type=simple
 Restart=always
 User=nate
+WorkingDirectory=/home/nate/delivr-backend/
 ExecStart=python3 /home/nate/delivr-backend/orchestrator.py
 
 [Install]
