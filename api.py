@@ -16,6 +16,8 @@ from pymongo import MongoClient, ASCENDING
 from pymongo.errors import DuplicateKeyError
 from pystalk import BeanstalkClient
 
+from mail.sender import send_email
+
 from config import configuration
 
 app = Flask(__name__)
@@ -39,6 +41,9 @@ queue = BeanstalkClient("localhost", 11300)
 
 with open("templates/zone.j2") as zone_template_file:
     zone_template = Template(zone_template_file.read())
+
+with open("new_domain.j2", "r") as new_domain_template_file:
+    new_domain_template = Template(new_domain_template_file.read())
 
 
 def _post_record(domain, data):
@@ -243,6 +248,9 @@ def zones_add(username, is_admin):
     else:
         add_queue_message("refresh_zones", args=None)
         add_queue_message("refresh_single_zone", {"zone": zone})
+
+        mail_template = new_domain_template.render(domain=zone, nameservers=configuration["nameservers"])
+        send_email(username, "[delivr.dev] Domain added to delivr.dev", mail_template)
 
         return jsonify({"success": True, "message": "Added " + zone})
 
