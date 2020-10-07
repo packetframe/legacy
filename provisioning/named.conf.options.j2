@@ -2,7 +2,7 @@ options {
     directory "/var/cache/bind";
     recursion no;
     allow-transfer { none; };
-    version "PoP-Tag {{ ansible_hostname }}";
+    version "PoP {{ ansible_hostname }}";
 
     listen-on {
     {% for address in bind_addresses4 %}
