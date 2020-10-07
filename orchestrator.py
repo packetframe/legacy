@@ -64,7 +64,7 @@ while True:
 
                 print("    - sending updated zone file")
                 try:
-                    ssh.connect(node["management_ip"], username="root", port=34553, key_filename="./ssh-key2")
+                    ssh.connect(node["management_ip"], username="root", port=34553, key_filename=configuration["nodes"]["key"])
                 except TimeoutError:
                     error = "- ERROR: " + node["name"] + " timed out."
                     print(error)
@@ -97,7 +97,7 @@ while True:
                 print("    - sending updated zone file")
 
                 try:
-                    ssh.connect(node["management_ip"], username="root", port=34553, key_filename="./ssh-key2")
+                    ssh.connect(node["management_ip"], username="root", port=34553, key_filename=configuration["nodes"]["key"])
                 except TimeoutError:
                     error = "- ERROR: " + node["name"] + " timed out."
                     print(error)
@@ -117,7 +117,7 @@ while True:
                 print("... now updating " + node["name"] + " " + node["management_ip"] + " " + node["location"])
 
                 try:
-                    ssh.connect(node["management_ip"], username="root", port=34553, key_filename="./ssh-key2")
+                    ssh.connect(node["management_ip"], username="root", port=34553, key_filename=configuration["nodes"]["key"])
                 except TimeoutError:
                     error = "- ERROR: " + node["name"] + " timed out."
                     print(error)
