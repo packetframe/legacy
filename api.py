@@ -8,6 +8,7 @@ from time import strftime
 import dns.zone
 import requests
 from argon2 import PasswordHasher
+from argon2.exceptions import VerifyMismatchError
 from dns.rdatatype import RdataType
 from flask import Flask, request, jsonify
 from jinja2 import Template
@@ -194,15 +195,20 @@ def auth_login():
     if not user_doc:
         return jsonify({"success": False, "message": "Invalid username or password"})
 
-    if argon.verify(user_doc["password"], password):
-        return jsonify({"success": True, "message": user_doc["key"]})
-    else:
+    try:
+        valid = argon.verify(user_doc["password"], password)
+    except VerifyMismatchError:
         return jsonify({"success": False, "message": "Invalid username or password"})
+    else:
+        if valid:
+            return jsonify({"success": True, "message": user_doc["key"]})
+
+    return jsonify({"success": False, "message": "Invalid username or password"})
 
 
 @app.route("/zones/add", methods=["POST"])
 @authentication_required
-def zones_add(username):
+def zones_add(username, is_admin):
     # Add a new zone to the system
 
     try:
@@ -231,14 +237,17 @@ def zones_add(username):
 
 @app.route("/zones/list", methods=["GET"])
 @authentication_required
-def zones_list(username):
+def zones_list(username, is_admin):
     # Find all zones that have username in their users list
 
-    _zones = list(zones.find({
-        "users": {
-            "$in": [username]
-        }
-    }))
+    if is_admin:
+        _zones = list(zones.find({}))
+    else:
+        _zones = list(zones.find({
+            "users": {
+                "$in": [username]
+            }
+        }))
 
     for zone in _zones:
         del zone["_id"]
@@ -534,7 +543,7 @@ def zone_import(domain):
 
 @app.route("/nodes/add", methods=["POST"])
 @authentication_required
-def nodes_add(is_admin):
+def nodes_add(username, is_admin):
     # Add a node
 
     if not is_admin:
@@ -561,11 +570,11 @@ def nodes_add(is_admin):
 
 @app.route("/nodes/list", methods=["GET"])
 @authentication_required
-def nodes_list(is_admin):
+def nodes_list(username, is_admin):
     # Get a list of all nodes
 
     if not is_admin:
-        return 404
+        return jsonify({"success": False, "message": "Unauthorized"})
 
     _nodes = list(nodes.find())
 
@@ -580,40 +589,58 @@ def nodes_list(is_admin):
 if configuration["development"]:
     @app.route("/debug/refresh_zones")
     @authentication_required
-    def refresh_zones(is_admin):
+    def refresh_zones(username, is_admin):
         # Refresh the named.conf.local file
 
         if not is_admin:
-            return 404
+            return jsonify({"success": False, "message": "Unauthorized"})
 
         add_queue_message("refresh_zones", args=None)
-        return "Done"
+        return jsonify({"success": True, "message": "Refreshing zones"})
 
 
     @app.route("/debug/refresh_single_zone/<zone>")
     @authentication_required
-    def refresh_single_zone(zone, is_admin):
+    def refresh_single_zone(zone, username, is_admin):
         # Refresh the db.<zone> file
 
         if not is_admin:
-            return 404
+            return jsonify({"success": False, "message": "Unauthorized"})
+
+        zone_doc = zones.find_one({"zone": zone})
+        if not zone_doc:
+            return jsonify({"success": False, "message": "zone doesn't exist"})
 
         add_queue_message("refresh_single_zone", {"zone": zone})
-        return "Done"
+        return jsonify({"success": True, "message": "Refreshing single zone"})
 
 
     @app.route("/debug/refresh_all_zones")
     @authentication_required
-    def refresh_all_zones(is_admin):
+    def refresh_all_zones(username, is_admin):
         # Refresh all db.<zone> files and the named.conf.local file
 
         if not is_admin:
-            return 404
+            return jsonify({"success": False, "message": "Unauthorized"})
 
         for zone in zones.find():
             add_queue_message("refresh_single_zone", {"zone": zone["zone"]})
 
         add_queue_message("refresh_zones", args=None)
-        return "Done"
+        return jsonify({"success": True, "message": "Refreshing all zones"})
+
+
+    @app.route("/debug/clear_queue")
+    @authentication_required
+    def clear_queue(username, is_admin):
+        # Clear the beanstalk queue
+
+        if not is_admin:
+            return jsonify({"success": False, "message": "Unauthorized"})
+
+        for job in queue.reserve_iter():
+            queue.delete_job(job.job_id)
+
+        return jsonify({"success": True, "message": "Cleared queue"})
 
 app.run(debug=configuration["development"])
