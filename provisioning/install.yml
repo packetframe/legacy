@@ -1,7 +1,7 @@
 - name: Install
   hosts: all
   tasks:
-    - include_vars: vars/main.yml
+    - include_vars: vars.yml
 
     - name: Add debian sid repo
       apt_repository:
