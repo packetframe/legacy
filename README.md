@@ -1,11 +1,41 @@
-# cdn-v2
+# delivr-backend
 
 #### API Documentation
 
 
 
 
-##### /zone/add
+##### /auth/signup
+
+Create a zone
+
+Methods: POST
+
+Request Body:
+
+| POST Field | Type   | Description |
+| ---------- | ------ | ----------- |
+| username   | string | Username    |
+| password   | string | Password    |
+
+
+##### /auth/login
+
+Create a zone
+
+Methods: POST
+Returns: API Key
+
+Request Body:
+
+| POST Field | Type   | Description |
+| ---------- | ------ | ----------- |
+| username   | string | Username    |
+| password   | string | Password    |
+
+
+
+##### /zones/add
 Create a zone
 
 Methods: POST
