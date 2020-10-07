@@ -21,3 +21,21 @@ jobs:
           port: ${{ secrets.PORT }}
           source: "."
           target: "/home/nate/delivr-backend/"
+
+      - name: Restart orchestrator process
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: systemctl restart delivr-orchestrator
+
+      - name: Restart API process
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: systemctl restart delivr-api
