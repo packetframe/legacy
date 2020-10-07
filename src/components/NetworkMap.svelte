@@ -37,7 +37,7 @@
                     const lon = nodes[i]["geoloc"].split(", ")[1];
                     L.marker([lat, lon])
                         .addTo(mymap)
-                        .bindPopup("<b>" + nodes[i]["name"] + "</b><br>" + nodes[i]["location"] + "<br>" + nodes[i]["provider"])
+                        .bindPopup("<b>" + nodes[i]["name"] + "</b><br>" + nodes[i]["location"] + "<br>" + nodes[i]["provider"] + "<br><a href='#' onclick='stopNode(" + nodes[i]["name"] + ")'>Stop Node</a>")
                 }
             })
     })
