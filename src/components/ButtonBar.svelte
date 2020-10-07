@@ -10,5 +10,6 @@
         border-radius: 15px;
         padding: 5px;
         margin-bottom: 15px;
+        justify-content: center;
     }
 </style>

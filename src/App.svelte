@@ -18,6 +18,7 @@
     let selected_zone = window.location.toString().split("zone=")[1];
     let no_zones = false;
     let showAdmin = false;
+    let showMap = true;
 
     function loadRecordDropdown(page) {
         fetch("https://delivr.dev/api/nodes/list", {
@@ -143,14 +144,16 @@
             </div>
 
             {#if showAdmin && $IsAdmin}
-                <NetworkMap/>
+                {#if showMap}
+                    <NetworkMap/>
+                {/if}
 
                 <ButtonBar>
                     <Button padded onclick={() => refreshZoneRegistry()}>Refresh zone registry</Button>
                     <Button padded onclick={() => refreshAllZones()}>Refresh all zones</Button>
                     <Button padded onclick={() => clearQueue()}>Clear queue</Button>
                     <Button padded onclick={() => refreshSingleZone()}>Refresh single zone</Button>
-                    <!--                <Button padded onclick={() => reprovision()}>Reprovision</Button>-->
+                    <Button padded onclick={() => {showMap = !showMap}}>Toggle map</Button>
                 </ButtonBar>
             {/if}
 
