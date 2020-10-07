@@ -10,7 +10,7 @@ import requests
 from argon2 import PasswordHasher
 from argon2.exceptions import VerifyMismatchError
 from dns.rdatatype import RdataType
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, make_response
 from jinja2 import Template
 from pymongo import MongoClient, ASCENDING
 from pymongo.errors import DuplicateKeyError
@@ -201,7 +201,9 @@ def auth_login():
         return jsonify({"success": False, "message": "Invalid username or password"})
     else:
         if valid:
-            return jsonify({"success": True, "message": user_doc["key"]})
+            resp = make_response(jsonify({"success": True, "message": user_doc["key"]}))
+            resp.set_cookie("apikey", user_doc["key"])
+            return resp
 
     return jsonify({"success": False, "message": "Invalid username or password"})
 
