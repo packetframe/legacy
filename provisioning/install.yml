@@ -103,11 +103,22 @@
     - name: Create Caddyfile
       copy:
         content: |
-          local.delivr.dev:80, local-v4.delivr.dev:80, local-v6.delivr.dev:80
+          {
+            experimental_http3
+          }
+
+          https://local.delivr.dev, https://local-v4.delivr.dev, https://local-v6.delivr.dev
+          tls /etc/caddy/fullchain.pem /etc/caddy/privkey.pem
           header / -Server
           respond / `{
             "pop": "{{ ansible_hostname }}"
           }`
+
+          handle /.well-known/acme-challenge/* {
+            root * /usr/share/caddy
+            uri strip_prefix /.well-known/acme-challenge/
+            file_server browse
+          }
         dest: /etc/caddy/Caddyfile
       register: caddyfile
 
