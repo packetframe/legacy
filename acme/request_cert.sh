@@ -8,4 +8,3 @@ sudo certbot certonly \
   --manual-auth-hook /home/nate/delivr-backend/acme/acme_pre_hook.sh \
   --manual-cleanup-hook /home/nate/delivr-backend/acme/acme_post_hook.sh \
   -d local.delivr.dev \
-  --dry-run
