@@ -604,7 +604,7 @@ def nodes_list(username, is_admin):
     return jsonify({"success": True, "message": _nodes})
 
 
-@app.route("/nodes/power", methods=["GET"])
+@app.route("/nodes/power", methods=["POST"])
 @authentication_required
 def nodes_power(username, is_admin):
     # Start or stop a node's BGP daemon
