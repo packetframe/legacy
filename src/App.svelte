@@ -9,7 +9,7 @@
     import SnackbarGroup from "./components/SnackbarGroup.svelte";
     import {Page} from "./stores";
     import {IsAdmin} from "./stores";
-    import {SnackBars} from "./stores"
+    import {SnackBars} from "./stores";
     import ButtonBar from "./components/ButtonBar.svelte";
     import TextInput from "./components/TextInput.svelte";
     import {addSnackbar} from "./utils"
@@ -96,6 +96,20 @@
                 addSnackbar("clear_queue", data["message"], data["success"] ? "green" : "red")
             });
     }
+
+    function addZone() {
+        fetch("https://delivr.dev/api/zones/add", {
+            method: "POST",
+            credentials: "include",
+            body: JSON.stringify({
+                zone: prompt("What domain do you want to add?")
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                addSnackbar("add_zone", data["message"], data["success"] ? "green" : "red")
+            });
+    }
 </script>
 
 <main>
@@ -119,6 +133,8 @@
                 {#if $IsAdmin}
                     <Button onclick={() => showAdmin = !showAdmin} padded={true}>Toggle Admin Tools</Button>
                 {/if}
+
+                <Button onclick={() => addZone()} padded={true}>Add Zone</Button>
 
                 {#if zones}
                     <Dropdown width="100%" bind:content={selected_zone}>
