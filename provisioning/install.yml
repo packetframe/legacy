@@ -100,6 +100,11 @@
         dest: /etc/init.d/anycast.sh
         mode: +x
 
+    - name: Create Caddy directory
+      file:
+        path: /caddy
+        state: directory
+
     - name: Create Caddyfile
       copy:
         content: |
@@ -107,7 +112,7 @@
             experimental_http3
           }
 
-          https://local.delivr.dev, https://local-v4.delivr.dev, https://local-v6.delivr.dev
+          https://local.delivr.dev
           tls /caddy/fullchain.pem /caddy/privkey.pem
           header / -Server
           respond / `{
