@@ -3,6 +3,7 @@ import time
 
 from jinja2 import Template
 from paramiko import SSHClient, AutoAddPolicy
+from paramiko.ssh_exception import NoValidConnectionsError
 from pymongo import MongoClient
 from pystalk import BeanstalkClient
 from scp import SCPClient
@@ -65,7 +66,7 @@ while True:
                 print("    - sending updated zone file")
                 try:
                     ssh.connect(node["management_ip"], username="root", port=34553, key_filename=configuration["nodes"]["key"])
-                except TimeoutError:
+                except (TimeoutError, NoValidConnectionsError):
                     error = "- ERROR: " + node["name"] + " timed out."
                     print(error)
                 else:
@@ -98,7 +99,7 @@ while True:
 
                 try:
                     ssh.connect(node["management_ip"], username="root", port=34553, key_filename=configuration["nodes"]["key"])
-                except TimeoutError:
+                except (TimeoutError, NoValidConnectionsError):
                     error = "- ERROR: " + node["name"] + " timed out."
                     print(error)
                 else:
@@ -118,7 +119,7 @@ while True:
 
                 try:
                     ssh.connect(node["management_ip"], username="root", port=34553, key_filename=configuration["nodes"]["key"])
-                except TimeoutError:
+                except (TimeoutError, NoValidConnectionsError):
                     error = "- ERROR: " + node["name"] + " timed out."
                     print(error)
                 else:
