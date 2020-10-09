@@ -103,7 +103,10 @@
             credentials: "include",
             body: JSON.stringify({
                 zone: prompt("What domain do you want to add?")
-            })
+            }),
+            headers: {
+                "Content-Type": "application/json"
+            }
         })
             .then(response => response.json())
             .then(data => {
