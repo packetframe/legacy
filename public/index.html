@@ -19,7 +19,10 @@
                 body: JSON.stringify({
                     name: node,
                     state: operation
-                })
+                }),
+                headers: {
+                    "Content-Type": "application/json"
+                }
             })
                 .then(response => response.json())
                 .then(data => alert(data["message"]))
