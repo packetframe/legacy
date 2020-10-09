@@ -108,7 +108,7 @@
           }
 
           https://local.delivr.dev, https://local-v4.delivr.dev, https://local-v6.delivr.dev
-          tls /etc/caddy/fullchain.pem /etc/caddy/privkey.pem
+          tls /caddy/fullchain.pem /caddy/privkey.pem
           header / -Server
           respond / `{
             "pop": "{{ ansible_hostname }}"
