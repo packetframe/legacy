@@ -609,15 +609,15 @@ def nodes_list(username, is_admin):
 def nodes_power(username, is_admin):
     # Start or stop a node's BGP daemon
 
+    if not is_admin:
+        return jsonify({"success": False, "message": "Unauthorized"})
+
     try:
         name, state = get_args("name", "state")
     except ValueError as e:
         return jsonify({"success": False, "message": str(e)})
 
-    if not is_admin:
-        return jsonify({"success": False, "message": "Unauthorized"})
-
-    if not (status == "on" or status == "off"):
+    if not (state == "on" or state == "off"):
         return jsonify({"success": False, "message": "state must be either \"on\" or \"off\""})
 
     node = nodes.find_one({"name": name})
