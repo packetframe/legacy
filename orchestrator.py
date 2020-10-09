@@ -128,6 +128,21 @@ while True:
 
             print("finished deleting " + args["zone"])
 
+        elif operation == "node_power":
+            print("setting node " + args["ip"] + " to " + args["state"])
+
+            try:
+                ssh.connect(args["ip"], username="root", port=34553, key_filename=configuration["nodes"]["key"])
+            except (TimeoutError, NoValidConnectionsError):
+                error = "- ERROR: " + args["ip"] + " timed out."
+                print(error)
+            else:
+                if args["state"] == "on":
+                    run_ssh_command("systemctl start bird")
+                elif args["state"] == "off":
+                    run_ssh_command("birdc down")
+                ssh.close()
+
         queue.delete_job(job.job_id)
 
     time.sleep(0.5)
