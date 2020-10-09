@@ -13,19 +13,24 @@
     <script defer src='/build/bundle.js'></script>
     <script>
         function setNode(node, operation) {
-            fetch("https://delivr.dev/api/nodes/power", {
-                method: "POST",
-                credentials: "include",
-                body: JSON.stringify({
-                    name: node,
-                    state: operation
-                }),
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            })
-                .then(response => response.json())
-                .then(data => alert(data["message"]))
+
+            let check_confirm = window.confirm("Are you sure you want to set " + node.toUpperCase() + " BGP state to " + operation + "?");
+
+            if (check_confirm) {
+                fetch("https://delivr.dev/api/nodes/power", {
+                    method: "POST",
+                    credentials: "include",
+                    body: JSON.stringify({
+                        name: node,
+                        state: operation
+                    }),
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => alert(data["message"]))
+            }
         }
     </script>
 </head>
