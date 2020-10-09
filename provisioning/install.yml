@@ -97,7 +97,7 @@
     - name: Create network config
       copy:
         content: "{{ config }}"
-        dest: /etc/init.d/anycast.sh
+        dest: /root/network.sh
         mode: +x
 
     - name: Create Caddy directory
