@@ -32,8 +32,8 @@
                             <br>
                             ${nodes[i]["provider"]}
                             <br>
-                            <a href='#' onclick='setNode("${nodes[i]["name"]}", "start")'>Start</a>
-                            <a href='#' onclick='setNode("${nodes[i]["name"]}", "stop")'>Stop</a>
+                            <a href='#' onclick='setNode("${nodes[i]["name"]}", "on")'>Start</a>
+                            <a href='#' onclick='setNode("${nodes[i]["name"]}", "off")'>Stop</a>
                         `)
                 }
             })

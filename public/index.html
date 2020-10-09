@@ -13,11 +13,12 @@
     <script defer src='/build/bundle.js'></script>
     <script>
         function setNode(node, operation) {
-            fetch("https://delivr.dev/api/nodes/" + operation, {
+            fetch("https://delivr.dev/api/nodes/power", {
                 method: "POST",
                 credentials: "include",
                 body: JSON.stringify({
-                    node: node
+                    node: node,
+                    state: operation
                 })
             })
                 .then(response => response.json())
