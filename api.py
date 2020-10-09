@@ -491,72 +491,72 @@ def zones_export(zone):
     return jsonify({"success": True, "message": "; " + zone["zone"] + " exported from delivr.dev at " + current_time + "\n\n" + zone_file})
 
 
-@app.route("/zones/<zone>/import", methods=["POST"])
-def zone_import(domain):
-    # Parse a RFC 1035 (BIND-format) zone file and import records accordingly
-
-    if not valid_zone(domain):
-        return jsonify({"success": False, "message": "Invalid zone"})
-
-    try:
-        file = get_args("file")
-    except ValueError as e:
-        return jsonify({"success": False, "message": str(e)})
-
-    zone = dns.zone.from_text(file, domain)
-
-    for name, node in zone.items():
-        if str(name) == "@":
-            name = domain + "."
-        else:
-            name = str(name) + "." + domain + "."
-
-        for rdataset in node.rdatasets:
-            for rdata in rdataset:
-                if rdataset.rdtype == RdataType.A:
-                    _post_record(domain, {
-                        "label": name,
-                        "ttl": 3600,
-                        "type": "A",
-                        "value": str(rdata.address)
-                    })
-                if rdataset.rdtype == RdataType.AAAA:
-                    _post_record(domain, {
-                        "label": name,
-                        "ttl": 3600,
-                        "type": "AAAA",
-                        "value": str(rdata.address)
-                    })
-                if rdataset.rdtype == RdataType.MX:
-                    _post_record(domain, {
-                        "label": name,
-                        "ttl": 3600,
-                        "type": "MX",
-                        "value": f"{rdata.preference} {rdata.exchange}"
-                    })
-                if rdataset.rdtype == RdataType.CNAME:
-                    _post_record(domain, {
-                        "label": name,
-                        "ttl": 3600,
-                        "type": "CNAME",
-                        "value": str(rdata.target)
-                    })
-                if rdataset.rdtype == RdataType.SRV:
-                    _post_record(domain, {
-                        "label": name,
-                        "ttl": 3600,
-                        "type": "SRV",
-                        "value": f"{rdata.priority} {rdata.weight} {rdata.port} {rdata.target}"
-                    })
-                if rdataset.rdtype == RdataType.TXT:
-                    _post_record(domain, {
-                        "label": name,
-                        "ttl": 3600,
-                        "type": "TXT",
-                        "value": str(rdata).replace("\" \"", "").replace("\"", "")
-                    })
-
-    return "Done"
+# @app.route("/zones/<zone>/import", methods=["POST"])
+# def zone_import(domain):
+#     # Parse a RFC 1035 (BIND-format) zone file and import records accordingly
+#
+#     if not valid_zone(domain):
+#         return jsonify({"success": False, "message": "Invalid zone"})
+#
+#     try:
+#         file = get_args("file")
+#     except ValueError as e:
+#         return jsonify({"success": False, "message": str(e)})
+#
+#     zone = dns.zone.from_text(file, domain)
+#
+#     for name, node in zone.items():
+#         if str(name) == "@":
+#             name = domain + "."
+#         else:
+#             name = str(name) + "." + domain + "."
+#
+#         for rdataset in node.rdatasets:
+#             for rdata in rdataset:
+#                 if rdataset.rdtype == RdataType.A:
+#                     _post_record(domain, {
+#                         "label": name,
+#                         "ttl": 3600,
+#                         "type": "A",
+#                         "value": str(rdata.address)
+#                     })
+#                 if rdataset.rdtype == RdataType.AAAA:
+#                     _post_record(domain, {
+#                         "label": name,
+#                         "ttl": 3600,
+#                         "type": "AAAA",
+#                         "value": str(rdata.address)
+#                     })
+#                 if rdataset.rdtype == RdataType.MX:
+#                     _post_record(domain, {
+#                         "label": name,
+#                         "ttl": 3600,
+#                         "type": "MX",
+#                         "value": f"{rdata.preference} {rdata.exchange}"
+#                     })
+#                 if rdataset.rdtype == RdataType.CNAME:
+#                     _post_record(domain, {
+#                         "label": name,
+#                         "ttl": 3600,
+#                         "type": "CNAME",
+#                         "value": str(rdata.target)
+#                     })
+#                 if rdataset.rdtype == RdataType.SRV:
+#                     _post_record(domain, {
+#                         "label": name,
+#                         "ttl": 3600,
+#                         "type": "SRV",
+#                         "value": f"{rdata.priority} {rdata.weight} {rdata.port} {rdata.target}"
+#                     })
+#                 if rdataset.rdtype == RdataType.TXT:
+#                     _post_record(domain, {
+#                         "label": name,
+#                         "ttl": 3600,
+#                         "type": "TXT",
+#                         "value": str(rdata).replace("\" \"", "").replace("\"", "")
+#                     })
+#
+#     return "Done"
 
 
 # Node
