@@ -14,18 +14,6 @@
         }).addTo(mymap);
         mymap.setView([50, -25], 1.5);
 
-        function stopNode(node) {
-            fetch("https://delivr.dev/api/nodes/stop", {
-                method: "POST",
-                credentials: "include",
-                body: JSON.stringify({
-                    node: node
-                })
-            })
-                .then(response => response.json())
-                .then(data => addSnackbar("stop_node", data["message"], data["success"] ? "green" : "red"))
-        }
-
         fetch("https://delivr.dev/api/nodes/list", {
             credentials: "include"
         })
@@ -37,7 +25,16 @@
                     const lon = nodes[i]["geoloc"].split(", ")[1];
                     L.marker([lat, lon])
                         .addTo(mymap)
-                        .bindPopup("<b>" + nodes[i]["name"] + "</b><br>" + nodes[i]["location"] + "<br>" + nodes[i]["provider"] + "<br><a href='#' onclick='stopNode(" + nodes[i]["name"] + ")'>Stop Node</a>")
+                        .bindPopup(`
+                            <b>${nodes[i]["name"]}</b>
+                            <br>
+                            ${nodes[i]["location"]}
+                            <br>
+                            ${nodes[i]["provider"]}
+                            <br>
+                            <a href='#' onclick='setNode("${nodes[i]["name"]}", "start")'>Start</a>
+                            <a href='#' onclick='setNode("${nodes[i]["name"]}", "stop")'>Stop</a>
+                        `)
                 }
             })
     })

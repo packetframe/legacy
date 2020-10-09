@@ -11,6 +11,19 @@
     <link rel='stylesheet' href='/build/bundle.css'>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script defer src='/build/bundle.js'></script>
+    <script>
+        function setNode(node, operation) {
+            fetch("https://delivr.dev/api/nodes/" + operation, {
+                method: "POST",
+                credentials: "include",
+                body: JSON.stringify({
+                    node: node
+                })
+            })
+                .then(response => response.json())
+                .then(data => alert(data["message"]))
+        }
+    </script>
 </head>
 
 <body>
