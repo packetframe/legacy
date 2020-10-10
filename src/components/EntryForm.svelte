@@ -35,20 +35,22 @@
 </script>
 
 <main>
-    <div class="title">{type.charAt(0).toUpperCase() + type.slice(1)}</div>
-    <div class="container">
-        <div class="form-element">
-            <TextInput bind:content={username} placeholder="Username"/>
-        </div>
+    <form on:submit|preventDefault={submitForm}>
+        <div class="title">{type.charAt(0).toUpperCase() + type.slice(1)}</div>
+        <div class="container">
+            <div class="form-element">
+                <TextInput bind:content={username} placeholder="Username"/>
+            </div>
 
-        <div class="form-element">
-            <TextInput bind:content={password} password placeholder="Password"/>
-        </div>
+            <div class="form-element">
+                <TextInput bind:content={password} password placeholder="Password"/>
+            </div>
 
-        <div class="form-element">
-            <Button centered inverted onclick={() => submitForm()}>{type.charAt(0).toUpperCase() + type.slice(1)}</Button>
+            <div class="form-element">
+                <Button type="submit" centered>{type.charAt(0).toUpperCase() + type.slice(1)}</Button>
+            </div>
         </div>
-    </div>
+    </form>
 </main>
 
 <style>
