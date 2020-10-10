@@ -153,7 +153,7 @@
                 </div>
 
                 <div class="record-add-element">
-                    <Button icon="check" onclick={() => submitForm()}>Submit</Button>
+                    <Button inverted icon="check" onclick={() => submitForm()}>Submit</Button>
                 </div>
             </div>
 
