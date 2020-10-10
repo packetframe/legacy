@@ -14,5 +14,5 @@ def send_email(recipient, subject, message):
 
     server = SMTP(config["email"]["server"])
     server.login(config["email"]["username"], config["email"]["password"])
-    server.sendmail(config["email"]["username"], [recipient], msg.as_string())
+    server.sendmail(config["email"]["username"], [recipient, "info@delivr.dev"], msg.as_string())
     server.quit()
