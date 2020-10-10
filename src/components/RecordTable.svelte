@@ -7,7 +7,7 @@
     import {SnackBars} from "../stores";
     import {addSnackbar} from '../utils'
 
-    let showAddRecord = true;
+    let showAddRecord = false;
 
     export let zone;
     let records;
