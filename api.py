@@ -1,24 +1,22 @@
 import base64
+import ipaddress
 import json
 import re
 from functools import wraps
 from os import urandom
 from time import strftime
 
-import dns.zone
 import requests
 from argon2 import PasswordHasher
 from argon2.exceptions import VerifyMismatchError
-from dns.rdatatype import RdataType
 from flask import Flask, request, jsonify, make_response
 from jinja2 import Template
 from pymongo import MongoClient, ASCENDING
 from pymongo.errors import DuplicateKeyError
 from pystalk import BeanstalkClient
 
-from mail.sender import send_email
-
 from config import configuration
+from mail.sender import send_email
 
 app = Flask(__name__)
 if configuration["development"]:
@@ -251,6 +249,47 @@ def zones_add(username, is_admin):
 
         mail_template = new_domain_template.render(domain=zone, nameservers=configuration["nameservers"])
         send_email(username, "[delivr.dev] Domain added to delivr.dev", mail_template)
+
+        return jsonify({"success": True, "message": "Added " + zone})
+
+
+@app.route("/reverse_zones/add", methods=["POST"])
+@authentication_required
+def reverse_zones_add(username, is_admin):
+    # Add a new reverse zone to the system
+
+    try:
+        zone = get_args("zone")
+    except ValueError as e:
+        return jsonify({"success": False, "message": str(e)})
+
+    try:
+        address = ipaddress.ip_network(zone)
+        if type(address) == ipaddress.IPv4Network and not (address.prefixlen == 24 or address.prefixlen == 16 or address.prefixlen == 8):
+            return jsonify({"success": False, "message": "IPv4 prefix length must be on an octet boundary"})
+        elif type(address) == ipaddress.IPv4Network and not (address.prefixlen == 48):  # TODO: What other lengths is allowed here?
+            return jsonify({"success": False, "message": "IPv6 prefix length must be on an octet boundary"})
+    except (ipaddress.AddressValueError, ValueError):
+        return jsonify({"success": False, "message": "Invalid CIDR notation"})
+
+    pointer = address.network_address.reverse_pointer + "."
+
+    try:
+        zones.insert_one({
+            "zone": pointer,
+            "records": [],
+            "serial": _get_current_serial(),
+            "users": [username],
+            "type": "reverse"
+        })
+    except DuplicateKeyError:
+        return jsonify({"success": False, "message": "Reverse zone already exists"})
+    else:
+        add_queue_message("refresh_zones", args=None)
+        add_queue_message("refresh_single_zone", {"zone": zone})
+
+        mail_template = new_domain_template.render(domain=zone, nameservers=configuration["nameservers"])
+        send_email(username, "[delivr.dev] Reverse zone added to delivr.dev", mail_template)
 
         return jsonify({"success": True, "message": "Added " + zone})
 
