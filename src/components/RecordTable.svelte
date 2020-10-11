@@ -81,13 +81,15 @@
         })
             .then(response => response.json())
             .then(data => {
-                addSnackbar("zone_export", data["message"], data["success"] ? "green" : "red");
                 if (data["success"]) {
+                    addSnackbar("zone_export", "Downloading zone file", "green");
                     let hiddenElement = document.createElement('a');
                     hiddenElement.href = 'data:attachment/text,' + encodeURI(data["message"]);
                     hiddenElement.target = '_blank';
                     hiddenElement.download = "db." + zone;
                     hiddenElement.click();
+                } else {
+                    addSnackbar("zone_export", data["message"], "red");
                 }
             });
     }
