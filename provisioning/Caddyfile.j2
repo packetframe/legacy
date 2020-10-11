@@ -1,0 +1,42 @@
+{
+    experimental_http3
+}
+
+https://local.delivr.dev
+
+tls /caddy/fullchain.pem /caddy/privkey.pem
+header / -Server
+
+handle /.well-known/acme-challenge/* {
+    root * /usr/share/caddy
+    uri strip_prefix /.well-known/acme-challenge/
+    file_server browse
+}
+
+respond /json `{
+    "pop": "{{ ansible_hostname }}"
+}`
+
+respond / `
+<!DOCTYPE html>
+<html>
+
+<style>
+  body {
+      color: #ffffff;
+      background-color: #000;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+      text-align: center;
+      padding-top: 25px;
+  }
+</style>
+
+<body>
+<p>You're connected to <u>{{ ansible_hostname }}</u></p>
+</body>
+
+</html>
+`
