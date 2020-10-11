@@ -122,6 +122,7 @@
                         <option value="TXT">TXT</option>
                         <option value="MX">MX</option>
                         <option value="SRV">SRV</option>
+                        <option value="PTR">PTR</option>
                     </Dropdown>
                 </div>
 
@@ -156,7 +157,6 @@
                     <Button inverted icon="check" onclick={() => submitForm()}>Submit</Button>
                 </div>
             </div>
-
         {/if}
     </div>
 
