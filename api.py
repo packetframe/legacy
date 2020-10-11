@@ -285,7 +285,7 @@ def reverse_zones_add(username, is_admin):
         return jsonify({"success": False, "message": "Reverse zone already exists"})
     else:
         add_queue_message("refresh_zones", args=None)
-        add_queue_message("refresh_single_zone", {"zone": zone})
+        add_queue_message("refresh_single_zone", {"zone": pointer})
 
         mail_template = new_domain_template.render(domain=zone, nameservers=configuration["nameservers"])
         send_email(username, "[delivr.dev] Reverse zone added to delivr.dev", mail_template)
