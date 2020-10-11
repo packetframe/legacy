@@ -2,3 +2,4 @@
 ssh-key*
 provisioning/hosts.yml
 provisioning/*.retry
+provisioning/vars.yml
