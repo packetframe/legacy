@@ -231,14 +231,30 @@ def zones_add(username, is_admin):
         return jsonify({"success": False, "message": str(e)})
 
     if not valid_zone(zone):
-        return jsonify({"success": False, "message": "Invalid zone"})
+        if "/" in zone:
+            try:
+                address = ipaddress.ip_network(zone)
+                if type(address) == ipaddress.IPv4Network and not (address.prefixlen == 24 or address.prefixlen == 16 or address.prefixlen == 8):
+                    return jsonify({"success": False, "message": "IPv4 prefix length must be on an octet boundary"})
+                elif type(address) == ipaddress.IPv6Network and not (address.prefixlen == 48):  # TODO: What other lengths is allowed here?
+                    return jsonify({"success": False, "message": "IPv6 prefix length must be on an octet boundary"})
+            except (ipaddress.AddressValueError, ValueError):
+                return jsonify({"success": False, "message": "Invalid CIDR notation"})
+
+            zone = address.network_address.reverse_pointer + "."
+            zone_type = "reverse"
+        else:
+            return jsonify({"success": False, "message": "Invalid zone"})
+    else:  # If valid forward zone
+        zone_type = "forward"
 
     try:
         zones.insert_one({
             "zone": zone,
             "records": [],
             "serial": _get_current_serial(),
-            "users": [username]
+            "users": [username],
+            "type": zone_type
         })
     except DuplicateKeyError:
         return jsonify({"success": False, "message": "Zone already exists"})
@@ -248,47 +264,6 @@ def zones_add(username, is_admin):
 
         mail_template = new_domain_template.render(domain=zone, nameservers=configuration["nameservers"])
         send_email(username, "[delivr.dev] Domain added to delivr.dev", mail_template)
-
-        return jsonify({"success": True, "message": "Added " + zone})
-
-
-@app.route("/reverse_zones/add", methods=["POST"])
-@authentication_required
-def reverse_zones_add(username, is_admin):
-    # Add a new reverse zone to the system
-
-    try:
-        zone = get_args("zone")
-    except ValueError as e:
-        return jsonify({"success": False, "message": str(e)})
-
-    try:
-        address = ipaddress.ip_network(zone)
-        if type(address) == ipaddress.IPv4Network and not (address.prefixlen == 24 or address.prefixlen == 16 or address.prefixlen == 8):
-            return jsonify({"success": False, "message": "IPv4 prefix length must be on an octet boundary"})
-        elif type(address) == ipaddress.IPv6Network and not (address.prefixlen == 48):  # TODO: What other lengths is allowed here?
-            return jsonify({"success": False, "message": "IPv6 prefix length must be on an octet boundary"})
-    except (ipaddress.AddressValueError, ValueError):
-        return jsonify({"success": False, "message": "Invalid CIDR notation"})
-
-    pointer = address.network_address.reverse_pointer + "."
-
-    try:
-        zones.insert_one({
-            "zone": pointer,
-            "records": [],
-            "serial": _get_current_serial(),
-            "users": [username],
-            "type": "reverse"
-        })
-    except DuplicateKeyError:
-        return jsonify({"success": False, "message": "Reverse zone already exists"})
-    else:
-        add_queue_message("refresh_zones", args=None)
-        add_queue_message("refresh_single_zone", {"zone": pointer})
-
-        mail_template = new_domain_template.render(domain=zone, nameservers=configuration["nameservers"])
-        send_email(username, "[delivr.dev] Reverse zone added to delivr.dev", mail_template)
 
         return jsonify({"success": True, "message": "Added " + zone})
 
