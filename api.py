@@ -327,90 +327,108 @@ def records_add(zone):
     if not valid_label(label):
         return jsonify({"success": False, "message": "Invalid label"})
 
-    if rec_type == "A":
-        try:
-            value = get_args("value")
-        except ValueError as e:
-            return jsonify({"success": False, "message": str(e)})
+    zone_doc = zones.find_one({"zone": zone})
+    if not zone_doc:
+        return jsonify({"success": False, "message": "Zone doesn't exist"})
 
-        if not valid_ipv4(value):
-            return jsonify({"success": False, "message": "Invalid IPv4 address"})
+    if zone_doc["type"] == "forward":
+        if rec_type == "A":
+            try:
+                value = get_args("value")
+            except ValueError as e:
+                return jsonify({"success": False, "message": str(e)})
 
-    elif rec_type == "AAAA":
-        try:
-            value = get_args("value")
-        except ValueError as e:
-            return jsonify({"success": False, "message": str(e)})
+            if not valid_ipv4(value):
+                return jsonify({"success": False, "message": "Invalid IPv4 address"})
 
-        if not valid_ipv6(value):
-            return jsonify({"success": False, "message": "Invalid IPv6 address"})
+        elif rec_type == "AAAA":
+            try:
+                value = get_args("value")
+            except ValueError as e:
+                return jsonify({"success": False, "message": str(e)})
 
-    elif rec_type == "CNAME":
-        try:
-            value = get_args("value")
-        except ValueError as e:
-            return jsonify({"success": False, "message": str(e)})
+            if not valid_ipv6(value):
+                return jsonify({"success": False, "message": "Invalid IPv6 address"})
 
-        if not valid_label(value):
-            return jsonify({"success": False, "message": "Invalid CNAME value"})
+        elif rec_type == "CNAME":
+            try:
+                value = get_args("value")
+            except ValueError as e:
+                return jsonify({"success": False, "message": str(e)})
 
-    elif rec_type == "TXT":
-        try:
-            value = get_args("value")
-        except ValueError as e:
-            return jsonify({"success": False, "message": str(e)})
+            if not valid_label(value):
+                return jsonify({"success": False, "message": "Invalid CNAME value"})
 
-        # TODO: Check for TXT validity and maybe put quotes around the TXT record?
-        # if not valid_label(value):
-        #     return jsonify({"success": False, "message": "Invalid MX server"})
+        elif rec_type == "TXT":
+            try:
+                value = get_args("value")
+            except ValueError as e:
+                return jsonify({"success": False, "message": str(e)})
 
-    elif rec_type == "MX":
-        try:
-            value, priority = get_args("value", "priority")
-        except ValueError as e:
-            return jsonify({"success": False, "message": str(e)})
+            # TODO: Check for TXT validity and maybe put quotes around the TXT record?
+            # if not valid_label(value):
+            #     return jsonify({"success": False, "message": "Invalid MX server"})
 
-        if not valid_label(value):
-            return jsonify({"success": False, "message": "Invalid MX server label"})
+        elif rec_type == "MX":
+            try:
+                value, priority = get_args("value", "priority")
+            except ValueError as e:
+                return jsonify({"success": False, "message": str(e)})
 
-        try:
-            # TODO: What is in bound here?
-            if int(priority) < 1:
-                raise TypeError
-        except TypeError:
-            return jsonify({"success": False, "message": "MX priority must be an integer"})
+            if not valid_label(value):
+                return jsonify({"success": False, "message": "Invalid MX server label"})
 
-        value = str(priority) + " " + value
+            try:
+                # TODO: What is in bound here?
+                if int(priority) < 1:
+                    raise TypeError
+            except TypeError:
+                return jsonify({"success": False, "message": "MX priority must be an integer"})
 
-    elif rec_type == "SRV":
-        try:
-            value, priority, weight, port = get_args("value", "priority", "weight", "port")
-        except ValueError as e:
-            return jsonify({"success": False, "message": str(e)})
+            value = str(priority) + " " + value
 
-        if not valid_label(value):
-            return jsonify({"success": False, "message": "Invalid SRV target"})
+        elif rec_type == "SRV":
+            try:
+                value, priority, weight, port = get_args("value", "priority", "weight", "port")
+            except ValueError as e:
+                return jsonify({"success": False, "message": str(e)})
 
-        try:
-            # TODO: What is in bound here?
-            if int(priority) < 0 or int(weight) < 0 or int(port) < 0:
-                raise TypeError
-        except TypeError:
-            return jsonify({"success": False, "message": "SRV priority, weight, and port must be a positive integer"})
+            if not valid_label(value):
+                return jsonify({"success": False, "message": "Invalid SRV target"})
 
-        value = str(priority) + " " + str(weight) + " " + str(port) + " " + value
+            try:
+                # TODO: What is in bound here?
+                if int(priority) < 0 or int(weight) < 0 or int(port) < 0:
+                    raise TypeError
+            except TypeError:
+                return jsonify({"success": False, "message": "SRV priority, weight, and port must be a positive integer"})
 
-    elif rec_type == "CNAME":
-        try:
-            value = get_args("value")
-        except ValueError as e:
-            return jsonify({"success": False, "message": str(e)})
+            value = str(priority) + " " + str(weight) + " " + str(port) + " " + value
 
-        if not valid_label(value):
-            return jsonify({"success": False, "message": "Invalid CNAME value"})
+        elif rec_type == "CNAME":
+            try:
+                value = get_args("value")
+            except ValueError as e:
+                return jsonify({"success": False, "message": str(e)})
 
-    else:
-        return jsonify({"success": False, "message": "Invalid record type (Allowed values are A/AAAA"})
+            if not valid_label(value):
+                return jsonify({"success": False, "message": "Invalid CNAME value"})
+
+        else:
+            return jsonify({"success": False, "message": "Invalid record type (Allowed values are A/AAAA/CNAME/TXT/MX/SRV"})
+
+    else:  # Reverse zone
+        if rec_type == "PTR":
+            try:
+                value = get_args("value")
+            except ValueError as e:
+                return jsonify({"success": False, "message": str(e)})
+
+            if not valid_label(value):
+                return jsonify({"success": False, "message": "Invalid PTR value"})
+
+        else:
+            return jsonify({"success": False, "message": "Invalid record type (Allowed values are PTR"})
 
     zones.update_one({"zone": zone}, {
         "$push": {
