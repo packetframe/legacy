@@ -97,6 +97,18 @@
             });
     }
 
+    function showQueueStats() {
+        fetch("https://delivr.dev/api/debug/queue_stats", {
+            method: "GET",
+            credentials: "include"
+        })
+            .then(response => response.json())
+            .then(data => {
+                addSnackbar("queue_stats", data["message"], data["success"] ? "green" : "red")
+                alert()
+            });
+    }
+
     function addZone() {
         fetch("https://delivr.dev/api/zones/add", {
             method: "POST",
@@ -164,6 +176,7 @@
                     <Button padded onclick={() => refreshAllZones()}>Refresh all zones</Button>
                     <Button padded onclick={() => clearQueue()}>Clear queue</Button>
                     <Button padded onclick={() => refreshSingleZone()}>Refresh single zone</Button>
+                    <Button padded onclick={() => showQueueStats()}>Queue Stats</Button>
                     <Button padded onclick={() => {showMap = !showMap}}>Toggle map</Button>
                 </ButtonBar>
             {/if}
