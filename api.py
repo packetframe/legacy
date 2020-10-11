@@ -241,7 +241,7 @@ def zones_add(username, is_admin):
             except (ipaddress.AddressValueError, ValueError):
                 return jsonify({"success": False, "message": "Invalid CIDR notation"})
 
-            zone = address.network_address.reverse_pointer + "."
+            zone = address.network_address.reverse_pointer
             zone_type = "reverse"
         else:
             return jsonify({"success": False, "message": "Invalid zone"})
