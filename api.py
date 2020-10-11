@@ -719,4 +719,20 @@ if configuration["development"]:
 
         return jsonify({"success": True, "message": "Cleared queue"})
 
+
+    @app.route("/debug/queue_stats")
+    @authentication_required
+    def queue_stats(username, is_admin):
+        # Clear the beanstalk queue
+
+        if not is_admin:
+            return jsonify({"success": False, "message": "Unauthorized"})
+
+        stats = queue.stats()
+
+        return jsonify({"success": True, "message": {
+            "current_ready": stats["current-jobs-ready"],
+            "current_reserved": stats["current-jobs-reserved"]
+        }})
+
 app.run(debug=configuration["development"])
