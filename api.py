@@ -108,19 +108,25 @@ def get_args(*args):
         return tuple(payload)
 
 
+def get_api_key():
+    x_api_key = request.headers.get("X-API-Key")
+    if not (x_api_key or request.headers.get("Cookie")):
+        return jsonify({"success": False, "message": "X-API-Key or Cookie must not be blank"})
+
+    if x_api_key:
+        api_key = x_api_key
+    else:
+        api_key = request.headers.get("Cookie").split("apikey=")[1]
+
+    return api_key
+
+
 def zone_authentication_required(f):
     # Check if a user is authenticated and permitted to perform operations on a zone
 
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        x_api_key = request.headers.get("X-API-Key")
-        if not (x_api_key or request.headers.get("Cookie")):
-            return jsonify({"success": False, "message": "X-API-Key or Cookie must not be blank"})
-
-        if x_api_key:
-            api_key = x_api_key
-        else:
-            api_key = request.headers.get("Cookie").split("apikey=")[1]
+        api_key = get_api_key()
 
         zone = kwargs.get("zone")
         if not zone:
@@ -147,14 +153,7 @@ def authentication_required(f):
 
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        x_api_key = request.headers.get("X-API-Key")
-        if not (x_api_key or request.headers.get("Cookie")):
-            return jsonify({"success": False, "message": "X-API-Key or Cookie must not be blank"})
-
-        if x_api_key:
-            api_key = x_api_key
-        else:
-            api_key = request.headers.get("Cookie").split("apikey=")[1]
+        api_key = get_api_key()
 
         user_doc = users.find_one({"key": api_key})
         if not user_doc:
