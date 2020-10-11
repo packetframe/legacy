@@ -1,5 +1,9 @@
 # delivr-backend
 
+#### Certbot
+`certbot renew --deploy-hook acme/deploy_cert.sh`
+
+
 #### API Documentation
 
 
