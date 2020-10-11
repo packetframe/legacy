@@ -105,7 +105,7 @@
             .then(response => response.json())
             .then(data => {
                 addSnackbar("queue_stats", "success", data["success"] ? "green" : "red")
-                alert("Pending: " + data["message"]["current_ready"] + "\nRunning: " + data["current_reserved"]["jobs_reserved"])
+                alert("Pending: " + data["message"]["current_ready"] + "\nRunning: " + data["message"]["current_reserved"])
             });
     }
 
