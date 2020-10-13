@@ -90,6 +90,24 @@
         bind_addresses6: "{{ bind_addresses6 }}"
       register: bind_config
 
+    - name: Copy manual zones
+      copy:
+        src: "{{ item }}"
+        dest: /etc/bind/
+        owner: root
+        mode: 644
+      with_fileglob:
+        - manual/*
+
+    - name: Copy named.conf
+      copy:
+        content: |
+          include "/etc/bind/named.conf.options";
+          include "/etc/bind/named.conf.local";
+          include "/etc/bind/named.conf.default-zones";
+          include "/etc/bind/manual.conf";
+        dest: /etc/bind/named.conf
+
     - name: Reload BIND config
       shell: rndc reload
       when: bind_config.changed
@@ -116,11 +134,3 @@
         name: caddy
         state: restarted
       when: caddyfile.changed
-
-    - copy:
-        src: "{{ item }}"
-        dest: /etc/bind/
-        owner: root
-        mode: 644
-      with_fileglob:
-        - manual/*
