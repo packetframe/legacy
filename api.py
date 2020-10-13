@@ -624,13 +624,13 @@ def nodes_add(username, is_admin):
 def nodes_list(username, is_admin):
     # Get a list of all nodes
 
-    if not is_admin:
-        return jsonify({"success": False, "message": "Unauthorized"})
-
     _nodes = list(nodes.find())
 
     for node in _nodes:
         del node["_id"]
+
+        if not is_admin:  # If user isn't admin, remove sensitive info
+            del node["management_ip"]
 
     return jsonify({"success": True, "message": _nodes})
 
