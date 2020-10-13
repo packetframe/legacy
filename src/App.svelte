@@ -13,6 +13,8 @@
     import ButtonBar from "./components/ButtonBar.svelte";
     import TextInput from "./components/TextInput.svelte";
     import {addSnackbar} from "./utils"
+    import ReadOnlyNetworkMap from "./components/ReadOnlyNetworkMap.svelte";
+    import ReadOnlyNetworkTable from "./components/ReadOnlyNetworkTable.svelte";
 
     let zones;
     let selected_zone = window.location.toString().split("zone=")[1];
@@ -194,12 +196,15 @@
             <EntryForm type="login"/>
         {:else if $Page === "signup"}
             <EntryForm type="signup"/>
+        {:else if $Page === "info"}
+            <ReadOnlyNetworkMap/>
+            <ReadOnlyNetworkTable/>
         {/if}
 
         <SnackbarGroup/>
     </div>
 
-    <footer>
+    <footer on:click={() => {$Page = "info"}}>
         &copy; Nate Sales 2020.
     </footer>
 </main>
