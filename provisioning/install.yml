@@ -116,3 +116,11 @@
         name: caddy
         state: restarted
       when: caddyfile.changed
+
+    - copy:
+        src: "{{ item }}"
+        dest: /etc/bind/
+        owner: root
+        mode: 644
+      with_fileglob:
+        - manual/*
