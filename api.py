@@ -601,13 +601,14 @@ def nodes_add(username, is_admin):
         return 404
 
     try:
-        name, provider, geoloc, location, management_ip = get_args("name", "provider", "geoloc", "location", "management_ip")
+        name, provider, datacenter, geoloc, location, management_ip = get_args("name", "provider", "datacenter", "geoloc", "location", "management_ip")
     except ValueError as e:
         return jsonify({"success": False, "message": str(e)})
 
     add_op = nodes.insert_one({
         "name": name,
         "provider": provider,
+        "datacenter": datacenter,
         "geoloc": geoloc,
         "location": location,
         "management_ip": management_ip,
