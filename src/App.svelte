@@ -127,6 +127,28 @@
                 addSnackbar("add_zone", data["message"], data["success"] ? "green" : "red")
             });
     }
+
+    function addNode() {
+        fetch("https://delivr.dev/api/nodes/add", {
+            method: "POST",
+            credentials: "include",
+            body: JSON.stringify({
+                name: prompt("Name"),
+                provider: prompt("Provider"),
+                datacenter: prompt("Datacenter"),
+                geoloc: prompt("Geoloc"),
+                location: prompt("Location"),
+                management_ip: prompt("Management IP")
+            }),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                addSnackbar("add_node", data["message"], data["success"] ? "green" : "red")
+            });
+    }
 </script>
 
 <main>
@@ -179,6 +201,7 @@
                     <Button padded onclick={() => clearQueue()}>Clear queue</Button>
                     <Button padded onclick={() => refreshSingleZone()}>Refresh single zone</Button>
                     <Button padded onclick={() => showQueueStats()}>Queue Stats</Button>
+                    <Button padded onclick={() => addNode()}>Add Node</Button>
                     <Button padded onclick={() => {showMap = !showMap}}>Toggle map</Button>
                 </ButtonBar>
             {/if}
