@@ -21,6 +21,7 @@
     let no_zones = false;
     let showAdmin = false;
     let showMap = true;
+    let showTable = false;
 
     function loadRecordDropdown(page) {
         fetch("https://delivr.dev/api/nodes/list", {
@@ -195,6 +196,10 @@
                     <NetworkMap/>
                 {/if}
 
+                {#if showTable}
+                    <ReadOnlyNetworkTable/>
+                {/if}
+
                 <ButtonBar>
                     <Button padded onclick={() => refreshZoneRegistry()}>Refresh zone registry</Button>
                     <Button padded onclick={() => refreshAllZones()}>Refresh all zones</Button>
@@ -203,6 +208,7 @@
                     <Button padded onclick={() => showQueueStats()}>Queue Stats</Button>
                     <Button padded onclick={() => addNode()}>Add Node</Button>
                     <Button padded onclick={() => {showMap = !showMap}}>Toggle map</Button>
+                    <Button padded onclick={() => {showTable = !showTable}}>Toggle table</Button>
                 </ButtonBar>
             {/if}
 
