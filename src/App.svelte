@@ -146,7 +146,7 @@
                 <h1 class="header-text">CDN Dashboard</h1>
 
                 {#if $IsAdmin}
-                    <Button onclick={() => showAdmin = !showAdmin} padded={true}>Toggle Admin Tools</Button>
+                    <Button onclick={() => showAdmin = !showAdmin}>Toggle Admin Tools</Button>
                 {/if}
 
                 <Button onclick={() => addZone()} padded={true}>Add Zone</Button>
