@@ -13,7 +13,6 @@
     import ButtonBar from "./components/ButtonBar.svelte";
     import TextInput from "./components/TextInput.svelte";
     import {addSnackbar} from "./utils"
-    import ReadOnlyNetworkMap from "./components/ReadOnlyNetworkMap.svelte";
     import ReadOnlyNetworkTable from "./components/ReadOnlyNetworkTable.svelte";
 
     let zones;
@@ -193,7 +192,7 @@
 
             {#if showAdmin && $IsAdmin}
                 {#if showMap}
-                    <NetworkMap/>
+                    <NetworkMap admin/>
                 {/if}
 
                 {#if showTable}
@@ -226,7 +225,7 @@
         {:else if $Page === "signup"}
             <EntryForm type="signup"/>
         {:else if $Page === "info"}
-            <ReadOnlyNetworkMap/>
+            <NetworkMap/>
             <ReadOnlyNetworkTable/>
         {/if}
 
