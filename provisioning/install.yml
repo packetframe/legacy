@@ -146,5 +146,5 @@
       register: caddy_certs
 
     - name: Reload caddy config
-      run: caddy reload -config /etc/caddy/Caddyfile
+      shell: caddy reload -config /etc/caddy/Caddyfile
       when: caddy_certs.changed
