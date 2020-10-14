@@ -661,6 +661,14 @@ def nodes_power(username, is_admin):
     return jsonify({"success": True, "message": "Set BGP status to " + state})
 
 
+@app.route("/admin")
+@authentication_required
+def admin(username, is_admin):
+    # Return if you are an admin or not
+
+    return jsonify({"success": is_admin, "message": "200"})
+
+
 # Debug
 
 if configuration["development"]:
