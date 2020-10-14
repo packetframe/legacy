@@ -36,7 +36,7 @@
                     <tr>
                         <td>{node["name"]}</td>
                         <td>{node["location"]}</td>
-                        <td><a href="https://bgp.he.net/{node["transit_asn"]}">{node["transit_asn"]}</a></td>
+                        <td>{node["transit_asn"]}</td>
                         <td>{node["datacenter"]}</td>
                         <td>{node["provider"]}</td>
                         {#if admin}
