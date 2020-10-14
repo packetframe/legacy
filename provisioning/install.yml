@@ -127,24 +127,24 @@
       template:
         src: Caddyfile.j2
         dest: /etc/caddy/Caddyfile
-      register: caddyfile
+      register: caddy
 
-    - name: Apply Caddy config
-      systemd:
-        name: caddy
-        state: restarted
-      when: caddyfile.changed
-
-    - name: Copy local.delivr.dev SSL cert
+    - name: Copy local.delivr.dev fullchain.pem
       copy:
-        src: "{{ item }}"
-        dest: /caddy/
+        src: /etc/letsencrypt/live/local.delivr.dev/fullchain.pem
+        dest: /caddy/fullchain.pem
         owner: caddy
         group: caddy
-        with_fileglob:
-          - /etc/letsencrypt/live/local.delivr.dev/*
-      register: caddy_certs
+      register: caddy
+
+    - name: Copy local.delivr.dev privkey.pem
+      copy:
+        src: /etc/letsencrypt/live/local.delivr.dev/privkey.pem
+        dest: /caddy/privkey.pem
+        owner: caddy
+        group: caddy
+      register: caddy
 
     - name: Reload caddy config
       shell: caddy reload -config /etc/caddy/Caddyfile
-      when: caddy_certs.changed
+      when: caddy.changed
