@@ -38,7 +38,7 @@
                         <td>{node["datacenter"]}</td>
                         <td>{node["provider"]}</td>
                         {#if admin}
-                            <th>{node["management_ip"]}</th>
+                            <td><a href="https://bgp.he.net/ip/{node["management_ip"]}">{node["management_ip"]}</a></td>
                         {/if}
                     </tr>
                 {/each}
