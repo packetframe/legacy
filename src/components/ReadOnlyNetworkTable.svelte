@@ -22,6 +22,7 @@
         <table class="sethjs-table">
             <tr>
                 <th>Name</th>
+                <th>Location</th>
                 <th>Datacenter</th>
                 <th>Provider</th>
             </tr>
@@ -30,6 +31,7 @@
                 {#each nodes as node, i }
                     <tr>
                         <td>{node["name"]}</td>
+                        <td>{node["location"]}</td>
                         <td>{node["datacenter"]}</td>
                         <td>{node["provider"]}</td>
                     </tr>

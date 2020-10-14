@@ -24,7 +24,7 @@
     let showTable = false;
 
     function loadRecordDropdown(page) {
-        fetch("https://delivr.dev/api/nodes/list", {
+        fetch("https://delivr.dev/api/admin", {
             credentials: "include"
         })
             .then(response => response.json())
