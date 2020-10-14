@@ -25,6 +25,7 @@
                 <th>Location</th>
                 <th>Datacenter</th>
                 <th>Provider</th>
+                <th>Transit ASN</th>
                 {#if admin}
                     <th>Unicast IP</th>
                 {/if}
@@ -35,6 +36,7 @@
                     <tr>
                         <td>{node["name"]}</td>
                         <td>{node["location"]}</td>
+                        <td><a href="https://bgp.he.net/{node["transit_asn"]}">{node["transit_asn"]}</a></td>
                         <td>{node["datacenter"]}</td>
                         <td>{node["provider"]}</td>
                         {#if admin}
