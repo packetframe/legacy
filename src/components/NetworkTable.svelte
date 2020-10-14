@@ -36,9 +36,9 @@
                     <tr>
                         <td>{node["name"]}</td>
                         <td>{node["location"]}</td>
-                        <td>{node["transit_asn"]}</td>
                         <td>{node["datacenter"]}</td>
                         <td>{node["provider"]}</td>
+                        <td>{node["transit_asn"]}</td>
                         {#if admin}
                             <td>{node["management_ip"]}</td>
                         {/if}
