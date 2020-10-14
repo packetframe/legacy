@@ -43,11 +43,10 @@
 
 <style>
     main {
-        margin: auto;
         border: 2px solid white;
         border-radius: 15px;
-        padding-bottom: 10px;
         padding-top: 10px;
+        margin: 15px auto;
     }
 
     div {
