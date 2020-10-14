@@ -281,7 +281,7 @@ template bgp ibgp_upstream6 {
 template bgp default_route_upstream4 {
   local as ASN;                               
     ipv4 {
-        import where (net = 0.0.0.0);
+        import where (net = 0.0.0.0/0);
         export where export_filter();
     };
 }
