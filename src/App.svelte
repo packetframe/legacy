@@ -13,7 +13,7 @@
     import ButtonBar from "./components/ButtonBar.svelte";
     import TextInput from "./components/TextInput.svelte";
     import {addSnackbar} from "./utils"
-    import ReadOnlyNetworkTable from "./components/ReadOnlyNetworkTable.svelte";
+    import NetworkTable from "./components/NetworkTable.svelte";
 
     let zones;
     let selected_zone = window.location.toString().split("zone=")[1];
@@ -196,7 +196,7 @@
                 {/if}
 
                 {#if showTable}
-                    <ReadOnlyNetworkTable/>
+                    <NetworkTable admin/>
                 {/if}
 
                 <ButtonBar>
@@ -226,7 +226,7 @@
             <EntryForm type="signup"/>
         {:else if $Page === "info"}
             <NetworkMap/>
-            <ReadOnlyNetworkTable/>
+            <NetworkTable/>
         {/if}
 
         <SnackbarGroup/>

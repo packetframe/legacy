@@ -2,7 +2,7 @@
     import {onMount} from "svelte";
 
     let nodes;
-
+    export let admin = false;
 
     function getNodes() {
         fetch("https://delivr.dev/api/nodes/list", {
@@ -25,6 +25,9 @@
                 <th>Location</th>
                 <th>Datacenter</th>
                 <th>Provider</th>
+                {#if admin}
+                    <th>Unicast IP</th>
+                {/if}
             </tr>
 
             {#if nodes}
@@ -34,6 +37,9 @@
                         <td>{node["location"]}</td>
                         <td>{node["datacenter"]}</td>
                         <td>{node["provider"]}</td>
+                        {#if admin}
+                            <th>{node["management_ip"]}</th>
+                        {/if}
                     </tr>
                 {/each}
             {:else}
