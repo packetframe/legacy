@@ -2,6 +2,7 @@
     import {onMount} from "svelte";
 
     let nodes;
+    let nodeNum;
     export let admin = false;
 
     function getNodes() {
@@ -11,6 +12,7 @@
             .then(response => response.json())
             .then(data => {
                 nodes = data["message"]
+                nodeNum = data["message"].length
             })
     }
 
@@ -21,7 +23,7 @@
     <div class="table-wrapper">
         <table class="sethjs-table">
             <tr>
-                <th>Name</th>
+                <th>Name ({nodeNum})</th>
                 <th>Location</th>
                 <th>Datacenter</th>
                 <th>Provider</th>
