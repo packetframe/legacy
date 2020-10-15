@@ -56,6 +56,7 @@
         border: 2px solid white;
         border-radius: 15px;
         padding-top: 10px;
+        padding-bottom: 10px;
         margin: 15px auto;
     }
 
