@@ -30,6 +30,7 @@ db = client["cdn"]
 # Collections
 zones = db["zones"]
 nodes = db["nodes"]
+cache_nodes = db["cache_nodes"]
 users = db["users"]
 zones.create_index([("zone", ASCENDING)], unique=True)
 
@@ -637,6 +638,35 @@ def nodes_add(username, is_admin):
         return jsonify({"success": True, "message": "Added " + name})
     else:
         return jsonify({"success": False, "message": "Unable to add node" + name})
+
+
+@app.route("/cache_nodes/add", methods=["POST"])
+@authentication_required
+def cache_nodes_add(username, is_admin):
+    # Add a cache node
+
+    if not is_admin:
+        return 404
+
+    try:
+        name, provider, transit_asn, datacenter, geoloc, location, management_ip = get_args("name", "provider", "transit_asn", "datacenter", "geoloc", "location", "management_ip")
+    except ValueError as e:
+        return jsonify({"success": False, "message": str(e)})
+
+    add_op = cache_nodes.insert_one({
+        "name": name,
+        "provider": provider,
+        "transit_asn": transit_asn,
+        "datacenter": datacenter,
+        "geoloc": geoloc,
+        "location": location,
+        "management_ip": management_ip,
+    })
+
+    if add_op.acknowledged:
+        return jsonify({"success": True, "message": "Added " + name})
+    else:
+        return jsonify({"success": False, "message": "Unable to add cache node" + name})
 
 
 @app.route("/nodes/list", methods=["GET"])
