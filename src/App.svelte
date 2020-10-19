@@ -22,6 +22,18 @@
     let showMap = true;
     let showTable = false;
 
+    onMount(() => {
+        fetch("https://delivr.dev/api/authenticated", {
+            credentials: "include"
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data["message"]) { // If you are authenticated
+                    $Page = "dashboard";
+                }
+            })
+    })
+
     function loadRecordDropdown(page) {
         fetch("https://delivr.dev/api/admin", {
             credentials: "include"
