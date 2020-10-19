@@ -23,6 +23,8 @@
           - varnish
           - ufw
 
+#    TODO: ufw config
+
     - name: Install BIRD2 from sid
       apt:
         name: bird2
@@ -34,12 +36,35 @@
         dest: /etc/bird/bird.conf
       vars:
         asn: 34553
-        ipv4_prefix: "{{ ipv4_prefix }}"
-        ipv6_prefix: "{{ ipv6_prefix }}"
+        ipv4_prefix: "{{ cache_ipv4_prefix }}"
+        ipv6_prefix: "{{ cache_ipv6_prefix }}"
       register: bird_config
 
     - name: Apply BIRD config
       shell: birdc config
       when: bird_config.changed
 
-# TODO: Add varnish config and network.sh to listen on an anycast address
+    - name: Create network config
+      copy:
+        content: "{{ cache_config }}"
+        dest: /root/network.sh
+        mode: +x
+      register: network_config
+
+    - name: Apply network config
+      shell: /root/network.sh
+      when: network_config.changed
+
+    - name: Copy varnish service
+      template:
+        src: varnish.service.j2
+        dest: /lib/systemd/system/varnish.service
+      register: varnish_config
+
+    - name: Restart varnishd
+      systemd:
+        name: varnish
+        state: restarted
+      when: varnish_config.changed
+
+# TODO: Add varnish config
