@@ -670,6 +670,12 @@ def admin(username, is_admin):
     return jsonify({"success": is_admin, "message": "200"})
 
 
+@app.route("/authenticated")
+def authenticated():
+    # Return if you are authenticated or not
+    return jsonify({"success": True, "message": (request.headers.get("X-API-Key") or request.headers.get("Cookie"))})
+
+
 # Debug
 
 if configuration["development"]:
