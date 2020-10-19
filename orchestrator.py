@@ -25,6 +25,13 @@ with open("templates/local.j2", "r") as local_template_file:
 with open("templates/zone.j2") as zone_template_file:
     zone_template = Template(zone_template_file.read())
 
+with open("templates/default.vcl.j2", "r") as vcl_template_file:
+    vcl_template = Template(vcl_template_file.read())
+
+
+def normalize(string: str) -> str:
+    return "BACKEND_" + string.rstrip(".").upper().replace("-", "_").replace(".", "_")
+
 
 def run_ssh_command(command):
     print("    - running " + command, end="", flush=True)
@@ -142,6 +149,39 @@ while True:
                 elif args["state"] == "off":
                     run_ssh_command("birdc down")
                 ssh.close()
+
+        elif operation == "refresh_cache":
+            backends = {}
+            domains = {}
+
+            for zone in db["zones"].find():
+                for record in zone["records"]:
+                    if record.get("proxied"):
+                        domain = record["label"].rstrip(".")
+                        safe_name = normalize(domain)
+                        backends[safe_name] = record["value"]
+                        domains[domain] = safe_name
+
+            # Render and write the default.vcl tmp file
+            with open("/tmp/default.vcl", "w") as named_file:
+                named_file.write(vcl_template.render(backends=backends, domains=domains))
+
+            # Deploy the vcl file and reload
+            for node in db["cache_nodes"].find():
+                print("... now updating " + node["name"] + " " + node["management_ip"] + " " + node["location"])
+                print("    - sending updated vcl file")
+
+                try:
+                    ssh.connect(node["management_ip"], username="root", port=34553, key_filename=configuration["nodes"]["key"])
+                except (TimeoutError, NoValidConnectionsError):
+                    error = "- ERROR: " + node["name"] + " timed out."
+                    print(error)
+                else:
+                    with SCPClient(ssh.get_transport()) as scp:
+                        scp.put("/tmp/default.vcl", "/etc/varnish/default.vcl")
+
+                    run_ssh_command("systemctl reload varnish")
+                    ssh.close()
 
         queue.delete_job(job.job_id)
 

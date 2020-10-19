@@ -1,0 +1,34 @@
+vcl 4.0;
+
+{% for backend in backends -%}
+backend {{ backend }} {
+    .host = "{{ backends[backend] }}";
+    .port = "80";
+}
+{% endfor -%}
+
+sub vcl_recv {
+    {% for domain in domains -%}
+    if (req.http.host == "{{ domain }}") {
+        set req.http.host = "{{ domain }}";
+        set req.backend_hint = {{ domains[domain] }};
+    }
+    {% endfor %}
+}
+
+sub vcl_deliver {
+    if (obj.hits > 0) {
+        set resp.http.X-Cache = "hit";
+    } else {
+        set resp.http.X-Cache = "miss";
+    }
+
+    # Remove response headers
+    unset resp.http.Via;
+    unset resp.http.X-Varnish;
+    unset resp.http.Age;
+    unset resp.http.Last-Modified;
+    unset resp.http.Server;
+    unset resp.http.Accept-Ranges;
+#    set req.http.X-PoP = "fmt";
+}
