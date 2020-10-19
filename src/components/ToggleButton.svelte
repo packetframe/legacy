@@ -2,10 +2,11 @@
     $: isSlotFilled = $$slots["default"];
     export let enable;
     export let onclick;
+    export let disabled = false;
 </script>
 
 <main>
-    <button on:click={onclick} class:enable data-title="Enable proxy">
+    <button on:click={onclick} class:enable data-title="Enable proxy" disabled={disabled}>
         <span class="material-icons" class:icon-button-icon={!isSlotFilled}>
             {#if enable}
                 cloud
