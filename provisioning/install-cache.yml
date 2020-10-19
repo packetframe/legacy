@@ -36,8 +36,8 @@
         dest: /etc/bird/bird.conf
       vars:
         asn: 34553
-        ipv4_prefix: "{{ cache_ipv4_prefix }}"
-        ipv6_prefix: "{{ cache_ipv6_prefix }}"
+        selected_ipv4_prefix: "{{ cache_ipv4_prefix }}"
+        selected_ipv6_prefix: "{{ cache_ipv6_prefix }}"
       register: bird_config
 
     - name: Apply BIRD config

@@ -2,17 +2,17 @@
 
 define ASN = {{ asn }};
 
-define LOCAL_v4 = [{{ ipv4_prefix }}];
-define LOCAL_v6 = [{{ ipv6_prefix }}];
+define LOCAL_v4 = [{{ selected_ipv4_prefix }}];
+define LOCAL_v6 = [{{ selected_ipv6_prefix }}];
 
 protocol static {
   ipv4;
-  route {{ ipv4_prefix }} reject;
+  route {{ selected_ipv4_prefix }} reject;
 }
 
 protocol static {
   ipv6;
-  route {{ ipv6_prefix }} reject;
+  route {{ selected_ipv6_prefix }} reject;
 }
 
 # ---- Parameters ----
