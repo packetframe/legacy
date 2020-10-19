@@ -334,7 +334,7 @@ def records_add(zone):
     if zone_doc["type"] == "forward":
         if rec_type == "A":
             try:
-                value = get_args("value")
+                value, proxied = get_args("value", "proxied")
             except ValueError as e:
                 return jsonify({"success": False, "message": str(e)})
 
@@ -343,7 +343,7 @@ def records_add(zone):
 
         elif rec_type == "AAAA":
             try:
-                value = get_args("value")
+                value, proxied = get_args("value", "proxied")
             except ValueError as e:
                 return jsonify({"success": False, "message": str(e)})
 
@@ -430,19 +430,37 @@ def records_add(zone):
         else:
             return jsonify({"success": False, "message": "Invalid record type (Allowed values are PTR"})
 
-    zones.update_one({"zone": zone}, {
-        "$push": {
-            "records": {
-                "label": label,
-                "ttl": int(ttl),
-                "type": rec_type,
-                "value": value
+    try:
+        _proxied = proxied
+    except NameError:
+        zones.update_one({"zone": zone}, {
+            "$push": {
+                "records": {
+                    "label": label,
+                    "ttl": int(ttl),
+                    "type": rec_type,
+                    "value": value
+                }
+            },
+            "$set": {
+                "serial": _get_current_serial()
             }
-        },
-        "$set": {
-            "serial": _get_current_serial()
-        }
-    })
+        })
+    else:
+        zones.update_one({"zone": zone}, {
+            "$push": {
+                "records": {
+                    "label": label,
+                    "ttl": int(ttl),
+                    "type": rec_type,
+                    "value": value,
+                    "proxied": proxied
+                }
+            },
+            "$set": {
+                "serial": _get_current_serial()
+            }
+        })
 
     add_queue_message("refresh_single_zone", {"zone": zone})
 
