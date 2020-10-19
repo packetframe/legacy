@@ -9,5 +9,10 @@ $TTL	86400
 @	IN	NS	{{ nameserver }}.
 {% endfor %}
 {% for record in records -%}
+{% if record["proxied"] %}
+{{ record["label"] }}    60    IN    A    {{ proxy4 }}
+{{ record["label"] }}    60    IN    AAAA    {{ proxy6 }}
+{% else %}
 {{ record["label"] }}    {{ record["ttl"] }}    IN    {{ record["type"] }}    {{ record["value"] }}
+{% endif %}
 {% endfor %}

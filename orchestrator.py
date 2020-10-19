@@ -60,7 +60,9 @@ while True:
                 nameservers=configuration["nameservers"],
                 soa_root=configuration["soa_root"],
                 records=zone.get("records"),
-                serial=zone["serial"]
+                serial=zone["serial"],
+                proxy4=configuration["proxy4"],
+                proxy6=configuration["proxy6"]
             )
 
             with open("/tmp/db." + zone["zone"], "w") as zone_file_writer:
