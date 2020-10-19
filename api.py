@@ -800,4 +800,16 @@ if configuration["development"]:
             "current_reserved": stats["current-jobs-reserved"]
         }})
 
+
+    @app.route("/debug/refresh_cache")
+    @authentication_required
+    def refresh_cache(username, is_admin):
+        # Refresh the default.vcl cache file
+
+        if not is_admin:
+            return jsonify({"success": False, "message": "Unauthorized"})
+
+        add_queue_message("refresh_cache", None)
+        return jsonify({"success": True, "message": "Refreshing cache config"})
+
 app.run(debug=configuration["development"])
