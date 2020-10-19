@@ -200,7 +200,7 @@
                         <td class="flex-value">
                             {record["value"]}
                             {#if record["proxied"]}
-                                <ToggleButton disabled/>
+                                <Button disabled icon="cloud"/>
                             {/if}
                             <Button color="red" icon="delete" size="1.25rem" onclick={() => {deleteRecord(i)}} floatRight={true}/>
                         </td>
