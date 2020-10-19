@@ -14,6 +14,14 @@ _config = {
             "ansible_port": config["nodes"]["port"],
             "ansible_ssh_private_key_file": "../" + config["nodes"]["key"]
         }
+    },
+    "cache": {
+        "hosts": {},
+        "vars": {
+            "ansible_user": config["nodes"]["username"],
+            "ansible_port": config["nodes"]["port"],
+            "ansible_ssh_private_key_file": "../" + config["nodes"]["key"]
+        }
     }
 }
 
@@ -23,6 +31,14 @@ for node in db_client["cdn"]["nodes"].find():
     }
 
     print("+ " + node["name"])
+
+
+for node in db_client["cdn"]["cache_nodes"].find():
+    _config["cache"]["hosts"][node["name"]] = {
+        "ansible_host": node["management_ip"]
+    }
+
+    print("- cache + " + node["name"])
 
 with open("hosts.yml", "w") as hosts_file:
     hosts_file.write(yaml.dump(_config, default_flow_style=False))

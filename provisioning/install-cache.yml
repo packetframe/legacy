@@ -1,0 +1,45 @@
+- name: Install
+  hosts: cache
+  tasks:
+    - include_vars: vars.yml
+
+    - name: Add debian sid repo
+      apt_repository:
+        repo: "{{ item }}"
+        state: present
+      with_items:
+        - deb http://deb.debian.org/debian/ sid main
+        - deb [trusted=yes] https://apt.fury.io/caddy/ /
+
+    - name: Set default release
+      copy:
+        content: APT::Default-Release "stable";
+        dest: /etc/apt/apt.conf.d/default-release
+
+    - name: Install varnish, ufw
+      apt:
+        update_cache: yes
+        pkg:
+          - varnish
+          - ufw
+
+    - name: Install BIRD2 from sid
+      apt:
+        name: bird2
+        default_release: sid
+
+    - name: Copy BIRD2 config
+      template:
+        src: bird.j2
+        dest: /etc/bird/bird.conf
+      vars:
+        asn: 34553
+        ipv4_prefix: "{{ ipv4_prefix }}"
+        ipv6_prefix: "{{ ipv6_prefix }}"
+      register: bird_config
+
+    - name: Apply BIRD config
+      shell: birdc config
+      when: bird_config.changed
+
+# TODO: Add varnish config and network.sh to listen on an anycast address
