@@ -63,6 +63,7 @@
 
     - name: Restart varnishd
       systemd:
+        daemon_reload: yes
         name: varnish
         state: restarted
       when: varnish_config.changed
