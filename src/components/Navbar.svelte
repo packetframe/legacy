@@ -1,26 +1,31 @@
 <style>
     main {
         width: 100%;
-        background: #1c1c1c;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin-bottom: 35px;
+        margin-bottom: 20px;
     }
     div {
-        margin: 15px;
-        display: flex;
         max-height: 100%;
         align-items: center;
         cursor: pointer;
     }
+
+    .left {
+        padding-top: 12px;
+    }
+
+    .right {
+        padding-right: 35px;
+    }
 </style>
 
 <main>
-    <div>
+    <div class="left">
         <slot name="left-side"></slot>
     </div>
-    <div>
+    <div class="right">
         <slot name="right-side"></slot>
     </div>
 </main>

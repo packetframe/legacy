@@ -166,12 +166,12 @@
 <main>
     {#if $Page === "login"}
         <Navbar>
-            <div slot="left-side" on:click={() => {$Page = "dashboard"}}>delivr.dev</div>
+            <div slot="left-side" on:click={() => {$Page = "dashboard"}}><img src="/full.png" alt="delivr.dev"></div>
             <div class="nav-item" on:click={() => {$Page = "signup"}} slot="right-side">Signup</div>
         </Navbar>
     {:else}
         <Navbar>
-            <div slot="left-side" on:click={() => {$Page = "dashboard"}}>delivr.dev</div>
+            <div slot="left-side" on:click={() => {$Page = "dashboard"}}><img src="/full.png" alt="delivr.dev"></div>
             <div class="nav-item" on:click={() => {$Page = "login"}} slot="right-side">Login</div>
         </Navbar>
     {/if}
@@ -179,7 +179,7 @@
     <div class="body">
         {#if $Page === "dashboard"}
             <div class="header-container">
-                <h1 class="header-text">CDN Dashboard</h1>
+                <h1 class="header-text">Dashboard</h1>
 
                 {#if $IsAdmin}
                     <Button onclick={() => showAdmin = !showAdmin}>Toggle Admin Tools</Button>
@@ -282,5 +282,9 @@
 
     .nav-item {
         padding: 2px;
+    }
+
+    div img {
+        width: 300px;
     }
 </style>
