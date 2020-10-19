@@ -447,7 +447,7 @@ def records_add(zone):
                 "serial": _get_current_serial()
             }
         })
-    else:
+    else:  # If proxied
         zones.update_one({"zone": zone}, {
             "$push": {
                 "records": {
@@ -462,6 +462,7 @@ def records_add(zone):
                 "serial": _get_current_serial()
             }
         })
+        add_queue_message("refresh_cache", None)
 
     add_queue_message("refresh_single_zone", {"zone": zone})
 
