@@ -161,6 +161,8 @@
                 addSnackbar("add_node", data["message"], data["success"] ? "green" : "red")
             });
     }
+
+    let isEnabled = false;
 </script>
 
 <main>

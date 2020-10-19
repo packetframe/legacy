@@ -6,6 +6,7 @@
     import NumberInput from "./NumberInput.svelte";
     import {SnackBars} from "../stores";
     import {addSnackbar} from '../utils'
+    import ToggleButton from "./ToggleButton.svelte";
 
     let showAddRecord = false;
 
@@ -15,6 +16,7 @@
     let type, label, value, priority, port, weight;
     type = "A";
     let ttl = 86400;
+    let proxied = false;
 
     let snackbarEnabled = false;
     let snackbarColor = "green";
@@ -39,7 +41,8 @@
                 priority: priority,
                 port: port,
                 weight: weight,
-                ttl: ttl
+                ttl: ttl,
+                proxied: proxied
             })
         })
             .then((response) => response.json())
@@ -155,9 +158,26 @@
                     <TextInput placeholder="Value" id="add-value" bind:content={value}/>
                 </div>
 
+                {#if type === "A" || type === "AAAA" }
+                    <div class="record-add-element-button">
+                        <ToggleButton enable={proxied} onclick={() => {proxied = !proxied}}/>
+                    </div>
+                {/if}
+
                 <div class="record-add-element">
                     <Button inverted icon="check" onclick={() => submitForm()}>Submit</Button>
                 </div>
+            </div>
+            <div class="info-text">
+                {#if type === "A" || type === "AAAA" }
+                    {#if proxied }
+                        <p>This record <u>will</u> be proxied.</p>
+                    {:else}
+                        <p>This record <u>will not</u> be proxied.</p>
+                    {/if}
+                {:else}
+                    <p></p>
+                {/if}
             </div>
         {/if}
     </div>
@@ -251,7 +271,7 @@
         width: calc(100% - 15px);
         align-content: center;
         flex-wrap: wrap;
-        margin: 5px 8px 20px;
+        margin: 5px 8px 0;
     }
 
     .record-add-element {
@@ -268,6 +288,13 @@
         margin: 5px;
         justify-content: center;
         flex: 0.5 0 100px;
+    }
+
+    .record-add-element-button {
+        display: flex;
+        flex-direction: column;
+        margin: 5px;
+        justify-content: center;
     }
 
     .record-add-element-select {
@@ -288,5 +315,10 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+    }
+
+    .info-text p {
+        color: #afafaf;
+        margin-left: 15px;
     }
 </style>
