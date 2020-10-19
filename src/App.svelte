@@ -123,6 +123,17 @@
             });
     }
 
+    function refreshCache() {
+        fetch("https://delivr.dev/api/debug/refresh_cache", {
+            method: "GET",
+            credentials: "include"
+        })
+            .then(response => response.json())
+            .then(data => {
+                addSnackbar("refresh_cache", data["message"], data["success"] ? "green" : "red")
+            });
+    }
+
     function addZone() {
         fetch("https://delivr.dev/api/zones/add", {
             method: "POST",
@@ -184,7 +195,8 @@
                     <div class="nav-item" on:click={() => {
                         $Page = "login";
                         document.cookie = "";
-                    }} slot="right-side">Logout</div>
+                    }} slot="right-side">Logout
+                    </div>
                 </Navbar>
             {/if}
         {/if}
@@ -230,6 +242,7 @@
                     <Button padded onclick={() => refreshAllZones()}>Refresh all zones</Button>
                     <Button padded onclick={() => clearQueue()}>Clear queue</Button>
                     <Button padded onclick={() => refreshSingleZone()}>Refresh single zone</Button>
+                    <Button padded onclick={() => refreshCache()}>Refresh cache</Button>
                     <Button padded onclick={() => showQueueStats()}>Queue Stats</Button>
                     <Button padded onclick={() => addNode()}>Add Node</Button>
                     <Button padded onclick={() => {showMap = !showMap}}>Toggle map</Button>
