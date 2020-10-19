@@ -170,10 +170,22 @@
             <div class="nav-item" on:click={() => {$Page = "signup"}} slot="right-side">Signup</div>
         </Navbar>
     {:else}
-        <Navbar>
-            <div slot="left-side" on:click={() => {$Page = "dashboard"}}><img src="/full.png" alt="delivr.dev"></div>
-            <div class="nav-item" on:click={() => {$Page = "login"}} slot="right-side">Login</div>
-        </Navbar>
+        {#if $Page === "signup"}
+            <Navbar>
+                <div slot="left-side" on:click={() => {$Page = "dashboard"}}><img src="/full.png" alt="delivr.dev"></div>
+                <div class="nav-item" on:click={() => {$Page = "login"}} slot="right-side">Login</div>
+            </Navbar>
+        {:else}
+            {#if $Page === "dashboard"}
+                <Navbar>
+                    <div slot="left-side" on:click={() => {$Page = "dashboard"}}><img src="/full.png" alt="delivr.dev"></div>
+                    <div class="nav-item" on:click={() => {
+                        $Page = "login";
+                        document.cookie = "";
+                    }} slot="right-side">Logout</div>
+                </Navbar>
+            {/if}
+        {/if}
     {/if}
 
     <div class="body">
