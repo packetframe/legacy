@@ -2,11 +2,12 @@
     export let name, placeholder = "";
     export let id;
     export let content = "";
+    export let disabled = false;
 </script>
 
 <main>
     <label>
-        <input bind:value={content} id={id} name={name} placeholder={placeholder} type="number">
+        <input bind:value={content} id={id} name={name} placeholder={placeholder} type="number" disabled={disabled}>
     </label>
 </main>
 

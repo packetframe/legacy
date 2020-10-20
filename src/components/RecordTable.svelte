@@ -131,9 +131,16 @@
                     </Dropdown>
                 </div>
 
-                <div class="record-add-element-number">
-                    <NumberInput placeholder="TTL" id="add-value" bind:content={ttl}/>
-                </div>
+
+                {#if proxied}
+                    <div class="record-add-element-number">
+                        <NumberInput placeholder="Auto" id="add-value" disabled/>
+                    </div>
+                {:else}
+                    <div class="record-add-element-number">
+                        <NumberInput placeholder="TTL" id="add-value" bind:content={ttl}/>
+                    </div>
+                {/if}
 
                 <div class="record-add-element">
                     <TextInput placeholder="Label" id="add-label" bind:content={label}/>
