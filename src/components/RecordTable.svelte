@@ -203,7 +203,11 @@
                     <tr>
                         <td>{record["label"]}</td>
                         <td>{record["type"]}</td>
-                        <td>{record["ttl"]}</td>
+                        {#if record["proxied"]}
+                            <td>Auto</td>
+                        {:else}
+                            <td>{record["ttl"]}</td>
+                        {/if}
                         <td class="flex-value">
                             {record["value"]}
                             {#if record["proxied"]}
