@@ -165,8 +165,8 @@ while True:
                         domains[domain] = safe_name
 
             # Render and write the default.vcl tmp file
-            with open("/tmp/default.vcl", "w") as named_file:
-                named_file.write(vcl_template.render(backends=backends, domains=domains))
+            with open("/tmp/default.vcl", "w") as vcl_file:
+                vcl_file.write(vcl_template.render(backends=backends, domains=domains))
 
             # Deploy the vcl file and reload
             for node in db["cache_nodes"].find():
