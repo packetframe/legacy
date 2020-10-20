@@ -99,7 +99,7 @@
 
     $:loadRecords(zone);
     $: {
-        if (zone.endsWith("arpa")) {
+        if (zone !== undefined && zone.endsWith("arpa")) {
             type = "PTR"
         }
     }
