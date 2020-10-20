@@ -189,7 +189,7 @@ while True:
                     with SCPClient(ssh.get_transport()) as scp:
                         scp.put("/tmp/default.vcl", "/etc/varnish/default.vcl")
                     with SCPClient(ssh.get_transport()) as scp:
-                        scp.put("/tmp/Caddy", "/etc/caddy/Caddyfile")
+                        scp.put("/tmp/Caddyfile", "/etc/caddy/Caddyfile")
 
                     run_ssh_command("systemctl reload varnish")
                     run_ssh_command("caddy reload -conf /etc/caddy/Caddyfile")
