@@ -1,0 +1,10 @@
+{
+    experimental_http3
+}
+
+{%- for domain in domains %}
+https://{{ domain }} {
+    tls /etc/caddy/{{ domain }}-chain.pem /etc/caddy/{{ domain }}-key.pem
+    reverse_proxy http://localhost:8000
+}
+{% endfor %}

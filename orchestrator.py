@@ -28,6 +28,9 @@ with open("templates/zone.j2") as zone_template_file:
 with open("templates/default.vcl.j2", "r") as vcl_template_file:
     vcl_template = Template(vcl_template_file.read())
 
+with open("templates/Caddyfile.j2", "r") as caddy_template_file:
+    caddy_template = Template(caddy_template_file.read())
+
 
 def normalize(string: str) -> str:
     return "BACKEND_" + string.rstrip(".").upper().replace("-", "_").replace(".", "_")
@@ -168,6 +171,10 @@ while True:
             with open("/tmp/default.vcl", "w") as vcl_file:
                 vcl_file.write(vcl_template.render(backends=backends, domains=domains))
 
+            # Render and write the Caddyfile tmp file
+            with open("/tmp/Caddyfile", "w") as caddy_file:
+                caddy_file.write(caddy_template.render(domains=domains))
+
             # Deploy the vcl file and reload
             for node in db["cache_nodes"].find():
                 print("... now updating " + node["name"] + " " + node["management_ip"] + " " + node["location"])
@@ -181,8 +188,11 @@ while True:
                 else:
                     with SCPClient(ssh.get_transport()) as scp:
                         scp.put("/tmp/default.vcl", "/etc/varnish/default.vcl")
+                    with SCPClient(ssh.get_transport()) as scp:
+                        scp.put("/tmp/Caddy", "/etc/caddy/Caddyfile")
 
                     run_ssh_command("systemctl reload varnish")
+                    run_ssh_command("caddy reload -conf /etc/caddy/Caddyfile")
                     ssh.close()
 
         queue.delete_job(job.job_id)
