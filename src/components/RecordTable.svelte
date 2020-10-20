@@ -98,6 +98,11 @@
     }
 
     $:loadRecords(zone);
+    $: {
+        if (zone.endsWith("arpa")) {
+            type = "PTR"
+        }
+    }
 
     onMount(() => loadRecords());
 </script>
