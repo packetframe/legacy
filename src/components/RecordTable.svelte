@@ -121,14 +121,15 @@
             <div class="record-add-container">
                 <div class="record-add-element-select">
                     <Dropdown id="add-type" bind:content={type}>
-                        <option value="A">A</option>
-                        <option value="AAAA">AAAA</option>
-                        <option value="CNAME">CNAME</option>
-                        <option value="TXT">TXT</option>
-                        <option value="MX">MX</option>
-                        <option value="SRV">SRV</option>
                         {#if zone.endsWith("arpa")}
                             <option value="PTR">PTR</option>
+                        {:else}
+                            <option value="A">A</option>
+                            <option value="AAAA">AAAA</option>
+                            <option value="CNAME">CNAME</option>
+                            <option value="TXT">TXT</option>
+                            <option value="MX">MX</option>
+                            <option value="SRV">SRV</option>
                         {/if}
                     </Dropdown>
                 </div>
