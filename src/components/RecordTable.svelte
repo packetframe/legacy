@@ -127,7 +127,9 @@
                         <option value="TXT">TXT</option>
                         <option value="MX">MX</option>
                         <option value="SRV">SRV</option>
-                        <option value="PTR">PTR</option>
+                        {#if zone.endsWith("arpa")}
+                            <option value="PTR">PTR</option>
+                        {/if}
                     </Dropdown>
                 </div>
 
