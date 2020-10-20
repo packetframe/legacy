@@ -192,7 +192,7 @@ while True:
                         scp.put("/tmp/Caddyfile", "/etc/caddy/Caddyfile")
 
                     run_ssh_command("systemctl reload varnish")
-                    run_ssh_command("caddy reload -conf /etc/caddy/Caddyfile")
+                    run_ssh_command("caddy reload -config /etc/caddy/Caddyfile")
                     ssh.close()
 
         queue.delete_job(job.job_id)
