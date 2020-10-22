@@ -1,6 +1,6 @@
 options {
     directory "/var/cache/bind";
-    statistics-file "/var/named.stats";
+    statistics-file "/var/run/named/stats";
     recursion no;
     allow-transfer { none; };
     version "PoP {{ ansible_hostname }}";
