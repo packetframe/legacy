@@ -650,7 +650,7 @@ def cache_nodes_add(username, is_admin):
         return 404
 
     try:
-        name, provider, transit_asn, datacenter, geoloc, location, management_ip = get_args("name", "provider", "transit_asn", "datacenter", "geoloc", "location", "management_ip")
+        name, provider, transit_asn, datacenter, geoloc, location, management_ip, region = get_args("name", "provider", "transit_asn", "datacenter", "geoloc", "location", "management_ip", "region")
     except ValueError as e:
         return jsonify({"success": False, "message": str(e)})
 
@@ -662,6 +662,7 @@ def cache_nodes_add(username, is_admin):
         "geoloc": geoloc,
         "location": location,
         "management_ip": management_ip,
+        "region": region
     })
 
     if add_op.acknowledged:
