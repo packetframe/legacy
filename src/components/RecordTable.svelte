@@ -30,23 +30,43 @@
         showAddRecord = !showAddRecord;
     }
 
+    function getPinnedNodes() {
+        const checked = [];
+        const inputs = document.getElementsByTagName("input");
+        for (let i = 0; i < inputs.length; i++) {
+            if (inputs[i].type === "checkbox") {
+                if (inputs[i].checked) {
+                    checked.push(inputs[i].value)
+                }
+            }
+        }
+
+        return checked.join(", ")
+    }
+
     function submitForm() {
+        let body = {
+            type: type,
+            label: label,
+            value: value,
+            priority: priority,
+            port: port,
+            weight: weight,
+            ttl: ttl,
+            proxied: proxied
+        }
+
+        if (showNodePinning) {
+            body["pinned_nodes"] = getPinnedNodes()
+        }
+
         fetch("https://delivr.dev/api/zone/" + zone + "/add", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
             credentials: "include",
-            body: JSON.stringify({
-                type: type,
-                label: label,
-                value: value,
-                priority: priority,
-                port: port,
-                weight: weight,
-                ttl: ttl,
-                proxied: proxied
-            })
+            body: JSON.stringify(body)
         })
             .then((response) => response.json())
             .then((data) => addSnackbar("zone_add", data["message"], data["success"] ? "green" : "red"))
