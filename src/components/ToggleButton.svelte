@@ -11,13 +11,13 @@
         <span class="material-icons" class:icon-button-icon={!isSlotFilled}>
             {#if enable}
                 {#if icon == "globe"}
-                    gps_fixed
+                    location_on
                 {:else}
                     cloud
                 {/if}
             {:else}
                 {#if icon == "globe"}
-                    gps_off
+                    location_off
                 {:else}
                     cloud_off
                 {/if}
