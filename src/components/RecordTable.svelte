@@ -230,10 +230,9 @@
                 </div>
 
                 {#if showNodePinning }
-                    <div class="info-text">
+                    <div class="info-text" style="display: block">
                         <p>This record <u>will</u> be pinned to the following nodes:</p>
-                        <br>
-                        <div class="node-pinning-checkboxes">
+                        <div class="node-pinning-checkboxes" style="display: block">
                             {#if nodes}
                                 {#each nodes as node }
                                     <input type="checkbox" id="{node['name']}" name="{node['name']}" value="{node['name']}">
