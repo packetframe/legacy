@@ -3,15 +3,24 @@
     export let enable;
     export let onclick;
     export let disabled = false;
+    export let icon;
 </script>
 
 <main>
     <button on:click={onclick} class:enable data-title="Enable proxy" disabled={disabled}>
         <span class="material-icons" class:icon-button-icon={!isSlotFilled}>
             {#if enable}
-                cloud
+                {#if icon == "globe"}
+                    gps_fixed
+                {:else}
+                    cloud
+                {/if}
             {:else}
-                cloud_off
+                {#if icon == "globe"}
+                    gps_off
+                {:else}
+                    cloud_off
+                {/if}
             {/if}
         </span>
 
@@ -33,10 +42,10 @@
         border-width: 2px;
         opacity: 0.75;
         transition: 0.3s;
-        margin: 0;
         padding: 10px;
         font-size: 1.25em;
         border-radius: 50px;
+        margin: 0 5px 0 5px;
     }
 
     button:active {

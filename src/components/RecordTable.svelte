@@ -13,10 +13,13 @@
     export let zone;
     let records;
 
+    let nodes;
+
     let type, label, value, priority, port, weight;
     type = "A";
     let ttl = 86400;
     let proxied = false;
+    let showNodePinning = false;
 
     let snackbarEnabled = false;
     let snackbarColor = "green";
@@ -97,14 +100,27 @@
             });
     }
 
-    $:loadRecords(zone);
-    $: {
-        if (zone !== undefined && zone.endsWith("arpa")) {
-            type = "PTR"
-        }
+    function loadNodes() {
+        fetch("https://delivr.dev/api/nodes/list", {
+            credentials: "include"
+        })
+            .then(response => response.json())
+            .then(data => {
+                nodes = data["message"]
+            })
     }
 
-    onMount(() => loadRecords());
+    $:loadRecords(zone);
+    // $: {
+    //     if (zone !== undefined && zone.endsWith("arpa")) {
+    //         type = "PTR"
+    //     }
+    // }
+
+    onMount(() => {
+        loadRecords();
+        loadNodes();
+    });
 </script>
 
 <main>
@@ -126,7 +142,7 @@
             <div class="record-add-container">
                 <div class="record-add-element-select">
                     <Dropdown id="add-type" bind:content={type}>
-                        {#if zone.endsWith("arpa")}
+                        {#if zone}
                             <option value="PTR">PTR</option>
                         {:else}
                             <option value="A">A</option>
@@ -175,7 +191,8 @@
 
                 {#if type === "A" || type === "AAAA" }
                     <div class="record-add-element-button">
-                        <ToggleButton enable={proxied} onclick={() => {proxied = !proxied}}/>
+                        <ToggleButton enable={proxied} onclick={() => {proxied = !proxied}} icon="cloud"/>
+                        <ToggleButton enable={showNodePinning} onclick={() => {showNodePinning = !showNodePinning}} icon="globe"/>
                     </div>
                 {/if}
 
@@ -183,17 +200,34 @@
                     <Button inverted icon="check" onclick={() => submitForm()}>Submit</Button>
                 </div>
             </div>
-            <div class="info-text">
-                {#if type === "A" || type === "AAAA" }
+
+            {#if type === "A" || type === "AAAA" }
+                <div class="info-text">
                     {#if proxied }
                         <p>This record <u>will</u> be proxied.</p>
                     {:else}
                         <p>This record <u>will not</u> be proxied.</p>
                     {/if}
-                {:else}
-                    <p></p>
+                </div>
+
+                {#if showNodePinning }
+                    <div class="info-text">
+                        <div class="node-pinning-checkboxes">
+                            {#if nodes}
+                                {#each nodes as node }
+                                    <input type="checkbox" id="{node['name']}" name="{node['name']}" value="{node['name']}">
+                                    <label for="{node['name']}"> {node["name"]}</label><br>
+                                {/each}
+                            {:else}
+                                <p>Loading...</p>
+                            {/if}
+                        </div>
+                    </div>
                 {/if}
-            </div>
+
+            {:else}
+                <div class="info-text"><p></p></div>
+            {/if}
         {/if}
     </div>
 
@@ -314,9 +348,7 @@
 
     .record-add-element-button {
         display: flex;
-        flex-direction: column;
         margin: 5px;
-        justify-content: center;
     }
 
     .record-add-element-select {
@@ -342,5 +374,10 @@
     .info-text p {
         color: #afafaf;
         margin-left: 15px;
+    }
+
+    .node-pinning-checkboxes {
+        margin-left: 10px;
+        margin-bottom: 15px;
     }
 </style>
