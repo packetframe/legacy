@@ -8,7 +8,7 @@
 /* You can override the default Infima variables here. */
 html[data-theme="dark"] {
   --ifm-background-color: black;
-  --ifm-background-surface-color: #0f0f0f;
+  --ifm-background-surface-color: #000000;
   --ifm-color-primary: #d000ff;
   --ifm-color-primary-dark: #d000ff;
   --ifm-color-primary-darker: #d000ff;

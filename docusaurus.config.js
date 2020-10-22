@@ -1,24 +1,24 @@
 module.exports = {
-  title: 'delivr.dev',
-  tagline: 'The tagline of my site',
+  title: 'DELIVR.DEV',
+  tagline: 'The open source CDN platform for technology enthusiasts.',
   url: 'https://your-docusaurus-test-site.com',
   baseUrl: '/',
   onBrokenLinks: 'throw',
-  favicon: 'img/favicon.ico',
+  favicon: 'https://delivr.dev/favicon.png',
   organizationName: 'natesales', // Usually your GitHub org/user name.
   projectName: 'delivr-docs', // Usually your repo name.
   themeConfig: {
     forceDarkMode: true,
     navbar: {
-      title: 'My Site',
+      title: 'DELIVR.DEV',
       logo: {
-        alt: 'My Site Logo',
-        src: 'img/logo.svg',
+        alt: 'DELIVR.DEV',
+        src: 'https://delivr.dev/favicon.png',
       },
       items: [
         {
           to: 'docs/record-management',
-          activeBasePath: 'docs',
+          activeBasePath: 'docs/record-management',
           label: 'Docs',
           position: 'left',
         },
