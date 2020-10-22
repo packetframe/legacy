@@ -175,7 +175,6 @@
                     </Dropdown>
                 </div>
 
-
                 {#if proxied}
                     <div class="record-add-element-number">
                         <NumberInput placeholder="Auto" id="add-value" disabled/>
@@ -274,6 +273,9 @@
                             {record["value"]}
                             {#if record["proxied"]}
                                 <Button disabled icon="cloud">Proxied</Button>
+                            {/if}
+                            {#if record["pinned_nodes"]}
+                                <Button disabled icon="gps_fixed">Pinned: { record["pinned_nodes"].join() }</Button>
                             {/if}
                             <Button color="red" icon="delete" size="1.25rem" onclick={() => {deleteRecord(i)}} floatRight={true}/>
                         </td>
