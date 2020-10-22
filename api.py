@@ -460,11 +460,12 @@ def records_add(zone):
 
     try:
         _proxied = proxied
-    except NameError:  # If not proxied
+    except NameError:  # If not an A/AAAA record
         is_proxied = False
     else:
-        is_proxied = True
-        new_record["proxied"] = True
+        if proxied:
+            is_proxied = True
+            new_record["proxied"] = True
 
     zones.update_one({"zone": zone}, {
         "$push": {"records": new_record},
