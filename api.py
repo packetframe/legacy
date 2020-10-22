@@ -431,37 +431,47 @@ def records_add(zone):
         else:
             return jsonify({"success": False, "message": "Invalid record type (Allowed values are PTR"})
 
+    # The new record's universal options
+    new_record = {
+        "label": label,
+        "ttl": int(ttl),
+        "type": rec_type,
+        "value": value
+    }
+
+    pinned_nodes = request.json.get("pinned_nodes")
+    if pinned_nodes:
+        pinned_nodes_list = []
+
+        # Find all node names
+        node_names = []
+        for node in nodes.find():
+            node_names.append(node["name"])
+
+        # Iterate over a comma-separated list of pinned nodes
+        for pinned_node in pinned_nodes.split(", "):
+            # Check for invalid nodes
+            if pinned_node not in node_names:
+                return jsonify({"success": False, "message": "Node " + pinned_nodes + " is not a valid node"})
+            else:
+                pinned_nodes_list.append(pinned_node)
+
+        new_record["pinned_nodes"] = pinned_nodes_list
+
     try:
         _proxied = proxied
-    except NameError:
-        zones.update_one({"zone": zone}, {
-            "$push": {
-                "records": {
-                    "label": label,
-                    "ttl": int(ttl),
-                    "type": rec_type,
-                    "value": value
-                }
-            },
-            "$set": {
-                "serial": _get_current_serial()
-            }
-        })
-    else:  # If proxied
-        zones.update_one({"zone": zone}, {
-            "$push": {
-                "records": {
-                    "label": label,
-                    "ttl": int(ttl),
-                    "type": rec_type,
-                    "value": value,
-                    "proxied": proxied
-                }
-            },
-            "$set": {
-                "serial": _get_current_serial()
-            }
-        })
+    except NameError:  # If not proxied
+        is_proxied = False
+    else:
+        is_proxied = True
+        new_record["proxied"] = True
+
+    zones.update_one({"zone": zone}, {
+        "$push": {"records": new_record},
+        "$set": {"serial": _get_current_serial()}
+    })
+
+    if is_proxied:
         add_queue_message("refresh_cache", None)
 
     add_queue_message("refresh_single_zone", {"zone": zone})
