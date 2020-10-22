@@ -8,16 +8,17 @@ $TTL	86400
 {% for nameserver in nameservers -%}
 @	IN	NS	{{ nameserver }}.
 {% endfor %}
-{% for record in records -%}
+
+{%- for record in records -%}
 {% if not record["pinned_nodes"] %}
-{% if record["proxied"] %}
+{%- if record["proxied"] %}
 {{ record["label"] }}    60    IN    A    {{ proxy4 }}
 {{ record["label"] }}    60    IN    AAAA    {{ proxy6 }}
 {% else %}
 {{ record["label"] }}    {{ record["ttl"] }}    IN    {{ record["type"] }}    {{ record["value"] }}
 {% endif %}
-{% else if (node in record["pinned_nodes") %}
-{% if record["proxied"] %}
+{% elif node in record["pinned_nodes"] %}
+{%- if record["proxied"] %}
 {{ record["label"] }}    60    IN    A    {{ proxy4 }}
 {{ record["label"] }}    60    IN    AAAA    {{ proxy6 }}
 {% else %}
