@@ -461,11 +461,11 @@ def records_add(zone):
 
         new_record["pinned_nodes"] = pinned_nodes_list
 
-    is_proxied = True
+    is_proxied = False
     try:
         _proxied = proxied
     except NameError:  # If not an A/AAAA record
-        is_proxied = False
+        pass
     else:
         if proxied:
             is_proxied = True
