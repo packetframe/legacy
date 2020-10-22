@@ -1,12 +1,12 @@
 module.exports = {
-  title: 'My Site',
+  title: 'delivr.dev',
   tagline: 'The tagline of my site',
   url: 'https://your-docusaurus-test-site.com',
   baseUrl: '/',
   onBrokenLinks: 'throw',
   favicon: 'img/favicon.ico',
-  organizationName: 'facebook', // Usually your GitHub org/user name.
-  projectName: 'docusaurus', // Usually your repo name.
+  organizationName: 'natesales', // Usually your GitHub org/user name.
+  projectName: 'delivr-docs', // Usually your repo name.
   themeConfig: {
     forceDarkMode: true,
     navbar: {
@@ -24,8 +24,8 @@ module.exports = {
         },
         {to: 'blog', label: 'Blog', position: 'left'},
         {
-          href: 'https://github.com/facebook/docusaurus',
-          label: 'GitHub',
+          href: 'https://delivr.dev/dashboard',
+          label: 'Dashboard',
           position: 'right',
         },
       ],
@@ -88,13 +88,13 @@ module.exports = {
           sidebarPath: require.resolve('./sidebars.js'),
           // Please change this to your repo.
           editUrl:
-            'https://github.com/facebook/docusaurus/edit/master/website/',
+            'https://github.com/natesales/delivr-docs/edit/main/',
         },
         blog: {
           showReadingTime: true,
           // Please change this to your repo.
           editUrl:
-            'https://github.com/facebook/docusaurus/edit/master/website/blog/',
+            'https://github.com/natesales/delivr-docs/edit/main/',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
