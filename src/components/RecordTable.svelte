@@ -131,11 +131,11 @@
     }
 
     $:loadRecords(zone);
-    // $: {
-    //     if (zone !== undefined && zone.endsWith("arpa")) {
-    //         type = "PTR"
-    //     }
-    // }
+    $: {
+        if (zone !== undefined && zone.endsWith("arpa")) {
+            type = "PTR"
+        }
+    }
 
     onMount(() => {
         loadRecords();
