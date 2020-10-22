@@ -24,7 +24,7 @@ module.exports = {
         },
         {to: 'blog', label: 'Blog', position: 'left'},
         {
-          href: 'https://dash.delivr.dev/dashboard',
+          href: 'https://dash.delivr.dev/',
           label: 'Dashboard',
           position: 'right',
         },
