@@ -456,6 +456,9 @@ def records_add(zone):
             else:
                 pinned_nodes_list.append(pinned_node)
 
+        if len(pinned_nodes_list) < 1:
+            return jsonify({"success": False, "message": "You must pin at least one node"})
+
         new_record["pinned_nodes"] = pinned_nodes_list
 
     is_proxied = True
