@@ -6,7 +6,7 @@
     export let admin = false;
 
     function getNodes() {
-        fetch("https://delivr.dev/api/nodes/list", {
+        fetch("https://dash.delivr.dev/api/nodes/list", {
             credentials: "include"
         })
             .then(response => response.json())

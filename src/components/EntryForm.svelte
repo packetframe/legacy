@@ -10,7 +10,7 @@
     let username, password;
 
     function submitForm() {
-        fetch("https://delivr.dev/api/auth/" + type, {
+        fetch("https://dash.delivr.dev/api/auth/" + type, {
             method: "POST",
             credentials: "include",
             headers: {"Content-Type": "application/json"},

@@ -32,7 +32,7 @@
             CartoDB_DarkMatter.addTo(mymap)
         }
 
-        fetch("https://delivr.dev/api/nodes/list", {
+        fetch("https://dash.delivr.dev/api/nodes/list", {
             credentials: "include"
         })
             .then(response => response.json())

@@ -23,7 +23,7 @@
     let showTable = false;
 
     onMount(() => {
-        fetch("https://delivr.dev/api/authenticated", {
+        fetch("https://dash.delivr.dev/api/authenticated", {
             credentials: "include"
         })
             .then(response => response.json())
@@ -35,7 +35,7 @@
     })
 
     function loadRecordDropdown(page) {
-        fetch("https://delivr.dev/api/admin", {
+        fetch("https://dash.delivr.dev/api/admin", {
             credentials: "include"
         })
             .then(response => response.json())
@@ -46,7 +46,7 @@
             })
 
         if (page === "dashboard") {
-            fetch("https://delivr.dev/api/zones/list", {
+            fetch("https://dash.delivr.dev/api/zones/list", {
                 method: "GET",
                 credentials: "include"
             })
@@ -68,7 +68,7 @@
     $: loadRecordDropdown($Page)
 
     function refreshZoneRegistry() {
-        fetch("https://delivr.dev/api/debug/refresh_zones", {
+        fetch("https://dash.delivr.dev/api/debug/refresh_zones", {
             method: "GET",
             credentials: "include"
         })
@@ -79,7 +79,7 @@
     }
 
     function refreshAllZones() {
-        fetch("https://delivr.dev/api/debug/refresh_all_zones", {
+        fetch("https://dash.delivr.dev/api/debug/refresh_all_zones", {
             method: "GET",
             credentials: "include"
         })
@@ -90,7 +90,7 @@
     }
 
     function refreshSingleZone() {
-        fetch("https://delivr.dev/api/debug/refresh_single_zone/" + prompt("Which zone do you want to refresh?"), {
+        fetch("https://dash.delivr.dev/api/debug/refresh_single_zone/" + prompt("Which zone do you want to refresh?"), {
             method: "GET",
             credentials: "include"
         })
@@ -101,7 +101,7 @@
     }
 
     function clearQueue() {
-        fetch("https://delivr.dev/api/debug/clear_queue", {
+        fetch("https://dash.delivr.dev/api/debug/clear_queue", {
             method: "GET",
             credentials: "include"
         })
@@ -112,7 +112,7 @@
     }
 
     function showQueueStats() {
-        fetch("https://delivr.dev/api/debug/queue_stats", {
+        fetch("https://dash.delivr.dev/api/debug/queue_stats", {
             method: "GET",
             credentials: "include"
         })
@@ -124,7 +124,7 @@
     }
 
     function refreshCache() {
-        fetch("https://delivr.dev/api/debug/refresh_cache", {
+        fetch("https://dash.delivr.dev/api/debug/refresh_cache", {
             method: "GET",
             credentials: "include"
         })
@@ -135,7 +135,7 @@
     }
 
     function addZone() {
-        fetch("https://delivr.dev/api/zones/add", {
+        fetch("https://dash.delivr.dev/api/zones/add", {
             method: "POST",
             credentials: "include",
             body: JSON.stringify({
@@ -152,7 +152,7 @@
     }
 
     function addNode() {
-        fetch("https://delivr.dev/api/nodes/add", {
+        fetch("https://dash.delivr.dev/api/nodes/add", {
             method: "POST",
             credentials: "include",
             body: JSON.stringify({

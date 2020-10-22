@@ -60,7 +60,7 @@
             body["pinned_nodes"] = getPinnedNodes()
         }
 
-        fetch("https://delivr.dev/api/zone/" + zone + "/add", {
+        fetch("https://dash.delivr.dev/api/zone/" + zone + "/add", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -74,7 +74,7 @@
     }
 
     function deleteRecord(index) {
-        fetch("https://delivr.dev/api/zone/" + zone + "/delete_record/" + index, {
+        fetch("https://dash.delivr.dev/api/zone/" + zone + "/delete_record/" + index, {
             method: "POST",
             credentials: "include"
         })
@@ -85,7 +85,7 @@
 
     function loadRecords(nothing) {
         if (zone !== undefined) {
-            fetch("https://delivr.dev/api/zone/" + zone + "/records", {
+            fetch("https://dash.delivr.dev/api/zone/" + zone + "/records", {
                 credentials: "include"
             })
                 .then(response => response.json())
@@ -102,7 +102,7 @@
     }
 
     function exportRecords() {
-        fetch("https://delivr.dev/api/zones/" + zone + "/export", {
+        fetch("https://dash.delivr.dev/api/zones/" + zone + "/export", {
             credentials: "include"
         })
             .then(response => response.json())
@@ -121,7 +121,7 @@
     }
 
     function loadNodes() {
-        fetch("https://delivr.dev/api/nodes/list", {
+        fetch("https://dash.delivr.dev/api/nodes/list", {
             credentials: "include"
         })
             .then(response => response.json())
