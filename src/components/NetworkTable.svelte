@@ -28,7 +28,6 @@
                 <th>Datacenter</th>
                 <th>Provider</th>
                 <th>Transit ASN</th>
-                <th>Region</th>
                 {#if admin}
                     <th>Unicast IP</th>
                 {/if}
@@ -42,7 +41,6 @@
                         <td>{node["datacenter"]}</td>
                         <td>{node["provider"]}</td>
                         <td>{node["transit_asn"]}</td>
-                        <td>{node["region"]}</td>
                         {#if admin}
                             <td>{node["management_ip"]}</td>
                         {/if}
