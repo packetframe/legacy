@@ -216,7 +216,7 @@
                             {#if nodes}
                                 {#each nodes as node }
                                     <input type="checkbox" id="{node['name']}" name="{node['name']}" value="{node['name']}">
-                                    <label for="{node['name']}"> {node["name"]}</label><br>
+                                    <label for="{node['name']}" class="capital"> {node["name"]}</label><br>
                                 {/each}
                             {:else}
                                 <p>Loading...</p>
@@ -379,5 +379,9 @@
     .node-pinning-checkboxes {
         margin-left: 10px;
         margin-bottom: 15px;
+    }
+
+    .capital {
+        text-transform: uppercase;
     }
 </style>
