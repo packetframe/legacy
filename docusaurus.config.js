@@ -9,7 +9,9 @@ module.exports = {
   projectName: 'delivr-docs', // Usually your repo name.
   themeConfig: {
     forceDarkMode: true,
-    defaultDarkMode: true,
+    colorMode: {
+      defaultMode: "dark"
+    },
     navbar: {
       title: 'DELIVR.DEV',
       logo: {
