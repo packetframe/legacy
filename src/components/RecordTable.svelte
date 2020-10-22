@@ -232,6 +232,7 @@
                 {#if showNodePinning }
                     <div class="info-text">
                         <p>This record <u>will</u> be pinned to the following nodes:</p>
+                        <br>
                         <div class="node-pinning-checkboxes">
                             {#if nodes}
                                 {#each nodes as node }
