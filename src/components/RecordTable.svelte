@@ -133,7 +133,11 @@
     $:loadRecords(zone);
     $: {
         if (zone !== undefined && zone.endsWith("arpa")) {
+            console.log("Reverse zone")
             type = "PTR"
+        } else {
+            console.log("Forward zone")
+            type = "A"
         }
     }
 
@@ -162,7 +166,7 @@
             <div class="record-add-container">
                 <div class="record-add-element-select">
                     <Dropdown id="add-type" bind:content={type}>
-                        {#if zone.endsWith("arpa")}
+                        {#if zone && zone.endsWith("arpa")}
                             <option value="PTR">PTR</option>
                         {:else}
                             <option value="A">A</option>
