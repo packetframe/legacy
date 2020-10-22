@@ -59,21 +59,24 @@ while True:
 
             zone = db["zones"].find_one({"zone": args["zone"]})
 
-            zone_file = zone_template.render(
-                nameservers=configuration["nameservers"],
-                soa_root=configuration["soa_root"],
-                records=zone.get("records"),
-                serial=zone["serial"],
-                proxy4=configuration["proxy4"],
-                proxy6=configuration["proxy6"]
-            )
-
-            with open("/tmp/db." + zone["zone"], "w") as zone_file_writer:
-                zone_file_writer.write(zone_file)
-
             # Loop over the nodes and send the updated zone file to each one, then reload the configuration
             for node in db["nodes"].find():
                 print("... now updating " + node["name"] + " " + node["management_ip"] + " " + node["location"])
+
+                print("    - sending updated zone file")
+
+                zone_file = zone_template.render(
+                    nameservers=configuration["nameservers"],
+                    soa_root=configuration["soa_root"],
+                    records=zone.get("records"),
+                    serial=zone["serial"],
+                    proxy4=configuration["proxy4"],
+                    proxy6=configuration["proxy6"],
+                    node=node["name"]
+                )
+
+                with open("/tmp/db." + zone["zone"], "w") as zone_file_writer:
+                    zone_file_writer.write(zone_file)
 
                 print("    - sending updated zone file")
                 try:
