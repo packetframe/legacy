@@ -123,6 +123,18 @@
             });
     }
 
+    function showSystemStats() {
+        fetch("https://dash.delivr.dev/api/stats", {
+            method: "GET",
+            credentials: "include"
+        })
+            .then(response => response.json())
+            .then(data => {
+                addSnackbar("stats", "success", data["success"] ? "green" : "red")
+                alert("Nodes: " + data["message"]["nodes"] + "\nZones: " + data["message"]["zones"] + "\nUsers: " + data["message"]["users"])
+            });
+    }
+
     function refreshCache() {
         fetch("https://dash.delivr.dev/api/debug/refresh_cache", {
             method: "GET",
@@ -247,6 +259,7 @@
                     <Button padded onclick={() => addNode()}>Add Node</Button>
                     <Button padded onclick={() => {showMap = !showMap}}>Toggle map</Button>
                     <Button padded onclick={() => {showTable = !showTable}}>Toggle table</Button>
+                    <Button padded onclick={() => showSystemStats()}>System Stats</Button>
                 </ButtonBar>
             {/if}
 
