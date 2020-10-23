@@ -39,7 +39,7 @@
         <div class="title">{type.charAt(0).toUpperCase() + type.slice(1)}</div>
         <div class="container">
             <div class="form-element">
-                <TextInput bind:content={username} placeholder="Username"/>
+                <TextInput bind:content={username} placeholder="Email"/>
             </div>
 
             <div class="form-element">
