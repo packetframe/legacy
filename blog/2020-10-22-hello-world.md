@@ -10,4 +10,4 @@ tags: ["Hello World"]
 
 Hello World!
 
-Welcome to delivr.dev, the open source CDN platform for technology enthusiasts. delivr.dev is currently in private beta, so stay tuned for more information!
+Welcome to delivr.dev, the open source CDN platform for technology enthusiasts - currently in private beta. If you would like an account, please email info@delivr.dev and your application will be considered!
