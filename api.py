@@ -730,6 +730,21 @@ def nodes_power(username, is_admin):
     return jsonify({"success": True, "message": "Set BGP status to " + state})
 
 
+@app.route("/stats", methods=["GET"])
+@authentication_required
+def stats(username, is_admin):
+    # Get general system stats
+
+    if not is_admin:
+        return jsonify({"success": False, "message": "Unauthorized"})
+
+    return jsonify({"success": True, "message": {
+        "nodes": len(nodes.find()),
+        "zones": len(zones.find()),
+        "users": len(users.find())
+    }})
+
+
 @app.route("/admin")
 @authentication_required
 def admin(username, is_admin):
