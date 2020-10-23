@@ -739,9 +739,9 @@ def stats(username, is_admin):
         return jsonify({"success": False, "message": "Unauthorized"})
 
     return jsonify({"success": True, "message": {
-        "nodes": len(nodes.find()),
-        "zones": len(zones.find()),
-        "users": len(users.find())
+        "nodes": nodes.count(),
+        "zones": zones.count(),
+        "users": users.count()
     }})
 
 
