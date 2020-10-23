@@ -189,7 +189,8 @@ def auth_signup():
     users.insert_one({
         "username": username,
         "password": argon.hash(password),
-        "key": base64.b64encode(urandom(32)).decode().replace("=", "")
+        "key": base64.b64encode(urandom(32)).decode().replace("=", ""),
+        "enabled": False
     })
 
     return jsonify({"success": True, "message": "Signup success"})
@@ -214,9 +215,12 @@ def auth_login():
         return jsonify({"success": False, "message": "Invalid username or password"})
     else:
         if valid:
-            resp = make_response(jsonify({"success": True, "message": user_doc["key"]}))
-            resp.set_cookie("apikey", user_doc["key"])
-            return resp
+            if user_doc.get("enabled"):
+                resp = make_response(jsonify({"success": True, "message": user_doc["key"]}))
+                resp.set_cookie("apikey", user_doc["key"])
+                return resp
+            else:
+                return jsonify({"success": False, "message": "This account is inactive. Please contact info@delivr.dev for more information."})
 
     return jsonify({"success": False, "message": "Invalid username or password"})
 
