@@ -18,7 +18,8 @@ function Home() {
                 <div style={{textAlign: "center"}}>
                     <div className="container">
                         <h1 className="hero__title">{siteConfig.title}</h1>
-                        <p className="hero__subtitle">{siteConfig.tagline}</p>
+                        {/*<p className="hero__subtitle">{siteConfig.tagline}</p>*/}
+                        <p className="hero__subtitle">DELIVR.DEV is currently in private beta. Contact {atob("aW5mb0BkZWxpdnIuZGV2Cg==")} for more information.</p>
                         <div className={styles.buttons}>
                             <Link
                                 className={clsx(

@@ -1,6 +1,6 @@
 module.exports = {
   title: 'DELIVR.DEV',
-  tagline: 'The open source CDN platform for technology enthusiasts.',
+  tagline: '',
   url: 'https://delivr.dev/',
   baseUrl: '/',
   onBrokenLinks: 'throw',
