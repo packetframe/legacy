@@ -31,4 +31,109 @@ sub vcl_deliver {
     unset resp.http.Server;
     unset resp.http.Accept-Ranges;
 #    set req.http.X-PoP = "fmt";
+
+    if (resp.status == 500 || resp.status == 502 || resp.status == 503 || resp.status == 504) {
+        return (synth(resp.status));
+    }
+}
+
+sub vcl_synth {
+    set resp.http.Content-Type = "text/html; charset=utf-8";
+
+    synthetic({"
+        <head>
+           <title>Error "} + resp.status + {" - delivr.dev</title>
+           <link rel="stylesheet" href="https://dash.delivr.dev/5xx.css">
+           <link rel="icon" type="image/png"href="https://dash.delivr.dev/favicon.png">
+        </head>
+
+        <body>
+           <div class="navbar">
+               <div class="nav-element">
+                   <a href="https://delivr.dev/"><img style="width: 225px" src="https://dash.delivr.dev/img/full.png" alt="delivr.dev"></a>
+               </div>
+
+               <div class="nav-element" style="float: right">
+                   <a href="https://dash.delivr.dev/" style="text-decoration: none;">Dashboard</a>
+               </div>
+           </div>
+
+           <h1>Error "} + resp.status + {"</h1>
+           <h2>"} + resp.reason + {"</h2>
+           <div class="container">
+               <figure>
+                   <img style="width: 200px" src="https://dash.delivr.dev/img/laptop.png" alt="User">
+                   <figcaption>Browser<span class="icon">✅</span></figcaption>
+               </figure>
+
+               <figure>
+                   <img style="width: 200px" src="https://dash.delivr.dev/img/delivr.png" alt="delivr.dev">
+                   <figcaption>DELIVR.DEV<span class="icon">✅</span></figcaption>
+               </figure>
+
+               <figure>
+                   <img style="width: 150px" src="https://dash.delivr.dev/img/server.png" alt="">
+                   <figcaption>Origin<span class="icon">❌</span></figcaption>
+               </figure>
+           </div>
+
+           <div class="footer">
+               <p>Error  "} + resp.status + {" origin "} + req.http.host + {" xid "} + req.xid + {"</p>
+               <p>&copy; 2020 Nate Sales.</p>
+           </div>
+        </body>
+    "});
+
+    return (deliver);
+}
+
+
+sub vcl_backend_error {
+    set beresp.http.Content-Type = "text/html; charset=utf-8";
+
+    synthetic({"
+        <head>
+           <title>Error "} + beresp.status + {" - delivr.dev</title>
+           <link rel="stylesheet" href="https://dash.delivr.dev/5xx.css">
+           <link rel="icon" type="image/png"href="https://dash.delivr.dev/favicon.png">
+        </head>
+
+        <body>
+           <div class="navbar">
+               <div class="nav-element">
+                   <a href="https://delivr.dev/"><img style="width: 225px" src="https://dash.delivr.dev/img/full.png" alt="delivr.dev"></a>
+               </div>
+
+               <div class="nav-element" style="float: right">
+                   <a href="https://dash.delivr.dev/" style="text-decoration: none;">Dashboard</a>
+               </div>
+           </div>
+
+           <h1>Error "} + beresp.status + {"</h1>
+           <h2>"} + beresp.reason + {"</h2>
+           <div class="container">
+               <figure>
+                   <img style="width: 200px" src="https://dash.delivr.dev/img/laptop.png" alt="User">
+                   <figcaption>Browser<span class="icon">✅</span></figcaption>
+               </figure>
+
+               <figure>
+                   <img style="width: 200px" src="https://dash.delivr.dev/img/delivr.png" alt="delivr.dev">
+                   <figcaption>DELIVR.DEV<span class="icon">✅</span></figcaption>
+               </figure>
+
+               <figure>
+                   <img style="width: 150px" src="https://dash.delivr.dev/img/server.png" alt="">
+                   <figcaption>Origin<span class="icon">❌</span></figcaption>
+               </figure>
+           </div>
+
+           <div class="footer">
+               <p>Error  "} + beresp.status + {" origin "} + bereq.http.host + {" xid "} + bereq.xid + {"</p>
+               <p>&copy; 2020 Nate Sales.</p>
+           </div>
+        </body>
+    "});
+
+    return (deliver);
 }
