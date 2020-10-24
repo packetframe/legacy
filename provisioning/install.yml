@@ -112,6 +112,40 @@
       shell: rndc reload
       when: bind_config.changed
 
+    - name: Get bind_exporter
+      unarchive:
+        src: https://github.com/prometheus-community/bind_exporter/releases/download/v0.3.0/bind_exporter-0.3.0.linux-amd64.tar.gz
+        dest: /tmp/
+        remote_src: yes
+
+    - name: Move bind_exporter to path
+      command: mv /tmp/bind_exporter-0.3.0.linux-amd64/bind_exporter /usr/bin/
+
+    - name: Create bind_exporter service
+      copy:
+        content: |
+          [Unit]
+          Description=BIND Exporter
+          After=network.target
+
+          [Service]
+          User=root
+          Group=root
+          Type=simple
+          ExecStart=/usr/bin/bind_exporter -web.listen-address="{{ ansible_host }}:9119"
+
+          [Install]
+          WantedBy=multi-user.target
+        dest: /etc/systemd/system/bind-exporter.service
+      register: bind_exporter
+
+    - name: Enable and start bind_exporter
+      systemd:
+        name: bind-exporter
+        enabled: yes
+        state: restarted
+      when: bind_exporter.changed
+
     - name: Create network config
       copy:
         content: "{{ config }}"
