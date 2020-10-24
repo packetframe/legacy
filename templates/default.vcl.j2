@@ -108,7 +108,7 @@ sub vcl_backend_error {
     synthetic({"
         <html>
         <head>
-           <title>Error "} + resp.status + {" - delivr.dev</title>
+           <title>Error "} + beresp.status + {" - delivr.dev</title>
             <link rel="stylesheet" href="https://dash.delivr.dev/5xx.css">
             <link rel="icon" type="image/png" href="https://dash.delivr.dev/favicon.png">
         </head>
@@ -126,8 +126,8 @@ sub vcl_backend_error {
             </div>
         </div>
 
-       <h1>Error "} + resp.status + {"</h1>
-       <h2>"} + resp.reason + {"</h2>
+       <h1>Error "} + beresp.status + {"</h1>
+       <h2>"} + beresp.reason + {"</h2>
         <div class="container">
             <div class="figure-element">
                 <img class="image" src="https://dash.delivr.dev/img/laptop.png" alt="User">
@@ -155,7 +155,7 @@ sub vcl_backend_error {
         </div>
 
         <div class="footer">
-           <p>Error  "} + resp.status + {" origin "} + req.http.host + {" xid "} + req.xid + {"</p>
+           <p>Error  "} + beresp.status + {" origin "} + bereq.http.host + {" xid "} + bereq.xid + {"</p>
            <p>&copy; 2020 Nate Sales.</p>
         </div>
 
