@@ -54,6 +54,7 @@ h2 {
     align-items: center;
     cursor: pointer;
     margin: 15px;
+    text-decoration: none;
 }
 
 .footer {
