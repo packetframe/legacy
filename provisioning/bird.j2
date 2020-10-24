@@ -292,6 +292,24 @@ template bgp default_route_upstream6 {
     };
 }
 
+template bgp ibgp_default_route_upstream4 {
+  local as ASN;
+    ipv4 {
+        next hop self;
+        import where (net = 0.0.0.0/0);
+        export where export_filter();
+    };
+}
+
+template bgp ibgp_default_route_upstream6 {
+  local as ASN;
+    ipv6 {
+        next hop self;
+        import where (net = ::/0);
+        export where export_filter();
+    };
+}
+
 template bgp no_import_upstream4 {
   local as ASN;
     ipv4 {
