@@ -19,7 +19,7 @@ function Home() {
                     <div className="container">
                         <h1 className="hero__title">{siteConfig.title}</h1>
                         {/*<p className="hero__subtitle">{siteConfig.tagline}</p>*/}
-                        <p className="hero__subtitle">DELIVR.DEV is currently in private beta. Contact {atob("aW5mb0BkZWxpdnIuZGV2Cg==")} for more information.</p>
+                        <p className="hero__subtitle">DELIVR.DEV is currently in private beta. Contact <span style={{"unicode-bidi": "bidi-override", direction: "rtl"}}>ved.rviled@ofni</span> for more information.</p>
                         <div className={styles.buttons}>
                             <Link
                                 className={clsx(
