@@ -1,5 +1,5 @@
 - name: Install
-  hosts: all
+  hosts: nodes
   tasks:
     - include_vars: vars.yml
 

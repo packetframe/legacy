@@ -7,7 +7,7 @@ with open("../config.yml", "r") as config_file:
     config = yaml.safe_load(config_file.read())
 
 _config = {
-    "all": {
+    "nodes": {
         "hosts": {},
         "vars": {
             "ansible_user": config["nodes"]["username"],
@@ -26,7 +26,7 @@ _config = {
 }
 
 for node in db_client["cdn"]["nodes"].find():
-    _config["all"]["hosts"][node["name"]] = {
+    _config["nodes"]["hosts"][node["name"]] = {
         "ansible_host": node["management_ip"]
     }
 
