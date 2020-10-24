@@ -2,8 +2,11 @@
     experimental_http3
 }
 
+include unique.conf
+
 {%- for domain in domains %}
 https://{{ domain }} {
+    import respond_metadata
     tls /etc/caddy/{{ domain }}-chain.pem /etc/caddy/{{ domain }}-key.pem
     reverse_proxy http://localhost:8000
 }
