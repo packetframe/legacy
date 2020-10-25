@@ -53,19 +53,6 @@
       shell: /root/network.sh
       when: network_config.changed
 
-    - name: Copy Caddy unique config
-      copy:
-        content: |
-          {
-            experimental_http3
-            admin {{ ansible_host }}:2019
-          }
-
-          (respond_metadata) {
-            header PoP {{ ansible_hostname }}
-          }
-        dest: /etc/caddy/unique.conf
-
     - name: Copy firewall config
       template:
         src: ufw.j2

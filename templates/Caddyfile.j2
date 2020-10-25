@@ -1,4 +1,11 @@
-import unique.conf
+{
+    experimental_http3
+    admin {{ host }}:2019
+}
+
+(respond_metadata) {
+    header PoP {{ hostname }}
+}
 
 {% for domain in domains %}
 https://{{ domain }} {

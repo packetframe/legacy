@@ -174,14 +174,14 @@ while True:
             with open("/tmp/default.vcl", "w") as vcl_file:
                 vcl_file.write(vcl_template.render(backends=backends, domains=domains))
 
-            # Render and write the Caddyfile tmp file
-            with open("/tmp/Caddyfile", "w") as caddy_file:
-                caddy_file.write(caddy_template.render(domains=domains))
-
             # Deploy the vcl file and reload
             for node in db["cache_nodes"].find():
                 print("... now updating " + node["name"] + " " + node["management_ip"] + " " + node["location"])
                 print("    - sending updated vcl file")
+
+                # Render and write the Caddyfile tmp file
+                with open("/tmp/Caddyfile", "w") as caddy_file:
+                    caddy_file.write(caddy_template.render(domains=domains, host=node["management_ip"], hostname=node["name"]))
 
                 try:
                     ssh.connect(node["management_ip"], username="root", port=34553, key_filename=configuration["nodes"]["key"])
