@@ -177,7 +177,7 @@ while True:
             # Deploy the vcl file and reload
             for node in db["cache_nodes"].find():
                 print("... now updating " + node["name"] + " " + node["management_ip"] + " " + node["location"])
-                print("    - sending updated vcl file")
+                print("    - sending updated vcl/caddy configs")
 
                 # Render and write the Caddyfile tmp file
                 with open("/tmp/Caddyfile", "w") as caddy_file:
