@@ -60,7 +60,7 @@ for node in db_client["cdn"]["nodes"].find():
 
 prometheus_config += """
 
-  - job_name: cache_nodes
+  - job_name: cache_nodes_caddy
     static_configs:"""
 
 for node in db_client["cdn"]["cache_nodes"].find():
@@ -74,6 +74,17 @@ for node in db_client["cdn"]["cache_nodes"].find():
           service: '""" + node["name"] + """'"""
 
     print("- cache + " + node["name"])
+
+prometheus_config += """
+
+  - job_name: cache_nodes_varnish
+    static_configs:"""
+
+for node in db_client["cdn"]["cache_nodes"].find():
+    prometheus_config += """
+      - targets: ['""" + node["management_ip"] + """:9131']
+        labels:
+          service: '""" + node["name"] + """'"""
 
 with open("hosts.yml", "w") as hosts_file:
     hosts_file.write(yaml.dump(_config, default_flow_style=False))
