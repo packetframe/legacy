@@ -71,7 +71,7 @@ for node in db_client["cdn"]["cache_nodes"].find():
     }
 
     prometheus_config += """
-      - targets: ['""" + node["management_ip"] + """:9119']
+      - targets: ['""" + node["management_ip"] + """:2019']
         labels:
           service: '""" + node["name"] + """'"""
 
@@ -81,4 +81,4 @@ with open("hosts.yml", "w") as hosts_file:
     hosts_file.write(yaml.dump(_config, default_flow_style=False))
 
 with open("prometheus.yml", "w") as prometheus_file:
-    prometheus_file.write(prometheus_config)
+    prometheus_file.write(prometheus_config + "\n")
