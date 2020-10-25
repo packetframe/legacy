@@ -23,8 +23,6 @@
           - varnish
           - ufw
 
-    #    TODO: ufw config
-
     - name: Install BIRD2 from sid
       apt:
         name: bird2
@@ -74,7 +72,7 @@
         dest: /root/ufw.sh
         mode: +x
       vars:
-        selected_controller_host: "{{ controller_host }}"
+        allowed_hosts: "{{ allowed_hosts }}"
 
     - name: Copy varnish service
       template:
