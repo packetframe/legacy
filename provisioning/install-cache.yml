@@ -70,6 +70,14 @@
           }
         dest: /etc/caddy/unique.conf
 
+    - name: Copy firewall config
+      template:
+        src: ufw.j2
+        dest: /root/ufw.sh
+        mode: +x
+      vars:
+        selected_controller_host: "{{ controller_host }}"
+
     - name: Copy varnish service
       template:
         src: varnish.service.j2
@@ -82,5 +90,3 @@
         name: varnish
         state: restarted
       when: varnish_config.changed
-
-# TODO: Add varnish config
