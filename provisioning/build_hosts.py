@@ -25,9 +25,7 @@ _config = {
     }
 }
 
-prometheus_config = """
-
-global:
+prometheus_config = """global:
   scrape_interval:     15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
   evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
   # scrape_timeout is set to the global default (10s).
@@ -66,7 +64,7 @@ prometheus_config += """
     static_configs:"""
 
 for node in db_client["cdn"]["cache_nodes"].find():
-    _config["cache"]["hosts"][node["name"]] = {
+    _config["cache"]["hosts"]["cache-" + node["name"]] = {
         "ansible_host": node["management_ip"]
     }
 
