@@ -25,20 +25,60 @@ _config = {
     }
 }
 
+prometheus_config = """
+
+global:
+  scrape_interval:     15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+  evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
+  # scrape_timeout is set to the global default (10s).
+
+  # Attach these labels to any time series or alerts when communicating with
+  # external systems (federation, remote storage, Alertmanager).
+  external_labels:
+      monitor: 'example'
+
+# Alertmanager configuration
+alerting:
+  alertmanagers:
+  - static_configs:
+    - targets: ['localhost:9093']
+
+scrape_configs:
+  - job_name: dns_nodes
+    static_configs:"""
+
 for node in db_client["cdn"]["nodes"].find():
     _config["nodes"]["hosts"][node["name"]] = {
         "ansible_host": node["management_ip"]
     }
 
+    prometheus_config += """
+      - targets: ['""" + node["management_ip"] + """:9119']
+        labels:
+          service: '""" + node["name"] + """'"""
+
     print("+ " + node["name"])
 
+
+prometheus_config += """
+
+  - job_name: cache_nodes
+    static_configs:"""
 
 for node in db_client["cdn"]["cache_nodes"].find():
     _config["cache"]["hosts"][node["name"]] = {
         "ansible_host": node["management_ip"]
     }
 
+    prometheus_config += """
+      - targets: ['""" + node["management_ip"] + """:9119']
+        labels:
+          service: '""" + node["name"] + """'"""
+
     print("- cache + " + node["name"])
 
 with open("hosts.yml", "w") as hosts_file:
     hosts_file.write(yaml.dump(_config, default_flow_style=False))
+
+with open("prometheus.yml", "w") as prometheus_file:
+    prometheus_file.write(prometheus_config)
