@@ -64,9 +64,7 @@
           }
 
           (respond_metadata) {
-            handle_path /.delivr/metadata {
-                respond `PoP: {{ ansible_hostname }}`
-            }
+            header PoP {{ ansible_hostname }}
           }
         dest: /etc/caddy/unique.conf
 
