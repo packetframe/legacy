@@ -1,3 +1,8 @@
+<p align="center">
+  <img src="https://raw.githubusercontent.com/natesales/delivr/master/logo_transparent_text.png" alt=delivr.dev logo"/>
+</p>
+
+
 # delivr
 
 
