@@ -1,7 +1,7 @@
 <p align="center">
   <img width="250px" src="https://raw.githubusercontent.com/natesales/delivr/master/logo.png" alt=delivr.dev logo"/>
+  <a href="https://github.com/natesales/delivr"><img alt="GitHub license" src="https://img.shields.io/github/license/natesales/delivr?style=for-the-badge"></a>
 </p>
-
 
 ## delivr.dev
 
