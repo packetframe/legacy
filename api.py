@@ -7,7 +7,9 @@ from os import urandom
 from time import strftime
 
 import requests
+# noinspection PyPackageRequirements
 from argon2 import PasswordHasher
+# noinspection PyPackageRequirements
 from argon2.exceptions import VerifyMismatchError
 from flask import Flask, request, jsonify, make_response
 from jinja2 import Template
@@ -39,9 +41,11 @@ argon = PasswordHasher()
 queue = BeanstalkClient("localhost", 11300)
 
 with open("templates/zone.j2") as zone_template_file:
+    # noinspection JinjaAutoinspect
     zone_template = Template(zone_template_file.read())
 
 with open("mail/new_domain.j2", "r") as new_domain_template_file:
+    # noinspection JinjaAutoinspect
     new_domain_template = Template(new_domain_template_file.read())
 
 
