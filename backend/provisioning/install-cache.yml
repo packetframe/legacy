@@ -1,7 +1,7 @@
 - name: Install
   hosts: cache
   tasks:
-    - include_vars: vars.yml
+    - include_vars: /home/nate/delivr/config.yml
 
     - name: Add debian sid repo
       apt_repository:
@@ -34,8 +34,8 @@
         dest: /etc/bird/bird.conf
       vars:
         asn: 34553
-        selected_ipv4_prefix: "{{ cache_ipv4_prefix }}"
-        selected_ipv6_prefix: "{{ cache_ipv6_prefix }}"
+        selected_ipv4_prefix: "{{ proxy['prefix4'] }}"
+        selected_ipv6_prefix: "{{ proxy['prefix6'] }}"
       register: bird_config
 
     - name: Apply BIRD config
@@ -44,7 +44,7 @@
 
     - name: Create network config
       copy:
-        content: "{{ cache_config }}"
+        content: "{{ proxy['network_config'] }}"
         dest: /root/network.sh
         mode: +x
       register: network_config
@@ -59,7 +59,7 @@
         dest: /root/ufw.sh
         mode: +x
       vars:
-        allowed_hosts: "{{ allowed_hosts }}"
+        allowed_hosts: "{{ proxy['allowed_hosts'] }}"
 
     - name: Copy varnish service
       template:

@@ -4,16 +4,32 @@ development: true
 ssh-key: /home/nate/ssh-key
 
 dns:
-    rname: info.delivr.dev
-    nameservers:
-        - ns1.delivr.dev
-        - ns2.delivr.dev
+  rname: info.delivr.dev
+  nameservers:
+    - ns1.delivr.dev
+    - ns2.delivr.dev
 
 email:
-    username: noreply@delivr.dev
-    password: fake
-    server: fake
+  username: noreply@delivr.dev
+  password: fake
+  server: fake
 
 proxy:
-    server4: 192.0.2.100
-    server6: 2001:db8::100
+  server4: 192.0.2.100
+  server6: 2001:db8::100
+
+  prefix4: 192.0.2.0/23
+  prefix6: 2001:db8::/47
+
+  network_config: |
+    #!/bin/bash
+    ip link del local
+    ip link add local type dummy
+    ip addr add 192.0.2.100/23 dev local
+    ip addr add 2001:db8::100/47 dev local
+    ip link set dev local up
+
+  # Hosts allowed to access caches (controller and monitoring IPs)
+  allowed_hosts:
+    - 192.0.2.2
+    - 192.0.2.5
