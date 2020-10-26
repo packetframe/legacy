@@ -14,11 +14,12 @@ jobs:
 
       # Build frontend
 
-      - name: Use Node.js
+      - name: Build frontend and docs
         uses: actions/setup-node@v1
         with:
           node-version: '12.x'
       - run: cd frontend/ ; yarn install ; yarn build
+      - run: cd docs/ ; yarn install ; yarn build
 
       # Copy to server
 
