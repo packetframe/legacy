@@ -6,8 +6,8 @@ After=network.target
 Type=simple
 Restart=always
 User=nate
-WorkingDirectory=/home/nate/delivr-backend/
-ExecStart=python3 /home/nate/delivr-backend/api.py
+WorkingDirectory=/home/nate/delivr/backend/
+ExecStart=python3 /home/nate/delivr/backend/api.py
 
 [Install]
 WantedBy=multi-user.target
