@@ -42,13 +42,13 @@ module.exports = {
           sidebarPath: require.resolve('./sidebars.js'),
           // Please change this to your repo.
           editUrl:
-            'https://github.com/natesales/delivr-docs/edit/main/',
+            'https://github.com/natesales/delivr/edit/master/docs/',
         },
         blog: {
           showReadingTime: true,
           // Please change this to your repo.
           editUrl:
-            'https://github.com/natesales/delivr-docs/edit/main/',
+            'https://github.com/natesales/delivr/edit/master/docs/',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
