@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/natesales/delivr/master/logo.png" alt=delivr.dev logo"/>
+  <img width="250px" src="https://raw.githubusercontent.com/natesales/delivr/master/logo.png" alt=delivr.dev logo"/>
 </p>
 
 
