@@ -66,8 +66,8 @@ while True:
                 print("    - sending updated zone file")
 
                 zone_file = zone_template.render(
-                    nameservers=configuration["nameservers"],
-                    rname=configuration["rname"],
+                    nameservers=configuration["dns"]["nameservers"],
+                    rname=configuration["dns"]["rname"],
                     records=zone.get("records"),
                     serial=zone["serial"],
                     proxy4=configuration["proxy4"],

@@ -578,8 +578,8 @@ def zones_export(zone):
         return jsonify({"success": False, "message": "Zone doesn't exist"})
 
     zone_file = zone_template.render(
-        nameservers=configuration["nameservers"],
-        rname=configuration["rname"],
+        nameservers=configuration["dns"]["nameservers"],
+        rname=configuration["dns"]["rname"],
         records=zone["records"],
         serial=zone["serial"]
     )

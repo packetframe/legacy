@@ -3,7 +3,13 @@
 development: true
 ssh-key: /home/nate/ssh-key
 
-rname: info.delivr.dev
-nameservers:
-    - ns1.delivr.dev
-    - ns2.delivr.dev
+dns:
+    rname: info.delivr.dev
+    nameservers:
+        - ns1.delivr.dev
+        - ns2.delivr.dev
+
+email:
+    username: noreply@delivr.dev
+    password: fake
+    server: fake
