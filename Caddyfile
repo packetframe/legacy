@@ -1,9 +1,35 @@
-delivr.dev
+{
+	email info@delivr.dev
+}
 
-root * /home/nate/delivr-frontend/public/build/
-file_server
+delivr.dev {
+	root * /home/nate/delivr/docs/build/
+	file_server
 
-route /api/* {
-	uri strip_prefix /api
-	reverse_proxy localhost:5000
+	log {
+		output file /var/log/access-delivr.dev.log {
+			roll_size 1gb
+			roll_keep 1
+			roll_keep_for 7d
+		}
+	}
+}
+
+dash.delivr.dev {
+	root * /home/nate/delivr/frontend/public/
+	file_server
+
+
+	route /api/* {
+		uri strip_prefix /api
+		reverse_proxy localhost:5000
+	}
+
+	log {
+		output file /var/log/access-dash.delivr.dev.log {
+			roll_size 1gb
+			roll_keep 1
+			roll_keep_for 7d
+		}
+	}
 }
