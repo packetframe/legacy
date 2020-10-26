@@ -567,7 +567,7 @@ def zones_export(zone):
 
     zone_file = zone_template.render(
         nameservers=configuration["nameservers"],
-        soa_root=configuration["soa_root"],
+        rname=configuration["rname"],
         records=zone["records"],
         serial=zone["serial"]
     )

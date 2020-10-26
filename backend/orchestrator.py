@@ -67,7 +67,7 @@ while True:
 
                 zone_file = zone_template.render(
                     nameservers=configuration["nameservers"],
-                    soa_root=configuration["soa_root"],
+                    rname=configuration["rname"],
                     records=zone.get("records"),
                     serial=zone["serial"],
                     proxy4=configuration["proxy4"],
