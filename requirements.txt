@@ -8,3 +8,4 @@ pystalk~=0.6.1
 scp~=0.13.2
 dnspython~=2.0.0
 argon2-cffi
+ipaddress~=1.0.23
