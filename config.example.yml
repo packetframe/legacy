@@ -8,6 +8,23 @@ dns:
   nameservers:
     - ns1.delivr.dev
     - ns2.delivr.dev
+  prefix4: 203.0.113.0/24
+  prefix6: 2001:db8:2::/48
+  bind_addresses4:
+    - 203.0.113.2
+    - 203.0.113.3
+  bind_addresses6:
+    - 2001:db8:2::2
+    - 2001:db8:2::3
+  network_config: |
+    #!/bin/bash
+    ip link del local
+    ip link add local type dummy
+    ip addr add 203.0.113.2/24 dev local
+    ip addr add 203.0.113.3/24 dev local
+    ip addr add 2001:db8:2::2/48 dev local
+    ip addr add 2001:db8:2::3/48 dev local
+    ip link set dev local up
 
 email:
   username: noreply@delivr.dev

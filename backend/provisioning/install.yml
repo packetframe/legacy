@@ -1,7 +1,7 @@
 - name: Install
   hosts: nodes
   tasks:
-    - include_vars: vars.yml
+    - include_vars: /home/nate/delivr/config.yml
 
     - name: Add debian sid repo
       apt_repository:
@@ -73,8 +73,8 @@
         dest: /etc/bird/bird.conf
       vars:
         asn: 34553
-        selected_ipv4_prefix: "{{ ipv4_prefix }}"
-        selected_ipv6_prefix: "{{ ipv6_prefix }}"
+        selected_ipv4_prefix: "{{ dns['prefix4'] }}"
+        selected_ipv6_prefix: "{{ dns['prefix6'] }}"
       register: bird_config
 
     - name: Apply BIRD config
@@ -86,8 +86,8 @@
         src: named.conf.options.j2
         dest: /etc/bind/named.conf.options
       vars:
-        bind_addresses4: "{{ bind_addresses4 }}"
-        bind_addresses6: "{{ bind_addresses6 }}"
+        bind_addresses4: "{{ dns['bind_addresses4']}}"
+        bind_addresses6: "{{ dns['bind_addresses6']}}"
       register: bind_config
 
     - name: Copy manual zones
@@ -148,7 +148,7 @@
 
     - name: Create network config
       copy:
-        content: "{{ config }}"
+        content: "{{ dns['network_config'] }}"
         dest: /root/network.sh
         mode: +x
 
