@@ -480,6 +480,7 @@ def records_add(zone):
 
     is_proxied = False
     try:
+        # noinspection PyUnboundLocalVariable
         _proxied = proxied
     except NameError:  # If not an A/AAAA record
         pass
