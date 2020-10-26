@@ -70,8 +70,8 @@ while True:
                     rname=configuration["dns"]["rname"],
                     records=zone.get("records"),
                     serial=zone["serial"],
-                    proxy4=configuration["proxy4"],
-                    proxy6=configuration["proxy6"],
+                    proxy4=configuration["proxy"]["server4"],
+                    proxy6=configuration["proxy"]["server6"],
                     node=node["name"]
                 )
 

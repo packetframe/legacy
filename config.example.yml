@@ -13,3 +13,7 @@ email:
     username: noreply@delivr.dev
     password: fake
     server: fake
+
+proxy:
+    server4: 192.0.2.100
+    server6: 2001:db8::100
