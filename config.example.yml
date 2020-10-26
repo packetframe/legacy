@@ -4,7 +4,7 @@ development: true
 ssh-key: /home/nate/ssh-key
 
 dns:
-  rname: info.delivr.dev
+  rname: info.example.com
   nameservers:
     - ns1.delivr.dev
     - ns2.delivr.dev
@@ -27,9 +27,9 @@ dns:
     ip link set dev local up
 
 email:
-  username: noreply@delivr.dev
-  password: fake
-  server: fake
+  username: noreply@example.com
+  password: email-password
+  server: mail.example.com
 
 proxy:
   server4: 192.0.2.100
