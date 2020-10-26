@@ -38,17 +38,11 @@ jobs:
           port: ${{ secrets.PORT }}
           script: sudo caddy config -config /etc/caddy/Caddyfile
 
-#      - name: Copy backend service files
-#        run:
-
-#      # Restart backend processes
-#
-#      - name: Restart orchestrator process
-#        uses: appleboy/ssh-action@master
-#        with:
-#          host: ${{ secrets.HOST }}
-#          username: ${{ secrets.USERNAME }}
-#          password: ${{ secrets.PASSWORD }}
-#          port: ${{ secrets.PORT }}
-#          script: sudo systemctl restart delivr-orchestrator
-#
+      - name: Restart backend services
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: sudo systemctl daemon-reload ; sudo systemctl restart delivr-orchestrator ; sudo systemctl restart delivr-api
