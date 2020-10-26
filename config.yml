@@ -1,0 +1,8 @@
+# config.yml
+
+development: true
+
+rname: info.delivr.dev
+nameservers:
+    - ns1.delivr.dev
+    - ns2.delivr.dev
