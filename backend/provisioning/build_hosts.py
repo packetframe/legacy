@@ -3,24 +3,24 @@ import yaml
 
 db_client = MongoClient("mongodb://localhost:27017")
 
-with open("../config.yml", "r") as config_file:
+with open("/home/nate/delivr/config.yml", "r") as config_file:
     config = yaml.safe_load(config_file.read())
 
 _config = {
     "nodes": {
         "hosts": {},
         "vars": {
-            "ansible_user": config["nodes"]["username"],
-            "ansible_port": config["nodes"]["port"],
-            "ansible_ssh_private_key_file": "../" + config["nodes"]["key"]
+            "ansible_user": "root",
+            "ansible_port": 34553,
+            "ansible_ssh_private_key_file": config["ssh-key"]
         }
     },
     "cache": {
         "hosts": {},
         "vars": {
-            "ansible_user": config["nodes"]["username"],
-            "ansible_port": config["nodes"]["port"],
-            "ansible_ssh_private_key_file": "../" + config["nodes"]["key"]
+            "ansible_user": "root",
+            "ansible_port": 34553,
+            "ansible_ssh_private_key_file": config["ssh-key"]
         }
     }
 }
