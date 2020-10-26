@@ -22,3 +22,27 @@ caddy reload -config /etc/caddy/Caddyfile
 ln -s /home/nate/delivr/delivr-api.service /etc/systemd/system/delivr-api.service
 ln -s /home/nate/delivr/delivr-orchestrator.service /etc/systemd/system/delivr-orchestrator.service
 ```
+
+#### Project Structure
+```
+.
+├── backend # All code that runs server side
+│   ├── acme # LetsEncrypt automation for ACME challenges
+│   ├── provisioning # Ansible playbooks for node deployment
+│   └── templates # Per-node config templates used by the orchestrator
+├── docs # https://delivr.dev/ site, powered by Docusaurus
+│   ├── blog # Blog posts
+│   ├── docs # Doc pages
+│   ├── src
+│   │   ├── css
+│   │   └── pages
+│   └── static # Static assets
+│       └── img
+└── frontend # Svelte dashboard (https://dash.delivr.dev)
+    ├── public # Public static assets
+    │   ├── build
+    │   └── img
+    ├── scripts
+    └── src
+        └── components # Individual Svelte components
+```
