@@ -20,16 +20,6 @@ jobs:
           node-version: '12.x'
       - run: cd frontend/ ; yarn install ; yarn build
 
-      - name: Copy files to server
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.PASSWORD }}
-          port: ${{ secrets.PORT }}
-          source: "docs/build"
-          target: "/home/nate/delivr/docs/"
-
       # Copy to server
 
       - name: Copy files to server
