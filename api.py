@@ -116,7 +116,7 @@ def get_args(*args):
 def get_api_key():
     x_api_key = request.headers.get("X-API-Key")
     if not (x_api_key or request.headers.get("Cookie")):
-        return jsonify({"success": False, "message": "X-API-Key or Cookie must not be blank"})
+        raise ValueError("X-API-Key or Cookie must not be blank")
 
     if x_api_key:
         api_key = x_api_key
@@ -131,7 +131,10 @@ def zone_authentication_required(f):
 
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        api_key = get_api_key()
+        try:
+            api_key = get_api_key()
+        except ValueError:
+            return jsonify({"success": False, "message": "X-API-Key or Cookie must not be blank"})
 
         zone = kwargs.get("zone")
         if not zone:
@@ -158,7 +161,10 @@ def authentication_required(f):
 
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        api_key = get_api_key()
+        try:
+            api_key = get_api_key()
+        except ValueError:
+            return jsonify({"success": False, "message": "X-API-Key or Cookie must not be blank"})
 
         user_doc = users.find_one({"key": api_key})
         if not user_doc:
