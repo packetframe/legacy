@@ -30,7 +30,16 @@ jobs:
           target: "/home/nate/delivr/"
 
       - name: Reload Caddy config
-        run: caddy config -config /etc/caddy/Caddyfile
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: sudo caddy config -config /etc/caddy/Caddyfile
+
+#      - name: Copy backend service files
+#        run:
 
 #      # Restart backend processes
 #
@@ -43,11 +52,3 @@ jobs:
 #          port: ${{ secrets.PORT }}
 #          script: sudo systemctl restart delivr-orchestrator
 #
-#      - name: Restart API process
-#        uses: appleboy/ssh-action@master
-#        with:
-#          host: ${{ secrets.HOST }}
-#          username: ${{ secrets.USERNAME }}
-#          password: ${{ secrets.PASSWORD }}
-#          port: ${{ secrets.PORT }}
-#          script: sudo systemctl restart delivr-api
