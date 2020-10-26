@@ -1,32 +1,21 @@
 #!/bin/bash
 
-if [[ "$1" == "list" ]]; then
-  echo -n "Nodes: "
-  mongo --quiet --eval 'db.nodes.count({});' cdn
-  mongo --quiet --eval 'db.nodes.find().forEach(function(node) {print(node.name, node.location);});' cdn
-  exit
+SSH_KEY="/home/nate/ssh-key"
+
+if [[ "$1" == "node" ]]; then
+  target="$2"
+  echo -n Jumping to node $target
+  node_ip=$(mongo --quiet --eval "db.nodes.findOne({name: \"${target}\"})[\"management_ip\"]" cdn)
+  echo " - $node_ip"
+elif [[ "$1" == "cache" ]]; then
+  target="$2"
+  echo -n Jumping to cache $target
+  node_ip=$(mongo --quiet --eval "db.cache_nodes.findOne({name: \"${target}\"})[\"management_ip\"]" cdn)
+  echo " - $node_ip"
+else
+  echo "Usage: ./cdnctl.sh [cache|node] NODE_IP"
+  exit 1
 fi
 
-if [[ "$1" == "stop" ]]; then
-  echo -n "Stopping "
-  mongo --quiet --eval 'db.nodes.find().forEach(function(node) {print(node.name, node.location);});' cdn | grep "$2"
-  node_ip=$(mongo --quiet --eval 'db.nodes.find({"name": "'$2'"}).forEach(function(x) {print(x.management_ip);});' cdn)
-  ssh -p 34553 -i ssh-key root@"$node_ip" 'systemctl stop bird && echo "$(hostname) Stopped BGP process" || echo "ERROR: Failed to stop BGP process"'
-  exit
-fi
 
-if [[ "$1" == "start" ]]; then
-  echo -n "Starting "
-  mongo --quiet --eval 'db.nodes.find().forEach(function(node) {print(node.name, node.location);});' cdn | grep "$2"
-  node_ip=$(mongo --quiet --eval 'db.nodes.find({"name": "'$2'"}).forEach(function(x) {print(x.management_ip);});' cdn)
-  ssh -p 34553 -i ssh-key root@"$node_ip" 'systemctl start bird && echo "$(hostname) Started BGP process" || echo "ERROR: Failed to start BGP process"'
-  exit
-fi
-
-node="$1"
-
-echo -n Jumping to $node
-node_ip=$(mongo --quiet --eval "db.nodes.findOne({name: \"${node}\"})[\"management_ip\"]" cdn)
-echo " - $node_ip"
-
-ssh -i ssh-key -p 34553 root@$node_ip
+ssh -i $SSH_KEY -p 34553 root@$node_ip
