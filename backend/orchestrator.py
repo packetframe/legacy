@@ -80,7 +80,7 @@ while True:
 
                 print("    - sending updated zone file")
                 try:
-                    ssh.connect(node["management_ip"], username="root", port=34553, key_filename=configuration["nodes"]["key"])
+                    ssh.connect(node["management_ip"], username="root", port=34553, key_filename=configuration["ssh-key"])
                 except (TimeoutError, NoValidConnectionsError):
                     error = "- ERROR: " + node["name"] + " timed out."
                     print(error)
@@ -113,7 +113,7 @@ while True:
                 print("    - sending updated zone file")
 
                 try:
-                    ssh.connect(node["management_ip"], username="root", port=34553, key_filename=configuration["nodes"]["key"])
+                    ssh.connect(node["management_ip"], username="root", port=34553, key_filename=configuration["ssh-key"])
                 except (TimeoutError, NoValidConnectionsError):
                     error = "- ERROR: " + node["name"] + " timed out."
                     print(error)
@@ -133,7 +133,7 @@ while True:
                 print("... now updating " + node["name"] + " " + node["management_ip"] + " " + node["location"])
 
                 try:
-                    ssh.connect(node["management_ip"], username="root", port=34553, key_filename=configuration["nodes"]["key"])
+                    ssh.connect(node["management_ip"], username="root", port=34553, key_filename=configuration["ssh-key"])
                 except (TimeoutError, NoValidConnectionsError):
                     error = "- ERROR: " + node["name"] + " timed out."
                     print(error)
@@ -147,7 +147,7 @@ while True:
             print("setting node " + args["ip"] + " to " + args["state"])
 
             try:
-                ssh.connect(args["ip"], username="root", port=34553, key_filename=configuration["nodes"]["key"])
+                ssh.connect(args["ip"], username="root", port=34553, key_filename=configuration["ssh-key"])
             except (TimeoutError, NoValidConnectionsError):
                 error = "- ERROR: " + args["ip"] + " timed out."
                 print(error)
@@ -184,7 +184,7 @@ while True:
                     caddy_file.write(caddy_template.render(domains=domains, host=node["management_ip"], hostname=node["name"]))
 
                 try:
-                    ssh.connect(node["management_ip"], username="root", port=34553, key_filename=configuration["nodes"]["key"])
+                    ssh.connect(node["management_ip"], username="root", port=34553, key_filename=configuration["ssh-key"])
                 except (TimeoutError, NoValidConnectionsError):
                     error = "- ERROR: " + node["name"] + " timed out."
                     print(error)
