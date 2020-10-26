@@ -1,6 +1,7 @@
 # config.yml
 
 development: true
+ssh-key: /home/nate/ssh-key
 
 rname: info.delivr.dev
 nameservers:
