@@ -2,11 +2,13 @@
   <img width="250px" src="https://raw.githubusercontent.com/natesales/delivr/master/logo.png" alt=delivr.dev logo"/>
   <br>
   <a href="https://github.com/natesales/delivr"><img alt="GitHub license" src="https://img.shields.io/github/license/natesales/delivr?style=for-the-badge"></a>
-  <a href="https://delivr.dev/"><img alt="Documentation" src="https://img.shields.io/badge/docs-delivr.dev%2Fdocs-blue?style=for-the-badge"></a>
+  <a href="https://delivr.dev/docs/record-management"><img alt="Documentation" src="https://img.shields.io/badge/docs-delivr.dev-blue?style=for-the-badge"></a>
 </p>
 
 
 ## delivr.dev
+
+delivr.dev is an open source CDN platform, currently in beta.
 
 #### Installation
 Set up Caddy
