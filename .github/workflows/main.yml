@@ -36,7 +36,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
-          script: sudo caddy config -config /etc/caddy/Caddyfile
+          script: sudo caddy reload -config /etc/caddy/Caddyfile
 
       - name: Restart backend services
         uses: appleboy/ssh-action@master
