@@ -18,7 +18,8 @@ from pymongo.errors import DuplicateKeyError
 from pystalk import BeanstalkClient
 
 from config import configuration
-from mail.sender import send_email
+from smtplib import SMTP_SSL as SMTP
+from email.mime.text import MIMEText
 
 app = Flask(__name__)
 if configuration["development"]:
@@ -44,7 +45,7 @@ with open("templates/zone.j2") as zone_template_file:
     # noinspection JinjaAutoinspect
     zone_template = Template(zone_template_file.read())
 
-with open("mail/new_domain.j2", "r") as new_domain_template_file:
+with open("templates/new_domain.j2", "r") as new_domain_template_file:
     # noinspection JinjaAutoinspect
     new_domain_template = Template(new_domain_template_file.read())
 
@@ -81,6 +82,17 @@ def valid_email(email) -> bool:
 
 
 # Helpers
+
+def send_email(recipient, subject, message):
+    msg = MIMEText(message, "plain")
+    msg["Subject"] = subject
+    msg["From"] = configuration["email"]["username"]
+
+    server = SMTP(configuration["email"]["server"])
+    server.login(configuration["email"]["username"], configuration["email"]["password"])
+    server.sendmail(configuration["email"]["username"], [recipient, "info@delivr.dev"], msg.as_string())
+    server.quit()
+
 
 def _get_current_serial():
     return strftime("%Y%m%d%S")
