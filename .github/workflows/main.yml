@@ -12,16 +12,12 @@ jobs:
         with:
           persist-credentials: false
 
-      # Build frontend
-
       - name: Build frontend and docs
         uses: actions/setup-node@v1
         with:
           node-version: '12.x'
       - run: cd frontend/ ; yarn install ; yarn build
       - run: cd docs/ ; yarn install ; yarn build
-
-      # Copy to server
 
       - name: Copy files to server
         uses: appleboy/scp-action@master
@@ -32,6 +28,9 @@ jobs:
           port: ${{ secrets.PORT }}
           source: "."
           target: "/home/nate/delivr/"
+
+      - name: Reload Caddy config
+        run: caddy config -config /etc/caddy/Caddyfile
 
 #      # Restart backend processes
 #
