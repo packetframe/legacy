@@ -1,9 +1,9 @@
 <p align="center">
   <img width="250px" src="https://raw.githubusercontent.com/natesales/delivr/master/logo.png" alt=delivr.dev logo"/>
-  <br>
-                                                                                                                  <h2>delivr.dev</h2>
 </p>
 
+
+## delivr.dev
 
 #### Installation
 Set up Caddy
