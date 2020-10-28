@@ -45,9 +45,17 @@
     }
 
     function submitForm() {
+        let _label;
+
+        if (label === "@") {
+            _label = zone + "."
+        } else {
+            _label = label + "." + zone + "."
+        }
+
         let body = {
             type: type,
-            label: label,
+            label: _label,
             value: value,
             priority: priority,
             port: port,
@@ -223,6 +231,14 @@
                     <Button inverted icon="check" onclick={() => submitForm()}>Submit</Button>
                 </div>
             </div>
+
+            <p style="margin-left: 15px; margin-bottom: 0;">
+                {#if label === "@"}
+                    <b>{ label ? label : "[label]" }</b> points to <b>{ value ? value : "[value]" }</b>
+                {:else}
+                    <b>{ label ? label : "[label]" }.{zone}</b> points to <b>{ value ? value : "[value]" }</b>
+                {/if}
+            </p>
 
             {#if type === "A" || type === "AAAA" }
                 <div class="info-text">
