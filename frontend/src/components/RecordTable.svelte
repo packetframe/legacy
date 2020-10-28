@@ -234,7 +234,7 @@
 
             <p style="margin-left: 15px; margin-bottom: 0;">
                 {#if label === "@"}
-                    <b>{ label ? label : "[label]" }</b> points to <b>{ value ? value : "[value]" }</b>
+                    <b>{zone}</b> points to <b>{ value ? value : "[value]" }</b>
                 {:else}
                     <b>{ label ? label : "[label]" }.{zone}</b> points to <b>{ value ? value : "[value]" }</b>
                 {/if}
