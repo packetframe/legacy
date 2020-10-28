@@ -354,9 +354,6 @@ def records_add(zone):
     if not valid_label(label):
         return jsonify({"success": False, "message": "Invalid label"})
 
-    if not label.endswith("."):
-        label += "."
-
     zone_doc = zones.find_one({"zone": zone})
     if not zone_doc:
         return jsonify({"success": False, "message": "Zone doesn't exist"})
