@@ -58,7 +58,7 @@ def _post_record(domain, data):
 
 def valid_zone(zone) -> bool:
     # Validates a DNS zone (example.com)
-    return zone and (re.match(r"^(((?!-))(xn--|_)?[a-z0-9-]{0,61}[a-z0-9]\.)*(xn--)?([a-z0-9][a-z0-9\-]{0,60}|[a-z0-9-]{1,30}\.[a-z]{2,})$", zone) is not None)
+    return zone and (re.match(r"^(((?!-))(xn--|_)?[a-z0-9-]{0,61}[a-z0-9]\.)*(xn--)?([a-z0-9][a-z0-9\-]{0,60}|[a-z0-9-]{1,30}\.[a-z]{2,})$", zone) is not None) and (zone != ".")
 
 
 def valid_label(label) -> bool:
