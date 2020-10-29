@@ -788,6 +788,8 @@ def users(username, is_admin):
 
     for user in _users:
         del user["_id"]
+        del user["key"]
+        del user["password"]
 
     return jsonify({"success": True, "message": _users})
 
