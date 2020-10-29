@@ -794,6 +794,25 @@ def get_users(username, is_admin):
     return jsonify({"success": True, "message": _users})
 
 
+@app.route("/user/<user>/toggle", methods=["GET"])
+@authentication_required
+def user_toggle(username, is_admin, user):
+    # Toggle the enabled state of a user
+
+    if not is_admin:
+        return jsonify({"success": False, "message": "Unauthorized"})
+
+    _user = users.find_one({"username": user})
+    if not _user:
+        return jsonify({"success": False, "message": "User doesn't exist"})
+
+    users.update_one({"username": "user"}, {"$set": {
+        "enabled": not _user["enabled"]
+    }})
+
+    return jsonify({"success": True, "message": "Set user state to " + str(not _user["enabled"])})
+
+
 @app.route("/authenticated")
 def authenticated():
     # Return if you are authenticated or not
