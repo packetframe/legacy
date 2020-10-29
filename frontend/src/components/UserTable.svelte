@@ -19,6 +19,7 @@
 
     function toggleState(user) {
         fetch("https://dash.delivr.dev/api/user/" + user + "/toggle", {
+            method: "POST",
             credentials: "include"
         })
             .then(response => response.json())
