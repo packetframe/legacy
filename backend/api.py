@@ -776,6 +776,22 @@ def admin(username, is_admin):
     return jsonify({"success": is_admin, "message": "200"})
 
 
+@app.route("/users", methods=["GET"])
+@authentication_required
+def users(username, is_admin):
+    # Get a list of users
+
+    if not is_admin:
+        return jsonify({"success": False, "message": "Unauthorized"})
+
+    _users = list(users.find())
+
+    for user in _users:
+        del user["_id"]
+
+    return jsonify({"success": True, "message": _users})
+
+
 @app.route("/authenticated")
 def authenticated():
     # Return if you are authenticated or not
