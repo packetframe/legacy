@@ -1,5 +1,6 @@
 <script>
     import {onMount} from "svelte";
+    import Button from "./Button.svelte";
 
     let users;
 
@@ -21,16 +22,25 @@
         <table class="sethjs-table">
             <tr>
                 <th>Email</th>
-                <th>Enabled</th>
-                <th>Admin</th>
             </tr>
 
             {#if users}
                 {#each users as user, i }
                     <tr>
-                        <td>{user["email"]}</td>
-                        <td>{user["enabled"]}</td>
-                        <td>{user["admin"]}</td>
+                        <td>{user["username"]}</td>
+                        <td>
+                            {#if user["enabled"]}
+                                <Button disabled icon="check_circle">Enabled</Button>
+                            {:else}
+                                <Button disabled icon="not_interested">Disabled</Button>
+                            {/if}
+                        </td>
+
+                        <td>
+                            {#if user["admin"]}
+                                <Button disabled icon="verified_user">Admin</Button>
+                            {/if}
+                        </td>
                     </tr>
                 {/each}
             {:else}
