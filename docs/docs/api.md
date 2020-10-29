@@ -41,6 +41,8 @@ Authenticated routes require the `X-API-Key` request header to be set to your AP
 | /debug/queue_status | GET   | Get number of running and ready tasks |
 | /debug/refresh_cache | GET   | Refresh cache's varnish and caddy configs |
 
+### Route Specifics
+
 ##### /auth/signup
 
 Create a zone
