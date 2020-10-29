@@ -30,6 +30,7 @@ Authenticated routes require the `X-API-Key` request header to be set to your AP
 | /nodes/list | GET   | Get all DNS node |
 | /nodes/power | POST   | Enable or disable the node's BGP daemon |
 | /stats | GET   | Get system stats counters (nodes/zones/users) |
+| /users | GET   | Get all users |
 
 ### Debug Routes
 | Endpoint                           | Methods | Usage                                |
