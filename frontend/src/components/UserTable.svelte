@@ -22,6 +22,8 @@
         <table class="sethjs-table">
             <tr>
                 <th>Email</th>
+                <th></th>
+                <th></th>
             </tr>
 
             {#if users}
