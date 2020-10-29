@@ -778,7 +778,7 @@ def admin(username, is_admin):
 
 @app.route("/users", methods=["GET"])
 @authentication_required
-def users(username, is_admin):
+def get_users(username, is_admin):
     # Get a list of users
 
     if not is_admin:
