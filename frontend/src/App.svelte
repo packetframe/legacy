@@ -14,6 +14,7 @@
     import TextInput from "./components/TextInput.svelte";
     import {addSnackbar} from "./utils"
     import NetworkTable from "./components/NetworkTable.svelte";
+    import UserTable from "./components/UserTable.svelte";
 
     let zones;
     let selected_zone = window.location.toString().split("zone=")[1];
@@ -21,6 +22,7 @@
     let showAdmin = false;
     let showMap = true;
     let showTable = false;
+    let showUserTable = false;
 
     onMount(() => {
         fetch("https://dash.delivr.dev/api/authenticated", {
@@ -249,6 +251,10 @@
                     <NetworkTable admin/>
                 {/if}
 
+                {#if showUserTable}
+                    <UserTable/>
+                {/if}
+
                 <ButtonBar>
                     <Button padded onclick={() => refreshZoneRegistry()}>Refresh zone registry</Button>
                     <Button padded onclick={() => refreshAllZones()}>Refresh all zones</Button>
@@ -258,7 +264,8 @@
                     <Button padded onclick={() => showQueueStats()}>Queue Stats</Button>
                     <Button padded onclick={() => addNode()}>Add Node</Button>
                     <Button padded onclick={() => {showMap = !showMap}}>Toggle map</Button>
-                    <Button padded onclick={() => {showTable = !showTable}}>Toggle table</Button>
+                    <Button padded onclick={() => {showTable = !showTable}}>Toggle network table</Button>
+                    <Button padded onclick={() => {showUserTable = !showUserTable}}>Toggle user table</Button>
                     <Button padded onclick={() => showSystemStats()}>System Stats</Button>
                 </ButtonBar>
             {/if}
