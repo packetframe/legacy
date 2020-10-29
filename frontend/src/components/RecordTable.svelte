@@ -26,10 +26,6 @@
     let snackbarMessage = "";
     let snackbarTitle = "";
 
-    function toggleForm() {
-        showAddRecord = !showAddRecord;
-    }
-
     function getPinnedNodes() {
         const checked = [];
         const inputs = document.getElementsByTagName("input");
@@ -165,7 +161,7 @@
                 </span>
 
                 <span>
-                    <Button icon="add" inverted=true onclick={() => toggleForm()} size="1rem">Add Record</Button>
+                    <Button icon="add" inverted=true onclick={() => {showAddRecord = !showAddRecord}} size="1rem">Add Record</Button>
                 </span>
             </div>
         </div>
