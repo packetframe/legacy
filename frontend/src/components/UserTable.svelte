@@ -22,7 +22,10 @@
             credentials: "include"
         })
             .then(response => response.json())
-            .then((data) => addSnackbar("user_toggle", data["message"], data["success"] ? "green" : "red"))
+            .then((data) => {
+                addSnackbar("user_toggle", data["message"], data["success"] ? "green" : "red")
+                getUsers()
+            })
     }
 </script>
 
@@ -41,9 +44,9 @@
                         <td>{user["username"]}</td>
                         <td>
                             {#if user["enabled"]}
-                                <Button icon="check_circle" onclick={() => toggleState()}>Enabled</Button>
+                                <Button icon="check_circle" onclick={() => toggleState(user["username"])}>Enabled</Button>
                             {:else}
-                                <Button icon="not_interested" onclick={() => toggleState()}>Disabled</Button>
+                                <Button icon="not_interested" onclick={() => toggleState(user["username"])}>Disabled</Button>
                             {/if}
                         </td>
 
