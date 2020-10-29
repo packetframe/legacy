@@ -806,11 +806,11 @@ def user_toggle(username, is_admin, user):
     if not _user:
         return jsonify({"success": False, "message": "User doesn't exist"})
 
-    users.update_one({"username": "user"}, {"$set": {
+    users.update_one({"username": user}, {"$set": {
         "enabled": not _user["enabled"]
     }})
 
-    return jsonify({"success": True, "message": "Set user state to " + str(not _user["enabled"])})
+    return jsonify({"success": True, "message": "User enabled state is now " + str(not _user["enabled"])})
 
 
 @app.route("/authenticated")
