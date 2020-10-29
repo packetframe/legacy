@@ -794,7 +794,7 @@ def get_users(username, is_admin):
     return jsonify({"success": True, "message": _users})
 
 
-@app.route("/user/<user>/toggle", methods=["GET"])
+@app.route("/user/<user>/toggle", methods=["POST"])
 @authentication_required
 def user_toggle(username, is_admin, user):
     # Toggle the enabled state of a user
