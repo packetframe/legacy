@@ -1,6 +1,7 @@
 <script>
     import {onMount} from "svelte";
     import Button from "./Button.svelte";
+    import {addSnackbar} from '../utils'
 
     let users;
 
@@ -15,6 +16,14 @@
     }
 
     onMount(() => getUsers());
+
+    function toggleState(user) {
+        fetch("https://dash.delivr.dev/api/user/" + user + "/toggle", {
+            credentials: "include"
+        })
+            .then(response => response.json())
+            .then((data) => addSnackbar("user_toggle", data["message"], data["success"] ? "green" : "red"))
+    }
 </script>
 
 <main>
@@ -32,9 +41,9 @@
                         <td>{user["username"]}</td>
                         <td>
                             {#if user["enabled"]}
-                                <Button disabled icon="check_circle">Enabled</Button>
+                                <Button icon="check_circle" onclick={() => toggleState()}>Enabled</Button>
                             {:else}
-                                <Button disabled icon="not_interested">Disabled</Button>
+                                <Button icon="not_interested" onclick={() => toggleState()}>Disabled</Button>
                             {/if}
                         </td>
 
