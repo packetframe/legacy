@@ -3,7 +3,6 @@ import clsx from 'clsx';
 import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
-import useBaseUrl from '@docusaurus/useBaseUrl';
 import styles from './styles.module.css';
 
 function Home() {
@@ -21,14 +20,7 @@ function Home() {
                         {/*<p className="hero__subtitle">{siteConfig.tagline}</p>*/}
                         <p className="hero__subtitle">DELIVR.DEV is currently in private beta. Contact <span style={{"unicode-bidi": "bidi-override", direction: "rtl"}}>ved.rviled@ofni</span> for more information.</p>
                         <div className={styles.buttons}>
-                            <Link
-                                className={clsx(
-                                    'button button--outline button--secondary button--lg',
-                                    styles.getStarted,
-                                )}
-                                to={useBaseUrl('https://dash.delivr.dev/')}>
-                                Get Started
-                            </Link>
+                            <a className="button button--outline button--secondary button--lg" href="https://dash.delivr.dev/">Get Started</a>
                         </div>
                     </div>
                 </div>
