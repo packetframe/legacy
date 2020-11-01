@@ -141,6 +141,11 @@
         content: "{{ dns['network_config'] }}"
         dest: /root/network.sh
         mode: +x
+      register: network_config
+
+    - name: Apply network config
+      shell: bash /root/network.sh
+      when: network_config.changed
 
     - name: Create Caddy directory
       file:
