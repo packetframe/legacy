@@ -1,7 +1,9 @@
 #!/bin/bash
 
+BACKUP_FILE="/var/log/delivr-backup.txt"
+
 echo "Backup at $(date)" > backup.txt
-mongo --quiet --eval 'db.cache_nodes.find();' cdn >> backup.txt
-mongo --quiet --eval 'db.nodes.find();' cdn >> backup.txt
-mongo --quiet --eval 'db.zones.find();' cdn >> backup.txt
-mongo --quiet --eval 'db.users.find();' cdn >> backup.txt
+mongo --quiet --eval 'db.cache_nodes.find();' cdn >> $BACKUP_FILE
+mongo --quiet --eval 'db.nodes.find();' cdn >> $BACKUP_FILE
+mongo --quiet --eval 'db.zones.find();' cdn >> $BACKUP_FILE
+mongo --quiet --eval 'db.users.find();' cdn >> $BACKUP_FILE
