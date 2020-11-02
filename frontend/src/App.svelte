@@ -57,12 +57,7 @@
                     if (data["message"].length > 0) {
                         zones = data["message"];
 
-                        if (!zones.includes(location.hash)) {
-                            console.log(location.hash, " isn't in zones. Setting to default", zones)
-                            location.hash = data["message"][0]["zone"];
-                        }
-
-                        selected_zone = location.hash;
+                        selected_zone = location.hash.replace("#", "");
                     } else {
                         no_zones = true;
                     }
