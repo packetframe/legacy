@@ -35,6 +35,7 @@ zones = db["zones"]
 nodes = db["nodes"]
 cache_nodes = db["cache_nodes"]
 users = db["users"]
+ecas = db["ecas"]
 zones.create_index([("zone", ASCENDING)], unique=True)
 
 argon = PasswordHasher()
@@ -817,6 +818,28 @@ def user_toggle(username, is_admin, user):
 def authenticated():
     # Return if you are authenticated or not
     return jsonify({"success": True, "message": (request.headers.get("X-API-Key") or request.headers.get("Cookie"))})
+
+
+# ECA
+@app.route("/eca/add")
+@authentication_required
+def eca_add(username, is_admin):
+    # add an ECA node
+
+    if not is_admin:
+        return jsonify({"success": False, "message": "Unauthorized"})
+
+    try:
+        contact_name, contact_email, location = get_args("contact_name", "contact_email", "location")
+    except ValueError as e:
+        return jsonify({"success": False, "message": str(e)})
+
+    ecas.insert_one({
+        "contact_name": contact_name,
+        "contact_email": contact_email,
+        "location": location,
+        "enabled": False
+    })
 
 
 # Debug
