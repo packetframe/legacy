@@ -149,6 +149,12 @@
         loadRecords();
         loadNodes();
     });
+
+    $: {
+        if (zone !== undefined) {
+            location.hash = zone;
+        }
+    }
 </script>
 
 <main>
