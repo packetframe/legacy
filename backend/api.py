@@ -99,6 +99,10 @@ def _get_current_serial():
     return strftime("%Y%m%d%S")
 
 
+def get_random_key():
+    return base64.b64encode(urandom(32)).decode().replace("=", ""),
+
+
 def add_queue_message(operation, args):
     # Add a message to the queue
     queue.put_job(json.dumps({"operation": operation, "args": args}))
@@ -212,7 +216,7 @@ def auth_signup():
     users.insert_one({
         "username": username,
         "password": argon.hash(password),
-        "key": base64.b64encode(urandom(32)).decode().replace("=", ""),
+        "key": get_random_key(),
         "enabled": False
     })
 
@@ -838,7 +842,8 @@ def eca_add(username, is_admin):
         "contact_name": contact_name,
         "contact_email": contact_email,
         "location": location,
-        "enabled": False
+        "enabled": False,
+        "key": get_random_key()
     })
 
 
