@@ -60,6 +60,12 @@
                         if (selected_zone === undefined) {
                             selected_zone = data["message"][0]["zone"];
                         }
+
+                        if (zones.includes(location.hash)) {
+                            selected_zone = location.hash;
+                        } else {
+                            location.hash = "";
+                        }
                     } else {
                         no_zones = true;
                     }
