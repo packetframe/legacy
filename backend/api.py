@@ -847,6 +847,31 @@ def eca_add(username, is_admin):
     })
 
 
+@app.route("/eca/pull")
+def eca_pull():
+    # Pull eca config
+
+    auth_key = request.headers.get("X-Auth-Key")
+    if not auth_key:
+        return jsonify({"success": False, "message": "X-Auth-Key header must be supplied"})
+
+    eca = ecas.find_one({"key": auth_key})
+    if not eca:
+        return jsonify({"success": False, "message": "Cannot find ECA node"})
+
+    if not eca["enabled"]:
+        return jsonify({"success": False, "message": "This ECA node is disabled. Please contact info@delivr.dev for more information"})
+
+    _zones = {}
+
+    for zone in zones:
+        tmp_zone = zones[zone]
+        del tmp_zone["_id"]
+        _zones[zone] = tmp_zone
+
+    return jsonify({"success": True, "message": _zones})
+
+
 # Debug
 
 if configuration["development"]:
