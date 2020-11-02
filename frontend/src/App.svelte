@@ -57,15 +57,12 @@
                     if (data["message"].length > 0) {
                         zones = data["message"];
 
-                        if (selected_zone === undefined) {
-                            selected_zone = data["message"][0]["zone"];
+                        if (!zones.includes(location.hash)) {
+                            console.log(location.hash, " isn't in zones. Setting to default", zones)
+                            location.hash = data["message"][0]["zone"];
                         }
 
-                        if (zones.includes(location.hash)) {
-                            selected_zone = location.hash;
-                        } else {
-                            location.hash = "";
-                        }
+                        selected_zone = location.hash;
                     } else {
                         no_zones = true;
                     }
