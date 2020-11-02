@@ -294,7 +294,7 @@ def zones_add(username, is_admin):
         add_queue_message("refresh_zones", args=None)
         add_queue_message("refresh_single_zone", {"zone": zone})
 
-        mail_template = new_domain_template.render(domain=zone, nameservers=configuration["nameservers"])
+        mail_template = new_domain_template.render(domain=zone, nameservers=configuration["dns"]["nameservers"])
         send_email(username, "[delivr.dev] Domain added to delivr.dev", mail_template)
 
         return jsonify({"success": True, "message": "Added " + zone})
@@ -412,7 +412,7 @@ def records_add(zone):
 
             try:
                 # TODO: What is in bound here?
-                if int(priority) < 1:
+                if int(priority) < 0:
                     raise TypeError
             except TypeError:
                 return jsonify({"success": False, "message": "MX priority must be an integer"})
