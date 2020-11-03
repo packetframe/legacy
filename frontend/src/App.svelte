@@ -57,6 +57,10 @@
                     if (data["message"].length > 0) {
                         zones = data["message"];
 
+                        if (location.hash.length < 2) {
+                            location.hash = zones[0]["zone"];
+                        }
+
                         selected_zone = location.hash.replace("#", "");
                     } else {
                         no_zones = true;
