@@ -91,7 +91,7 @@ while True:
                     run_ssh_command("rndc reload")
                     ssh.close()
 
-            print("finished refresh_single_zone\n\n")
+            print("finished refresh_single_zone")
 
         elif operation == "refresh_zones":
             print("refreshing local zones file")
@@ -124,7 +124,7 @@ while True:
                     run_ssh_command("rndc reload")
                     ssh.close()
 
-            print("finished refresh_zone task\n\n")
+            print("finished refresh_zone task")
 
         elif operation == "delete_zone":
             print("deleting " + args["zone"])
@@ -141,7 +141,7 @@ while True:
                     run_ssh_command("rm /etc/bind/db." + args["zone"])
                     ssh.close()
 
-            print("finished delete_zone\n\n")
+            print("finished delete_zone")
 
         elif operation == "node_power":
             print("setting node " + args["ip"] + " to " + args["state"])
@@ -158,7 +158,7 @@ while True:
                     run_ssh_command("birdc down")
                 ssh.close()
 
-            print("finished node_power\n\n")
+            print("finished node_power")
 
         elif operation == "refresh_cache":
             backends = {}
@@ -200,10 +200,10 @@ while True:
                     run_ssh_command("caddy reload -config /etc/caddy/Caddyfile")
                     ssh.close()
 
-            print("finished refresh_cache\n\n")
+            print("finished refresh_cache")
 
         else:
-            print("\n\nERROR: This task isn't recognized\n\n")
+            print("ERROR: This task isn't recognized")
 
         queue.delete_job(job.job_id)
 
