@@ -3,7 +3,8 @@ options {
     statistics-file "/var/run/named/stats";
     recursion no;
     allow-transfer { none; };
-    version "PoP {{ ansible_hostname }}";
+    version "not currently available";
+    server-id hostname;
 
     listen-on {
     {% for address in bind_addresses4 %}
