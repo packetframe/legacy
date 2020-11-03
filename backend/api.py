@@ -733,6 +733,22 @@ def nodes_list(username, is_admin):
     return jsonify({"success": True, "message": _nodes})
 
 
+@app.route("/cache_nodes/list", methods=["GET"])
+@authentication_required
+def cache_nodes_list(username, is_admin):
+    # Get a list of all nodes
+
+    _nodes = list(cache_nodes.find())
+
+    for node in _nodes:
+        del node["_id"]
+
+        if not is_admin:  # If user isn't admin, remove sensitive info
+            del node["management_ip"]
+
+    return jsonify({"success": True, "message": _nodes})
+
+
 @app.route("/nodes/power", methods=["POST"])
 @authentication_required
 def nodes_power(username, is_admin):
