@@ -26,8 +26,8 @@ _config = {
 }
 
 prometheus_config = """global:
-  scrape_interval:     15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
-  evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
+  scrape_interval:     60s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+  evaluation_interval: 60s # Evaluate rules every 15 seconds. The default is every 1 minute.
   # scrape_timeout is set to the global default (10s).
 
   # Attach these labels to any time series or alerts when communicating with
