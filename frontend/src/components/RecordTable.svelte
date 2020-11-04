@@ -406,7 +406,6 @@
     }
 
     .table-wrapper {
-        overflow-x: auto;
         width: 100%;
     }
 
@@ -414,6 +413,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        word-break: break-all;
     }
 
     .info-text p {
