@@ -157,9 +157,7 @@
         dest: /etc/hosts
 
     - name: Set persistent hostname
-      copy:
-        content: "{{ inventory_hostname }}"
-        dest: /etc/hostname
+      shell: hostnamectl set-hostname "{{ inventory_hostname }}"
 
     - name: Create Caddy directory
       file:
