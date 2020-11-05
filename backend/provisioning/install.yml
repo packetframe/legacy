@@ -156,13 +156,9 @@
           ff02::2 ip6-allrouters
         dest: /etc/hosts
 
-    - name: Set hostname
-      hostname:
-        name: "{{ ansible_hostname }}"
-
     - name: Set persistent hostname
       copy:
-        content: "{{ ansible_hostname }}"
+        content: "{{ inventory_hostname }}"
         dest: /etc/hostname
 
     - name: Create Caddy directory
