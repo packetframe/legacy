@@ -125,6 +125,18 @@
             });
     }
 
+    function deleteZone() {
+        if (confirm("Are you sure you want to delete this zone?")) {
+            fetch("https://dash.delivr.dev/api/zone/" + zone + "/delete", {
+                credentials: "include",
+                method: "POST"
+            })
+                .then(response => response.json())
+                .then(data => addSnackbar("delete_record", data["message"], data["success"] ? "green" : "red"))
+                .then(() => location.reload())
+        }
+    }
+
     function loadNodes() {
         fetch("https://dash.delivr.dev/api/nodes/list", {
             credentials: "include"
@@ -163,6 +175,10 @@
         <div>
             <h2>Records</h2>
             <div>
+                <span style="padding-top: 1px">
+                    <Button icon="delete" onclick={() => deleteZone()} size="1.25rem" color="red"/>
+                </span>
+
                 <span>
                     <Button icon="get_app" onclick={() => exportRecords()} size="1rem">Export</Button>
                 </span>
