@@ -7,12 +7,6 @@ DELIVR.DEV Privacy Policy
 
 Last updated November 5, 2020
 
-Webserver logs for the `delivr.dev` and `dash.delivr.dev` domains are stored for **7 days** (or less if the log file gets too big) and are in the [Common Log Format](https://en.wikipedia.org/wiki/Common_Log_Format). This includes only the following information:
-
-- IP address
-- Date and time of request
-- HTTP request line (HTTP method, URL path, HTTP version)
-- HTTP status code
-- Response size
+Webserver logs for the `delivr.dev` and `dash.delivr.dev` domains are stored for **7 days** (or less if the log file gets too big) and are in the [Common Log Format](https://en.wikipedia.org/wiki/Common_Log_Format).
 
 Anonymized counters from all DNS queries are stored for ever (or until they get too big) and are logged every 60 seconds. We use https://github.com/prometheus-community/bind_exporter if you would like to see the full list of metrics, but in short these logs include numbers only so nothing that's able to identify any particular user.  
