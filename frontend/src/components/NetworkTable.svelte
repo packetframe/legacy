@@ -22,17 +22,19 @@
 <main>
     <div class="table-wrapper">
         <table class="sethjs-table">
+            <thead>
             <tr>
                 <th>Name ({nodeNum})</th>
                 <th>Location</th>
                 <th>Datacenter</th>
                 <th>Provider</th>
-                <th>Connectivity</th>
                 {#if admin}
-                    <th>Unicast IP</th>
+                    <th>IP</th>
                 {/if}
             </tr>
+            </thead>
 
+            <tbody>
             {#if nodes}
                 {#each nodes as node, i }
                     <tr>
@@ -40,7 +42,6 @@
                         <td>{node["location"]}</td>
                         <td>{node["datacenter"]}</td>
                         <td>{node["provider"]}</td>
-                        <td>{node["connectivity"]}</td>
                         {#if admin}
                             <td>{node["management_ip"]}</td>
                         {/if}
@@ -49,6 +50,7 @@
             {:else}
                 <p style="padding-left: 10px">Loading...</p>
             {/if}
+            </tbody>
         </table>
     </div>
 </main>
@@ -57,9 +59,7 @@
     main {
         border: 2px solid white;
         border-radius: 15px;
-        padding-top: 10px;
-        padding-bottom: 10px;
-        margin: 15px auto;
+        height: 100%;
     }
 
     div {
@@ -73,11 +73,6 @@
 
     h2 {
         margin: 15px;
-    }
-
-    :global(.sethjs-table) {
-        width: 100%;
-        border-collapse: collapse;
     }
 
     :global(.sethjs-table th) {
@@ -106,51 +101,18 @@
         text-align: left;
     }
 
-    .header-container {
-        flex-direction: column;
-    }
-
-    .record-add-container {
-        display: flex;
-        width: calc(100% - 15px);
-        align-content: center;
-        flex-wrap: wrap;
-        margin: 5px 8px 20px;
-    }
-
-    .record-add-element {
-        display: flex;
-        flex-direction: column;
-        margin: 5px;
-        justify-content: center;
-        flex: 1 1 auto;
-    }
-
-    .record-add-element-number {
-        display: flex;
-        flex-direction: column;
-        margin: 5px;
-        justify-content: center;
-        flex: 0.5 0 100px;
-    }
-
-    .record-add-element-select {
-        display: flex;
-        flex-direction: column;
-        margin: 5px;
-        justify-content: center;
-        width: 25%;
-        flex: 0 0 content;
-    }
-
     .table-wrapper {
-        overflow-x: auto;
         width: 100%;
     }
 
-    .flex-value {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+    tbody {
+        overflow-y: auto;
+        max-height: calc(400px - 65px);
+        display: block;
+    }
+
+    thead, tbody tr {
+        display: table;
+        width: 100%;
     }
 </style>
