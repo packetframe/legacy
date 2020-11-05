@@ -147,6 +147,24 @@
       shell: bash /root/network.sh
       when: network_config.changed
 
+    - name: Set hosts file
+      copy:
+        content: |
+          127.0.0.1	localhost
+          ::1     localhost ip6-localhost ip6-loopback
+          ff02::1 ip6-allnodes
+          ff02::2 ip6-allrouters
+        dest: /etc/hosts
+
+    - name: Set hostname
+      hostname:
+        name: "{{ ansible_hostname }}"
+
+    - name: Set persistent hostname
+      copy:
+        content: "{{ ansible_hostname }}"
+        dest: /etc/hostname
+
     - name: Create Caddy directory
       file:
         path: /caddy
