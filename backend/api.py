@@ -503,6 +503,13 @@ def records_add(zone):
             is_proxied = True
             new_record["proxied"] = True
 
+    # BEGIN HACK
+
+    if is_proxied:
+        return jsonify({"success": False, "message": "Proxied records is not available on your account. Please contact info@delivr.dev for more information"})
+
+    # END HACK
+
     zones.update_one({"zone": zone}, {
         "$push": {"records": new_record},
         "$set": {"serial": _get_current_serial()}
