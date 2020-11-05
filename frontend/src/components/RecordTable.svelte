@@ -179,7 +179,7 @@
             <h2>Records</h2>
             <div>
                 <span style="padding-top: 1px">
-                    <Button icon="delete" onclick={() => deleteZone()} size="1.25rem" color="red"/>
+                    <Button color="red" icon="delete" onclick={() => deleteZone()} size="1.25rem"/>
                 </span>
 
                 <span>
