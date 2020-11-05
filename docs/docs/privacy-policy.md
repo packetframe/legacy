@@ -5,30 +5,14 @@ title: Privacy Policy
 
 DELIVR.DEV Privacy Policy
 
-Last updated October 22, 2020
+Last updated November 5, 2020
 
-Logs for the `delivr.dev` and `dash.delivr.dev` domains are stored for **7 days** (or less if the log file gets too big) which includes:
+Webserver logs for the `delivr.dev` and `dash.delivr.dev` domains are stored for **7 days** (or less if the log file gets too big) and are in the [Common Log Format](https://en.wikipedia.org/wiki/Common_Log_Format). This includes only the following information:
 
-- Request IP address
-- Request headers
-- Response headers
-- Time of request
-- HTTP protocol version
-- HTTP method
-- Target host (either delivr.dev or dash.delivr.dev)
-- Request URI
-- TLS information (resumed, version, cipher_suite, proto, proto_mutual, server_name)
-- Request duration (how long it took)
-- Request size
-- Response HTTP status code
+- IP address
+- Date and time of request
+- HTTP request line (HTTP method, URL path, HTTP version)
+- HTTP status code
+- Response size
 
-Anonymized DNS and HTTP metrics on all zones and domains are stored for ever (or until they get too big) and include:
-
-- Time of query
-- Type of query (DNS, HTTP GET, HTTP POST, etc.)
-- Which node is serving the request
-
-
-#### Third Parties
-
-We use a DDoS detection and scrubbing service to mitigate the effects of DDoS attacks. Traffic may be temporarily routed through a third party in the event of a DDoS attack.
+Anonymized counters from all DNS queries are stored for ever (or until they get too big) and are logged every 60 seconds. We use https://github.com/prometheus-community/bind_exporter if you would like to see the full list of metrics, but in short these logs include numbers only so nothing that's able to identify any particular user.  
