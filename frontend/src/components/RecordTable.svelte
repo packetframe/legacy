@@ -7,6 +7,7 @@
     import {SnackBars} from "../stores";
     import {addSnackbar} from '../utils'
     import ToggleButton from "./ToggleButton.svelte";
+    import CheckBoxes from "./CheckBoxes.svelte";
 
     let showAddRecord = false;
 
@@ -256,10 +257,7 @@
                         <p>This record <u>will</u> be pinned to the following nodes:</p>
                         <div class="node-pinning-checkboxes" style="display: block">
                             {#if nodes}
-                                {#each nodes as node }
-                                    <input type="checkbox" id="{node['name']}" name="{node['name']}" value="{node['name']}">
-                                    <label for="{node['name']}" class="capital"> {node["name"]}</label><br>
-                                {/each}
+                                <CheckBoxes nodes={nodes}/>
                             {:else}
                                 <p>Loading...</p>
                             {/if}
