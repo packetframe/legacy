@@ -20,8 +20,6 @@
     let selected_zone = window.location.toString().split("zone=")[1];
     let no_zones = false;
     let showAdmin = false;
-    let showMap = true;
-    let showTable = false;
     let showUserTable = false;
 
     onMount(() => {
@@ -245,13 +243,10 @@
             </div>
 
             {#if showAdmin && $IsAdmin}
-                {#if showMap}
-                    <NetworkMap admin/>
-                {/if}
-
-                {#if showTable}
-                    <NetworkTable admin/>
-                {/if}
+                <div class="admin-container">
+                    <div class="admin-map"><NetworkMap admin/></div>
+                    <div class="admin-table"><NetworkTable admin/></div>
+                </div>
 
                 {#if showUserTable}
                     <UserTable/>
@@ -265,8 +260,6 @@
                     <Button padded onclick={() => refreshCache()}>Refresh cache</Button>
                     <Button padded onclick={() => showQueueStats()}>Queue Stats</Button>
                     <Button padded onclick={() => addNode()}>Add Node</Button>
-                    <Button padded onclick={() => {showMap = !showMap}}>Toggle map</Button>
-                    <Button padded onclick={() => {showTable = !showTable}}>Toggle network table</Button>
                     <Button padded onclick={() => {showUserTable = !showUserTable}}>Toggle user table</Button>
                     <Button padded onclick={() => showSystemStats()}>System Stats</Button>
                 </ButtonBar>
@@ -285,15 +278,12 @@
             <EntryForm type="login"/>
         {:else if $Page === "signup"}
             <EntryForm type="signup"/>
-        {:else if $Page === "info"}
-            <NetworkMap/>
-            <NetworkTable/>
         {/if}
 
         <SnackbarGroup/>
     </div>
 
-    <footer on:click={() => {$Page = "info"}}>
+    <footer>
         &copy; Nate Sales 2020.
     </footer>
 </main>
@@ -335,5 +325,22 @@
 
     div img {
         width: 300px;
+    }
+
+    .admin-container {
+        display: flex;
+        height: 400px;
+        margin-bottom: 20px;
+    }
+
+    .admin-table {
+        width: 60%;
+        height: 100%;
+    }
+
+    .admin-map {
+        width: 40%;
+        margin-right: 20px;
+        max-height: 400px;
     }
 </style>
