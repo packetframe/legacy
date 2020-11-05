@@ -8,7 +8,7 @@
 
     onMount(() => {
         let mymap = L.map("netmap").setView([51.505, -0.09], 13);
-        mymap.setView([50, -25], 1.5);
+        mymap.setView([35, 10], 1);
 
         let NASAGIBS_ViirsEarthAtNight2012 = L.tileLayer('https://map1.vis.earthdata.nasa.gov/wmts-webmerc/VIIRS_CityLights_2012/default/{time}/{tilematrixset}{maxZoom}/{z}/{y}/{x}.{format}', {
             attribution: 'Imagery provided by services from the Global Imagery Browse Services (GIBS), operated by the NASA/GSFC/Earth Science Data and Information System (<a href="https://earthdata.nasa.gov">ESDIS</a>) with funding provided by NASA/HQ.',
