@@ -133,7 +133,10 @@
             })
                 .then(response => response.json())
                 .then(data => addSnackbar("delete_record", data["message"], data["success"] ? "green" : "red"))
-                .then(() => location.reload())
+                .then(() => {
+                    location.hash = "";
+                    location.reload();
+                })
         }
     }
 
