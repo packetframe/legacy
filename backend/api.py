@@ -776,7 +776,31 @@ def authenticated():
     return jsonify({"success": True, "message": (request.headers.get("X-API-Key") or request.headers.get("Cookie"))})
 
 
-# ECA
+# ECA helpers
+
+
+def eca_auth_required(f):
+    # Check if an ECA node is authenticated and enabled
+
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        auth_key = request.headers.get("X-Auth-Key")
+        if not auth_key:
+            return jsonify({"success": False, "message": "X-Auth-Key header must be supplied"})
+
+        eca = ecas.find_one({"key": auth_key})
+        if not eca:
+            return jsonify({"success": False, "message": "Cannot find ECA node"})
+
+        if not eca["enabled"]:
+            return jsonify({"success": False, "message": "This ECA node is disabled. Please contact info@delivr.dev for more information"})
+
+        return f(*args, **kwargs, eca=eca)
+
+    return decorated_function
+
+
+# ECA routes
 @app.route("/eca/add")
 @authentication_required
 def eca_add(username, is_admin, methods=["POST"]):
@@ -804,19 +828,9 @@ def eca_add(username, is_admin, methods=["POST"]):
 
 
 @app.route("/eca/pull")
-def eca_pull():
+@eca_auth_required
+def eca_pull(eca):
     # Pull eca config
-
-    auth_key = request.headers.get("X-Auth-Key")
-    if not auth_key:
-        return jsonify({"success": False, "message": "X-Auth-Key header must be supplied"})
-
-    eca = ecas.find_one({"key": auth_key})
-    if not eca:
-        return jsonify({"success": False, "message": "Cannot find ECA node"})
-
-    if not eca["enabled"]:
-        return jsonify({"success": False, "message": "This ECA node is disabled. Please contact info@delivr.dev for more information"})
 
     _zones = {}
 
@@ -829,19 +843,9 @@ def eca_pull():
 
 
 @app.route("/eca/check")
-def eca_check():
+@eca_auth_required
+def eca_check(eca):
     # Check if this ECA is authorized
-
-    auth_key = request.headers.get("X-Auth-Key")
-    if not auth_key:
-        return jsonify({"success": False, "message": "X-Auth-Key header must be supplied"})
-
-    eca = ecas.find_one({"key": auth_key})
-    if not eca:
-        return jsonify({"success": False, "message": "Cannot find ECA node"})
-
-    if not eca["enabled"]:
-        return jsonify({"success": False, "message": "This ECA node is disabled. Please contact info@delivr.dev for more information"})
 
     eca = dict(eca)
     eca["_id"] = str(eca["_id"])
