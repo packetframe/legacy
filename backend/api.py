@@ -595,6 +595,7 @@ def zones_export(zone):
 
     return jsonify({"success": True, "message": "; " + zone["zone"] + " exported from delivr.dev at " + current_time + "\n\n" + zone_file})
 
+
 # Node
 
 @app.route("/nodes/add", methods=["POST"])
@@ -781,7 +782,7 @@ def authenticated():
 # ECA
 @app.route("/eca/add")
 @authentication_required
-def eca_add(username, is_admin):
+def eca_add(username, is_admin, methods=["POST"]):
     # add an ECA node
 
     if not is_admin:
@@ -792,13 +793,17 @@ def eca_add(username, is_admin):
     except ValueError as e:
         return jsonify({"success": False, "message": str(e)})
 
+    key = get_random_key()
+
     ecas.insert_one({
         "contact_name": contact_name,
         "contact_email": contact_email,
         "location": location,
         "enabled": False,
-        "key": get_random_key()
+        "key": key
     })
+
+    return jsonify({"success": True, "message": key})
 
 
 @app.route("/eca/pull")
@@ -818,7 +823,7 @@ def eca_pull():
 
     _zones = {}
 
-    for zone in zones:
+    for zone in zones.find():
         tmp_zone = zones[zone]
         del tmp_zone["_id"]
         _zones[zone] = tmp_zone
