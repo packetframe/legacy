@@ -21,6 +21,8 @@ from config import configuration
 from smtplib import SMTP_SSL as SMTP
 from email.mime.text import MIMEText
 
+import utils
+
 app = Flask(__name__)
 if configuration["development"]:
     app.secret_key = b'0'
@@ -586,12 +588,7 @@ def zones_export(zone):
     if not zone:
         return jsonify({"success": False, "message": "Zone doesn't exist"})
 
-    zone_file = zone_template.render(
-        nameservers=configuration["dns"]["nameservers"],
-        rname=configuration["dns"]["rname"],
-        records=zone["records"],
-        serial=zone["serial"]
-    )
+    zone_file = utils.render_zone(zone, {"name": "no-node-selected"})
 
     return jsonify({"success": True, "message": "; " + zone["zone"] + " exported from delivr.dev at " + current_time + "\n\n" + zone_file})
 
@@ -847,7 +844,7 @@ def eca_check():
         return jsonify({"success": False, "message": "This ECA node is disabled. Please contact info@delivr.dev for more information"})
 
     eca = dict(eca)
-    del eca["_id"]
+    eca["_id"] = str(eca["_id"])
 
     return jsonify({"success": True, "message": eca})
 

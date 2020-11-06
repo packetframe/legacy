@@ -1,7 +1,6 @@
 import json
 import time
 
-from jinja2 import Template
 from paramiko import SSHClient, AutoAddPolicy
 from paramiko.ssh_exception import NoValidConnectionsError
 from pymongo import MongoClient
@@ -9,6 +8,7 @@ from pystalk import BeanstalkClient
 from scp import SCPClient
 
 from config import configuration
+import utils
 
 db_client = MongoClient("mongodb://localhost:27017")
 db = db_client["cdn"]
@@ -18,18 +18,6 @@ queue = BeanstalkClient("localhost", 11300)
 ssh = SSHClient()
 ssh.load_system_host_keys()
 ssh.set_missing_host_key_policy(AutoAddPolicy())
-
-with open("templates/local.j2", "r") as local_template_file:
-    local_template = Template(local_template_file.read())
-
-with open("templates/zone.j2") as zone_template_file:
-    zone_template = Template(zone_template_file.read())
-
-with open("templates/default.vcl.j2", "r") as vcl_template_file:
-    vcl_template = Template(vcl_template_file.read())
-
-with open("templates/Caddyfile.j2", "r") as caddy_template_file:
-    caddy_template = Template(caddy_template_file.read())
 
 
 def normalize(string: str) -> str:
@@ -65,15 +53,7 @@ while True:
 
                 print("    - sending updated zone file")
 
-                zone_file = zone_template.render(
-                    nameservers=configuration["dns"]["nameservers"],
-                    rname=configuration["dns"]["rname"],
-                    records=zone.get("records"),
-                    serial=zone["serial"],
-                    proxy4=configuration["proxy"]["server4"],
-                    proxy6=configuration["proxy"]["server6"],
-                    node=node["name"]
-                )
+                zone_file = utils.render_zone(zone, node)
 
                 with open("/tmp/db." + zone["zone"], "w") as zone_file_writer:
                     zone_file_writer.write(zone_file)
@@ -100,7 +80,7 @@ while True:
 
             # Assemble named.local.conf based on zones
             for zone in db["zones"].find():
-                zones_file += local_template.render(zone=zone["zone"])
+                zones_file += utils.render_local(zone)
 
             # Write the named.conf.local tmp file
             with open("/tmp/named.conf.local", "w") as named_file:
@@ -174,7 +154,7 @@ while True:
 
             # Render and write the default.vcl tmp file
             with open("/tmp/default.vcl", "w") as vcl_file:
-                vcl_file.write(vcl_template.render(backends=backends, domains=domains))
+                vcl_file.write(utils.render_vcl(backends, domains))
 
             # Deploy the vcl file and reload
             for node in db["cache_nodes"].find():
@@ -183,7 +163,7 @@ while True:
 
                 # Render and write the Caddyfile tmp file
                 with open("/tmp/Caddyfile", "w") as caddy_file:
-                    caddy_file.write(caddy_template.render(domains=domains, host=node["management_ip"], hostname=node["name"]))
+                    caddy_file.write(utils.render_caddy(domains, node))
 
                 try:
                     ssh.connect(node["management_ip"], username="root", port=34553, key_filename=configuration["ssh-key"])
