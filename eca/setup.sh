@@ -1,6 +1,9 @@
 #!/bin/bash
 
-# Check for sudo
+if [ "$EUID" -ne 0 ]
+  then echo "Please run the ECA installer as root"
+  exit
+fi
 
 mkdir -p /etc/delivr-eca/
 mkdir -p /var/delivr-eca/
