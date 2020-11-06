@@ -1,0 +1,12 @@
+[Unit]
+Description=delivr.dev Edge Cache Appliance
+Documentation=https://delivr.dev/docs/eca
+After=network.target
+
+[Service]
+User=root
+Group=root
+ExecStart=/usr/bin/delivr-eca.py
+
+[Install]
+WantedBy=multi-user.target

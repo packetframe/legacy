@@ -17,8 +17,9 @@ endef
 export VARS
 
 build:
-	mkdir -p {debian/DEBIAN/,debian/etc/delivr-eca/,debian/var/delivr-eca/,debian/usr/bin/}
+	mkdir -p {debian/DEBIAN/,debian/etc/delivr-eca/,debian/var/delivr-eca/,debian/usr/bin/,/etc/systemd/system/}
 	cp eca.py debian/usr/bin/delivr-eca.py
+	cp delivr-eca.service /etc/systemd/system/
 	echo "$$VARS" > debian/DEBIAN/control
 	echo "Copyright 2020 Nathan Sales." > debian/DEBIAN/copyright
 	dpkg-deb --build debian
