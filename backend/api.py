@@ -801,9 +801,9 @@ def eca_auth_required(f):
 
 
 # ECA routes
-@app.route("/eca/add")
+@app.route("/eca/add", methods=["POST"])
 @authentication_required
-def eca_add(username, is_admin, methods=["POST"]):
+def eca_add(username, is_admin):
     # add an ECA node
 
     if not is_admin:
@@ -827,19 +827,37 @@ def eca_add(username, is_admin, methods=["POST"]):
     return jsonify({"success": True, "message": key})
 
 
-@app.route("/eca/pull")
+@app.route("/eca/manifest")
 @eca_auth_required
-def eca_pull(eca):
-    # Pull eca config
+def eca_manifest(eca):
+    # Get an ECA zone manifest
 
-    _zones = {}
+    manifest = {
+        "zones": {}
+    }
 
     for zone in zones.find():
-        zone = dict(zone)
-        del zone["_id"]
-        _zones[zone["zone"]] = zone
+        manifest["zones"][zone["zone"]] = zone["serial"]
 
-    return jsonify({"success": True, "message": _zones})
+    return jsonify({"success": True, "message": manifest})
+
+
+@app.route("/eca/pull/<zone>")
+@eca_auth_required
+def eca_pull(eca, zone):
+    # Pull a single zone
+
+    zone = zones.find_one({"zone": zone})
+    if not zone:
+        return jsonify({"success": False, "message": "Zone doesn't exist"})
+
+    zone = dict(zone)
+    del zone["_id"]
+
+    return jsonify({"success": True, "message": {
+        "file": utils.render_zone(zone, {"name": None}),
+        "serial": zone["serial"]
+    }})
 
 
 @app.route("/eca/check")
@@ -848,7 +866,10 @@ def eca_check(eca):
     # Check if this ECA is authorized
 
     eca = dict(eca)
-    eca["_id"] = str(eca["_id"])
+    eca["id"] = str(eca["_id"])
+    del eca["_id"]
+    del eca["enabled"]
+    del eca["key"]
 
     return jsonify({"success": True, "message": eca})
 
