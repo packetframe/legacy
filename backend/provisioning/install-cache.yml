@@ -16,12 +16,13 @@
         content: APT::Default-Release "stable";
         dest: /etc/apt/apt.conf.d/default-release
 
-    - name: Install varnish, ufw
+    - name: Install varnish, ufw, caddy
       apt:
         update_cache: yes
         pkg:
           - varnish
           - ufw
+          - caddy
 
     - name: Install BIRD2 from sid
       apt:
