@@ -100,7 +100,7 @@ def _get_current_serial():
 
 
 def get_random_key():
-    return base64.b64encode(urandom(32)).decode().replace("=", "")
+    return base64.b64encode(urandom(48)).decode().replace("=", "")
 
 
 def add_queue_message(operation, args):
