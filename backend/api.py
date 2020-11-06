@@ -824,9 +824,9 @@ def eca_pull():
     _zones = {}
 
     for zone in zones.find():
-        tmp_zone = zones[zone]
-        del tmp_zone["_id"]
-        _zones[zone] = tmp_zone
+        zone = dict(zone)
+        del zone["_id"]
+        _zones[zone["zone"]] = zone
 
     return jsonify({"success": True, "message": _zones})
 
@@ -846,11 +846,10 @@ def eca_check():
     if not eca["enabled"]:
         return jsonify({"success": False, "message": "This ECA node is disabled. Please contact info@delivr.dev for more information"})
 
-    return jsonify({"success": True, "message": {
-        "name": eca["contact_name"],
-        "email": eca["email"],
-        "location": eca["location"]
-    }})
+    eca = dict(eca)
+    del eca["_id"]
+
+    return jsonify({"success": True, "message": eca})
 
 
 # Debug
