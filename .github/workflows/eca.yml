@@ -1,9 +1,10 @@
 name: ECA
-
 on:
   push:
-    tags: "*"
-
+    branches:
+      - main
+    paths:
+      - "eca/**"
 jobs:
   build:
     name: Build
@@ -14,7 +15,6 @@ jobs:
 
       - name: Get commit hash
         run: echo $(git rev-parse --short "$GITHUB_SHA")
-
 
 #      - name: Build
 #        run: go build -ldflags "-X main.release=${{ steps.vars.outputs.tag }} -v"
