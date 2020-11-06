@@ -831,6 +831,28 @@ def eca_pull():
     return jsonify({"success": True, "message": _zones})
 
 
+@app.route("/eca/check")
+def eca_check():
+    # Check if this ECA is authorized
+
+    auth_key = request.headers.get("X-Auth-Key")
+    if not auth_key:
+        return jsonify({"success": False, "message": "X-Auth-Key header must be supplied"})
+
+    eca = ecas.find_one({"key": auth_key})
+    if not eca:
+        return jsonify({"success": False, "message": "Cannot find ECA node"})
+
+    if not eca["enabled"]:
+        return jsonify({"success": False, "message": "This ECA node is disabled. Please contact info@delivr.dev for more information"})
+
+    return jsonify({"success": True, "message": {
+        "name": eca["contact_name"],
+        "email": eca["email"],
+        "location": eca["location"]
+    }})
+
+
 # Debug
 
 if configuration["development"]:
