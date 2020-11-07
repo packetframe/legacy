@@ -14,7 +14,7 @@ handle /.well-known/acme-challenge/* {
 }
 
 respond /json `{
-    "pop": "{{ ansible_hostname }}"
+    "pop": "{{ inventory_hostname }}"
 }`
 
 respond / `
@@ -35,7 +35,7 @@ respond / `
 </style>
 
 <body>
-<p>You're connected to <u>{{ ansible_hostname }}</u></p>
+<p>You're connected to <u>{{ inventory_hostname }}</u></p>
 </body>
 
 </html>
