@@ -254,6 +254,22 @@ def auth_login():
     return jsonify({"success": False, "message": "Invalid username or password"})
 
 
+@app.route("/user/acl", methods=["GET", "PUT"])
+@authentication_required
+def user_acl(username, is_admin):
+    if request.method == "GET":
+        user_doc = users.find_one({"username": username})
+        return jsonify({"success": True, "message": user_doc.get("acl")})
+    elif request.method == "PUT":
+        addr = get_args("address")
+        try:
+            _valid = ipaddress.ip_address(addr)
+        except ValueError:
+            return jsonify({"success": False, "message": "Invalid CIDR notation"})
+
+        users.update({"username": username}, {"$push": {"acl": addr}})
+
+
 @app.route("/zones/add", methods=["POST"])
 @authentication_required
 def zones_add(username, is_admin):

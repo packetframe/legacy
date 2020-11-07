@@ -21,6 +21,7 @@ Authenticated routes require the `X-API-Key` request header to be set to your AP
 | /zone/[ZONE]/delete_record/[INDEX] | POST    | Delete record at [INDEX] from [ZONE] |
 | /zone/[ZONE]/export | GET   | Download RFC 1035 zone file for [ZONE] |
 | /admin | GET   | Check if the authenticated user is an admin or not |
+| /user/acl | GET, PUT   | Get or append to a user IP ACL |
 
 ### Admin Routes
 | Endpoint                           | Methods | Usage                                |
