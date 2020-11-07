@@ -3,4 +3,7 @@ id: eca
 title: Edge Cache Appliance
 ---
 
-The delivr.dev Edge Cache Appliance (ECA) is an authoritative delivr.dev DNS server wrapped in an easy to install software or hardware package to deploy in your network. ECAs can be deployed as a dedicated server, VM, or even a SBC like the Raspberry Pi. If you're interested in deploying an ECA in your network, send an email to <span style={{"unicode-bidi": "bidi-override", direction: "rtl"}}>ved.rviled@ofni</span> to get the application started.   
+The Edge Cache Appliance (ECA) program brings delivr.dev content as close to your users as possible by deploying an anycast node directly in your network.
+ECAs are designed to run in a wide variety of environments, even those within firewalled networks with limited external access. Requests are evaluated on a case-by-case basis and involve specific technical and policy requirements. Depending on the scenario, ECAs are available as dedicated hardware as well as VM images.
+
+If you're interested in deploying an ECA in your network, send an email to <span style={{"unicode-bidi": "bidi-override", direction: "rtl"}}>ved.rviled@ofni</span> to get the application started.   
