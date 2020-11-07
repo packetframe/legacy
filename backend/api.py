@@ -718,10 +718,17 @@ def stats(username, is_admin):
     if not is_admin:
         return jsonify({"success": False, "message": "Unauthorized"})
 
+    unique_locations = set()
+    for node in nodes.find():
+        unique_locations.add(node["location"])
+    for cache_node in cache_nodes.find():
+        unique_locations.add(cache_node["location"])
+
     return jsonify({"success": True, "message": {
         "nodes": nodes.count_documents({}),
         "zones": zones.count_documents({}),
-        "users": users.count_documents({})
+        "users": users.count_documents({}),
+        "locations": len(unique_locations)
     }})
 
 

@@ -133,7 +133,7 @@
             .then(response => response.json())
             .then(data => {
                 addSnackbar("stats", "success", data["success"] ? "green" : "red")
-                alert("Nodes: " + data["message"]["nodes"] + "\nZones: " + data["message"]["zones"] + "\nUsers: " + data["message"]["users"])
+                alert("Nodes: " + data["message"]["nodes"] + "\nZones: " + data["message"]["zones"] + "\nUsers: " + data["message"]["users"] + "\nLocations: " + data["message"]["locations"])
             });
     }
 
