@@ -79,7 +79,7 @@ function Home() {
             <div style={featureBlock}>
                 <div style={featureCaption}>
                     <h1>Globally Distributed</h1>
-                    <p>There are currently {nodes} PoPs across {locations} cities and with a presence in all 6 consumer-inhabited continents. (If you know of a datacenter in Antarctica, let me know!)</p>
+                    <p>There are currently 24 PoPs across 20 cities and with a presence in all 6 consumer-inhabited continents. (If you know of a datacenter in Antarctica, let me know!)</p>
                 </div>
                 <img style={featureImage} src="/img/main/world.svg" alt="world image"/>
             </div>
