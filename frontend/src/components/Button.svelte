@@ -10,11 +10,13 @@
     export let centered = false;
     export let type = "button";
     export let tbpadded = false;
+    export let rpadded = false;
+    export let lpadded = false;
     $: isSlotFilled = $$slots["default"];
 </script>
 
 <main>
-    <button class:centered class:disabled={disabled} class:float-right={floatRight} class:icon-button={!isSlotFilled} class:inverted class:padded={padded} class:tbpadded disabled={disabled} on:click={onclick} style="--buttonColor:{color}; --fontSize:{size}" type={type}>
+    <button class:centered class:disabled={disabled} class:float-right={floatRight} class:icon-button={!isSlotFilled} class:inverted class:padded={padded} class:lpadded class:tbpadded class:rpadded disabled={disabled} on:click={onclick} style="--buttonColor:{color}; --fontSize:{size}" type={type}>
         {#if icon !== ""}
         <span class="material-icons" class:icon-button-icon={!isSlotFilled}>
             {icon}
@@ -114,6 +116,14 @@
     .tbpadded {
         margin-top: 10px;
         margin-bottom: 10px;
+    }
+
+    .rpadded {
+        margin-right: 10px;
+    }
+
+    .lpadded {
+        margin-right: 10px;
     }
 
     .float-right {
