@@ -263,11 +263,12 @@ def user_acl(username, is_admin):
     elif request.method == "PUT":
         addr = get_args("address")
         try:
-            _valid = ipaddress.ip_address(addr)
+            _valid = ipaddress.ip_network(addr)
         except ValueError:
             return jsonify({"success": False, "message": "Invalid CIDR notation"})
 
-        users.update({"username": username}, {"$push": {"acl": addr}})
+        users.update_one({"username": username}, {"$push": {"acl": addr}})
+        return jsonify({"success": True, "message": "ACL updated"})
 
 
 @app.route("/zones/add", methods=["POST"])

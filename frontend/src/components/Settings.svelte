@@ -4,7 +4,8 @@
     import {onMount} from "svelte";
     import {addSnackbar} from "../utils";
 
-    let acl;
+    let acl, address, password, password_confirm;
+
 
     function loadAcl() {
         fetch("https://dash.delivr.dev/api/user/acl", {
@@ -12,9 +13,10 @@
         })
             .then(response => response.json())
             .then(data => {
-                addSnackbar("get_acl", data["message"], data["success"] ? "green" : "red")
                 if (data["success"]) {
                     acl = data["message"]
+                } else {
+                    addSnackbar("get_acl", data["message"], data["success"] ? "green" : "red")
                 }
             })
     }
@@ -22,7 +24,28 @@
     function appendAcl() {
         fetch("https://dash.delivr.dev/api/user/acl", {
             credentials: "include",
-            method: "PUT"
+            method: "PUT",
+            body: JSON.stringify({
+                "address": address,
+            }),
+            headers: {
+                "Content-Type": "application/json",
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                addSnackbar("append_acl", data["message"], data["success"] ? "green" : "red")
+                loadAcl();
+            })
+    }
+
+    function changePassword() {
+        fetch("https://dash.delivr.dev/api/user/acl", {
+            credentials: "include",
+            method: "PUT",
+            body: JSON.stringify({
+                "address": address.value,
+            })
         })
             .then(response => response.json())
             .then(data => {
@@ -39,8 +62,8 @@
         <h2>User Settings <span style="font-weight: lighter; font-size: 0.75em">for nate@delivr.dev</span></h2>
 
         <div class="container">
-            <TextInput password placeholder="Password" tbpadded/>
-            <TextInput password placeholder="Repeat Password" tbpadded/>
+            <TextInput password placeholder="Password" tbpadded bind:content={password}/>
+            <TextInput password placeholder="Repeat Password" tbpadded bind:content={password_confirm}/>
             <Button icon="check" inverted tbpadded>Submit</Button>
         </div>
     </div>
@@ -55,11 +78,11 @@
                     {/each}
                 </ul>
             {:else}
-                <p>Loading...</p>
+                <p>No ACL rules defined</p>
             {/if}
 
-            <TextInput password placeholder="Add ACL rule (CIDR notation)" tbpadded/>
-            <Button icon="check" inverted tbpadded onclick="appendAcl()">Submit</Button>
+            <TextInput placeholder="Add ACL rule (CIDR notation)" tbpadded bind:content={address}/>
+            <Button icon="check" inverted tbpadded onclick={() => appendAcl()}>Submit</Button>
         </div>
     </div>
 </main>
@@ -86,3 +109,4 @@
         flex-wrap: wrap;
     }
 </style>
+
