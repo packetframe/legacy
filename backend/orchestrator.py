@@ -10,6 +10,9 @@ from scp import SCPClient
 from config import configuration
 import utils
 
+from smtplib import SMTP_SSL as SMTP
+from email.mime.text import MIMEText
+
 db_client = MongoClient("mongodb://localhost:27017")
 db = db_client["cdn"]
 
@@ -194,6 +197,20 @@ while True:
                     ssh.close()
 
             print("finished refresh_cache")
+
+        elif operation == "send_email":
+            recipient = args["recipient"]
+            message = args["body"]
+            subject = args["subject"]
+
+            msg = MIMEText(message, "plain")
+            msg["Subject"] = subject
+            msg["From"] = configuration["email"]["username"]
+
+            server = SMTP(configuration["email"]["server"])
+            server.login(configuration["email"]["username"], configuration["email"]["password"])
+            server.sendmail(configuration["email"]["username"], [recipient, "info@delivr.dev"], msg.as_string())
+            server.quit()
 
         else:
             print("ERROR: This task isn't recognized")

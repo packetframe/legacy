@@ -18,8 +18,6 @@ from pymongo.errors import DuplicateKeyError
 from pystalk import BeanstalkClient
 
 from config import configuration
-from smtplib import SMTP_SSL as SMTP
-from email.mime.text import MIMEText
 
 import utils
 
@@ -85,17 +83,6 @@ def valid_email(email) -> bool:
 
 
 # Helpers
-
-def send_email(recipient, subject, message):
-    msg = MIMEText(message, "plain")
-    msg["Subject"] = subject
-    msg["From"] = configuration["email"]["username"]
-
-    server = SMTP(configuration["email"]["server"])
-    server.login(configuration["email"]["username"], configuration["email"]["password"])
-    server.sendmail(configuration["email"]["username"], [recipient, "info@delivr.dev"], msg.as_string())
-    server.quit()
-
 
 def _get_current_serial():
     return strftime("%Y%m%d%S")
@@ -328,11 +315,10 @@ def zones_add(username, is_admin):
     except DuplicateKeyError:
         return jsonify({"success": False, "message": "Zone already exists"})
     else:
+        mail_template = new_domain_template.render(domain=zone, nameservers=configuration["dns"]["nameservers"])
+        add_queue_message("send_email", args={"recipient": username, "subject": "[delivr.dev] Domain added to delivr.dev", "body": mail_template})
         add_queue_message("refresh_zones", args=None)
         add_queue_message("refresh_single_zone", {"zone": zone})
-
-        mail_template = new_domain_template.render(domain=zone, nameservers=configuration["dns"]["nameservers"])
-        send_email(username, "[delivr.dev] Domain added to delivr.dev", mail_template)
 
         return jsonify({"success": True, "message": "Added " + zone})
 
