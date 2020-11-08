@@ -164,6 +164,7 @@
             .then(response => response.json())
             .then(data => {
                 addSnackbar("add_zone", data["message"], data["success"] ? "green" : "red")
+                loadRecordDropdown("dashboard");
             });
     }
 
