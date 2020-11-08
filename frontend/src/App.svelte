@@ -228,7 +228,7 @@
                 {/if}
 
                 <Button onclick={() => {showSettings = !showSettings}} padded={true} icon="settings" size="1.25rem"/>
-                <Button onclick={() => addZone()} padded={true}>Add Zone</Button>
+                <Button onclick={() => addZone()}>Add Zone</Button>
 
                 {#if zones}
                     <Dropdown width="100%" bind:content={selected_zone}>
