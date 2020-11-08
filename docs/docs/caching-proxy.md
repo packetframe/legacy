@@ -15,6 +15,6 @@ Backend errors (HTTP 500, 502, 503, 504) will be caught by the caching servers a
 
 ### ACL Configuration
 
-Every domain that has a proxied record must have at least one user with an ACL configured. IP blocks in the ACL are permitted to send the `PURGE` HTTP request method to any route under domains that user controls to purge the cache. The ACL can be configured on a per-user basis by clicking the settings gear icon in the dashboard and adding the address in CIDR notation.
+Every domain that has a proxied record must have at least one user with an ACL configured. IP blocks in the ACL are permitted to send the `PURGE` HTTP request method to any route under domains that user controls to purge the cache of that object. The ACL can be configured on a per-user basis by clicking the settings gear icon in the dashboard and adding the address in CIDR notation.
 
 ![img](../static/img/acl-add.png)
