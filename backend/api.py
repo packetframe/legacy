@@ -696,6 +696,26 @@ def nodes_list(username, is_admin):
     return jsonify({"success": True, "message": _nodes})
 
 
+@app.route("/counters", methods=["GET"])
+def nodes_list():
+    # Get node and location counters
+
+    _nodes = list(nodes.find())
+    node_count = 0
+
+    unique_locations = set()
+    for node in nodes.find():
+        node_count += 1
+        unique_locations.add(node["location"])
+    for cache_node in cache_nodes.find():
+        unique_locations.add(cache_node["location"])
+
+    return jsonify({"success": True, "message": {
+        "nodes": node_count,
+        "locations": len(unique_locations)
+    }})
+
+
 @app.route("/cache_nodes/list", methods=["GET"])
 @authentication_required
 def cache_nodes_list(username, is_admin):

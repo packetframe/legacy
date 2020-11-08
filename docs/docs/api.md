@@ -23,6 +23,7 @@ Authenticated routes require the `X-API-Key` request header to be set to your AP
 | /admin | GET   | Check if the authenticated user is an admin or not |
 | /user/acl | GET, PUT   | Get or append to a user IP ACL |
 | /user/change_password | POST   | Change a user's password |
+| /counters | GET  | Get node and location counters |
 
 ### Admin Routes
 | Endpoint                           | Methods | Usage                                |
