@@ -74,7 +74,7 @@
     <div class="flex-item">
         <h2>ACL Settings</h2>
         <div class="container">
-            {#if acl}
+            {#if acl && acl.length > 0}
                 <ul>
                     {#each acl as rule, i }
                         <li>{rule}</li>
