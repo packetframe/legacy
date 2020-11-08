@@ -40,18 +40,21 @@
     }
 
     function changePassword() {
-        fetch("https://dash.delivr.dev/api/user/acl", {
-            credentials: "include",
-            method: "PUT",
-            body: JSON.stringify({
-                "address": address.value,
+        if (password !== password_confirm) {
+            addSnackbar("change_password", "Passwords don't match", "red")
+        } else {
+            fetch("https://dash.delivr.dev/api/user/change_password", {
+                credentials: "include",
+                method: "POST",
+                body: JSON.stringify({
+                    "password": password,
+                })
             })
-        })
-            .then(response => response.json())
-            .then(data => {
-                addSnackbar("append_acl", data["message"], data["success"] ? "green" : "red")
-                loadAcl();
-            })
+                .then(response => response.json())
+                .then(data => {
+                    addSnackbar("change_password", data["message"], data["success"] ? "green" : "red")
+                })
+        }
     }
 
     onMount(() => loadAcl());
@@ -64,7 +67,7 @@
         <div class="container">
             <TextInput password placeholder="Password" tbpadded bind:content={password}/>
             <TextInput password placeholder="Repeat Password" tbpadded bind:content={password_confirm}/>
-            <Button icon="check" inverted tbpadded>Submit</Button>
+            <Button icon="check" inverted tbpadded onclick={() => changePassword()}>Submit</Button>
         </div>
     </div>
 
