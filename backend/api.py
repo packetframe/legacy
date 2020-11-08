@@ -114,6 +114,7 @@ def get_args(*args):
     # Parse the request's JSON payload and return as a tuple of arguments.
 
     if request.json is None:
+        # TODO: Replace this function with a decorator that handles this ValueError and returns a correct JSON error response
         raise ValueError("request body isn't valid JSON")
 
     payload = []

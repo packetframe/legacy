@@ -21,7 +21,7 @@ ssh.set_missing_host_key_policy(AutoAddPolicy())
 
 
 def normalize(string: str) -> str:
-    return "BACKEND_" + string.rstrip(".").upper().replace("-", "_").replace(".", "_")
+    return string.rstrip(".").upper().replace("-", "_").replace(".", "_").replace("@", "_").replace(".", "_")
 
 
 def run_ssh_command(command):
@@ -143,14 +143,19 @@ while True:
         elif operation == "refresh_cache":
             backends = {}
             domains = {}
+            acls = {}
 
             for zone in db["zones"].find():
                 for record in zone["records"]:
                     if record.get("proxied"):
                         domain = record["label"].rstrip(".")
-                        safe_name = normalize(domain)
+                        safe_name = "BACKEND_" + normalize(domain)
                         backends[safe_name] = record["value"]
                         domains[domain] = safe_name
+
+            for user in db["users"].find():
+                if user.get("acl"):
+                    acls["ACL_" + normalize(user["username"])] = user.get("acl")
 
             # Render and write the default.vcl tmp file
             with open("/tmp/default.vcl", "w") as vcl_file:

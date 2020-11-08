@@ -1,5 +1,13 @@
 vcl 4.0;
 
+{% for acl in acls -%}
+acl {{ acl }} {
+{% for address in acls[acl] -%}
+    "{{ address }}";
+{% endfor -%}
+}
+{% endfor -%}
+
 {% for backend in backends -%}
 backend {{ backend }} {
     .host = "{{ backends[backend] }}";
