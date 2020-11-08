@@ -30,10 +30,13 @@ function Home() {
 
     const featureBlock = {
         "display": "flex",
-        "flex-flow": "row",
         "justify-content": "center",
         "align-items": "center",
-        "margin-top": "85px"
+        "margin-top": "85px",
+        "flex-wrap": "wrap",
+        "width": "50%",
+        "margin-left": "auto",
+        "margin-right": "auto"
     }
 
     const featureCaption = {
@@ -54,7 +57,7 @@ function Home() {
             <header>
                 <br/>
                 <div style={containerStyle}>
-                    <div>
+                    <div style={{"padding-bottom": "25px"}}>
                         <div className="container" style={{"text-align": "center"}}>
                             <h1 className="hero__title">{siteConfig.title}</h1>
                             <p className="hero__subtitle">Welcome to delivr.dev, the Open Source CDN for technology enthusiasts.<br/>The platform is currently in private beta, contact <span style={{"unicode-bidi": "bidi-override", direction: "rtl"}}>ved.rviled@ofni</span> for more information!</p>
@@ -63,11 +66,11 @@ function Home() {
                     </div>
 
                     <div>
-                        <img src="https://dash.delivr.dev/favicon-noborder.png" alt="delivr.dev" style={{"width": "350px", "margin-left": "30px"}}/>
+                        <img src="https://dash.delivr.dev/favicon-noborder.png" alt="delivr.dev" style={{"width": "350px"}}/>
                     </div>
                 </div>
             </header>
-
+            {/*HEX IS #6D2BD8*/}
             <div style={featureBlock}>
                 <img style={featureImage} src="/img/main/code.svg" alt="code image"/>
                 <div style={featureCaption}>
