@@ -30,8 +30,8 @@ def render_zone(zone, node):
     )
 
 
-def render_vcl(backends, domains, acls):
-    return vcl_template.render(backends=backends, domains=domains, acls=acls)
+def render_vcl(backends, domains, acls, normalize):
+    return vcl_template.render(backends=backends, domains=domains, acls=acls, normalize=normalize)
 
 
 def render_caddy(domains, node):

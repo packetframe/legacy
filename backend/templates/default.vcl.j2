@@ -2,24 +2,32 @@ vcl 4.0;
 
 {% for acl in acls -%}
 acl {{ acl }} {
-{% for address in acls[acl] -%}
+{%- for address in acls[acl] %}
     "{{ address }}";
 {% endfor -%}
 }
-{% endfor -%}
+
+{% endfor %}
 
 {% for backend in backends -%}
 backend {{ backend }} {
     .host = "{{ backends[backend] }}";
     .port = "80";
 }
-{% endfor -%}
+{% endfor %}
 
 sub vcl_recv {
     {% for domain in domains -%}
     if (req.http.host == "{{ domain }}") {
         set req.http.host = "{{ domain }}";
         set req.backend_hint = {{ domains[domain] }};
+
+        if (req.method == "PURGE") {
+            if (!client.ip ~ {{ normalize(domain) }}) {
+                return(synth(405,"Not allowed."));
+            }
+            return (purge);
+        }
     }
     {% endfor %}
 }

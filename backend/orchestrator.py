@@ -153,13 +153,21 @@ while True:
                         backends[safe_name] = record["value"]
                         domains[domain] = safe_name
 
-            for user in db["users"].find():
-                if user.get("acl"):
-                    acls["ACL_" + normalize(user["username"])] = user.get("acl")
+                        acl_name = "ACL_" + normalize(zone["zone"])
+
+                        if acl_name not in acls:
+                            acls[acl_name] = []
+                            acl = acls[acl_name]
+
+                            for user in zone["users"]:
+                                user_doc = db["users"].find_one({"username": user})
+                                if "acl" in user_doc:
+                                    for address in user_doc["acl"]:
+                                        acl.append(address)
 
             # Render and write the default.vcl tmp file
             with open("/tmp/default.vcl", "w") as vcl_file:
-                vcl_file.write(utils.render_vcl(backends, domains, acls))
+                vcl_file.write(utils.render_vcl(backends, domains, acls, normalize))
 
             # Deploy the vcl file and reload
             for node in db["cache_nodes"].find():
