@@ -6,7 +6,6 @@ from functools import wraps
 from os import urandom
 from time import strftime
 
-import requests
 # noinspection PyPackageRequirements
 from argon2 import PasswordHasher
 # noinspection PyPackageRequirements
@@ -53,6 +52,10 @@ with open("templates/new_domain.j2", "r") as new_domain_template_file:
 with open("templates/proxied_record.j2", "r") as proxied_record_template_file:
     # noinspection JinjaAutoinspect
     proxied_record_template = Template(proxied_record_template_file.read())
+
+with open("templates/welcome.j2", "r") as welcome_template_file:
+    # noinspection JinjaAutoinspect
+    welcome_template = Template(welcome_template_file.read())
 
 
 # Regex Validators
@@ -202,6 +205,8 @@ def auth_signup():
     user_doc = users.find_one({"username": username})
     if user_doc:
         return jsonify({"success": False, "message": "User already exists"})
+
+    add_queue_message("send_email", args={"recipient": username, "subject": "[delivr.dev] Welcome to delivr.dev!", "body": welcome_template.render()})
 
     users.insert_one({
         "username": username,
