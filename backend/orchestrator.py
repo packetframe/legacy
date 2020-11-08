@@ -159,7 +159,7 @@ while True:
 
             # Render and write the default.vcl tmp file
             with open("/tmp/default.vcl", "w") as vcl_file:
-                vcl_file.write(utils.render_vcl(backends, domains))
+                vcl_file.write(utils.render_vcl(backends, domains, acls))
 
             # Deploy the vcl file and reload
             for node in db["cache_nodes"].find():
