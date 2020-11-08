@@ -1,7 +1,6 @@
 import Layout from '@theme/Layout';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import React, { useState, useEffect } from 'react';
-import {addSnackbar} from "../../../frontend/src/utils";
 
 function Home() {
     const context = useDocusaurusContext();
