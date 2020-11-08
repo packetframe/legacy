@@ -51,3 +51,5 @@ proxy:
   allowed_hosts:
     - 192.0.2.2
     - 192.0.2.5
+
+monitoring_host: user@monitoring.example.com

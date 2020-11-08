@@ -1,5 +1,6 @@
 from pymongo import MongoClient
 import yaml
+import os
 
 db_client = MongoClient("mongodb://localhost:27017")
 
@@ -89,5 +90,8 @@ for node in db_client["cdn"]["cache_nodes"].find():
 with open("hosts.yml", "w") as hosts_file:
     hosts_file.write(yaml.dump(_config, default_flow_style=False))
 
-with open("prometheus.yml", "w") as prometheus_file:
+with open("/home/nate/delivr/intra/prometheus.yml", "w") as prometheus_file:
     prometheus_file.write(prometheus_config + "\n")
+
+print("Deploying monitoring config...")
+os.system("ssh " + config["monitoring_host"] + " -i /home/nate/ssh-key \"pct exe 101 ./update-prometheus.sh\"")
