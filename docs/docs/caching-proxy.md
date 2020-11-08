@@ -12,3 +12,7 @@ Proxied records can be added though the dashboard by clicking the "Add Record" b
 Once a proxied record is enabled, delivr.dev will request an SSL certificate from [LetsEncrypt](https://letsencrypt.org/) and configure the proxy. Origin pulls will come from unicast source IPs of the caching network.
 
 Backend errors (HTTP 500, 502, 503, 504) will be caught by the caching servers and a generic delivr.dev error page will be shown.
+
+Every domain that has a proxied record must have at least one user with an ACL configured. IP blocks in the ACL are permitted to send the `PURGE` HTTP request method to any route under domains that user controls to purge the cache. The ACL can be configured on a per-user basis by clicking the settings gear icon in the dashboard and adding the address in CIDR notation.
+
+![img](../static/img/acl-add.png)
