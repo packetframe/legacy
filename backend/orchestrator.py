@@ -202,6 +202,7 @@ while True:
             recipient = args["recipient"]
             message = args["body"]
             subject = args["subject"]
+            print("Sending email to", recipient)
 
             msg = MIMEText(message, "plain")
             msg["Subject"] = subject
@@ -211,6 +212,7 @@ while True:
             server.login(configuration["email"]["username"], configuration["email"]["password"])
             server.sendmail(configuration["email"]["username"], [recipient, "info@delivr.dev"], msg.as_string())
             server.quit()
+            print("Sent")
 
         else:
             print("ERROR: This task isn't recognized")

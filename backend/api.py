@@ -989,4 +989,5 @@ if configuration["development"]:
         add_queue_message("refresh_cache", None)
         return jsonify({"success": True, "message": "Refreshing cache config"})
 
-app.run(debug=configuration["development"])
+if __name__ == "__main__":
+    app.run(debug=configuration["development"])
