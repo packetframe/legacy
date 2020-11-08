@@ -50,9 +50,9 @@ with open("templates/new_domain.j2", "r") as new_domain_template_file:
     # noinspection JinjaAutoinspect
     new_domain_template = Template(new_domain_template_file.read())
 
-
-def _post_record(domain, data):
-    requests.post("http://localhost/api/zone/" + domain + "/add", json=data)
+with open("templates/proxied_record.j2", "r") as proxied_record_template_file:
+    # noinspection JinjaAutoinspect
+    proxied_record_template = Template(proxied_record_template_file.read())
 
 
 # Regex Validators
@@ -365,7 +365,7 @@ def zones_delete(zone):
 
 @app.route("/zone/<zone>/add", methods=["POST"])
 @zone_authentication_required
-def records_add(zone):
+def records_add(zone, username):
     # Add a record to a zone
 
     if not valid_zone(zone):
@@ -525,6 +525,7 @@ def records_add(zone):
         if proxied:
             is_proxied = True
             new_record["proxied"] = True
+            add_queue_message("send_email", args={"recipient": username, "subject": "[delivr.dev] Proxied record added", "body": proxied_record_template.render(domain=zone)})
 
     # BEGIN HACK
 
