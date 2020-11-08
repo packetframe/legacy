@@ -697,7 +697,7 @@ def nodes_list(username, is_admin):
 
 
 @app.route("/counters", methods=["GET"])
-def nodes_list():
+def counters():
     # Get node and location counters
 
     _nodes = list(nodes.find())
