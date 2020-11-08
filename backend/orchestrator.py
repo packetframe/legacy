@@ -83,7 +83,7 @@ while True:
 
             # Assemble named.local.conf based on zones
             for zone in db["zones"].find():
-                zones_file += utils.render_local(zone)
+                zones_file += utils.render_local(zone["zone"])
 
             # Write the named.conf.local tmp file
             with open("/tmp/named.conf.local", "w") as named_file:
