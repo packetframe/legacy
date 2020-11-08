@@ -15,12 +15,14 @@
     import {addSnackbar} from "./utils"
     import NetworkTable from "./components/NetworkTable.svelte";
     import UserTable from "./components/UserTable.svelte";
+    import Settings from "./components/Settings.svelte";
 
     let zones;
     let selected_zone = window.location.toString().split("zone=")[1];
     let no_zones = false;
     let showAdmin = false;
     let showUserTable = false;
+    let showSettings = false;
 
     onMount(() => {
         fetch("https://dash.delivr.dev/api/authenticated", {
@@ -225,6 +227,7 @@
                     <Button onclick={() => showAdmin = !showAdmin}>Toggle Admin Tools</Button>
                 {/if}
 
+                <Button onclick={() => {showSettings = !showSettings}} padded={true} icon="settings" size="1.25rem"/>
                 <Button onclick={() => addZone()} padded={true}>Add Zone</Button>
 
                 {#if zones}
@@ -263,6 +266,10 @@
                     <Button padded onclick={() => {showUserTable = !showUserTable}}>Toggle user table</Button>
                     <Button padded onclick={() => showSystemStats()}>System Stats</Button>
                 </ButtonBar>
+            {/if}
+
+            {#if showSettings}
+                <Settings/>
             {/if}
 
             {#if selected_zone !== ""}
