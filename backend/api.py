@@ -234,6 +234,9 @@ def auth_login():
     except ValueError as e:
         return jsonify({"success": False, "message": str(e)})
 
+    if len(password) < 16:
+        return jsonify({"success": False, "message": "Password must be longer than 16 characters"})
+
     user_doc = users.find_one({"username": username})
     if not user_doc:
         return jsonify({"success": False, "message": "Invalid username or password"})
@@ -269,6 +272,20 @@ def user_acl(username, is_admin):
 
         users.update_one({"username": username}, {"$push": {"acl": addr}})
         return jsonify({"success": True, "message": "ACL updated"})
+
+
+@app.route("/user/change_password", methods=["POST"])
+@authentication_required
+def change_password(username, is_admin):
+    password = get_args("password")
+
+    if len(password) > 16:
+        users.update_one({"username": username}, {"$set": {
+            "password": argon.hash(password),
+        }})
+        return jsonify({"success": True, "message": "Password updated successfully"})
+    else:
+        return jsonify({"success": False, "message": "Password must be longer than 16 characters"})
 
 
 @app.route("/zones/add", methods=["POST"])

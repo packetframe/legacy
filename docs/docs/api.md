@@ -22,6 +22,7 @@ Authenticated routes require the `X-API-Key` request header to be set to your AP
 | /zone/[ZONE]/export | GET   | Download RFC 1035 zone file for [ZONE] |
 | /admin | GET   | Check if the authenticated user is an admin or not |
 | /user/acl | GET, PUT   | Get or append to a user IP ACL |
+| /user/change_password | POST   | Change a user's password |
 
 ### Admin Routes
 | Endpoint                           | Methods | Usage                                |
