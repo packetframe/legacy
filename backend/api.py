@@ -67,7 +67,7 @@ def valid_zone(zone) -> bool:
 
 def valid_label(label) -> bool:
     # Validates a DNS zone label (www, @, example.com.)
-    return label and (re.match(r"^(?![0-9]+$)(?!-)[a-zA-Z0-9-]{,63}(?<!-)$", label) is None) and (not label.startswith("."))
+    return label and (re.match(r"^(?![0-9]+$)(?!-)[a-zA-Z0-9-]{,63}(?<!-)$", label) is None) and (not label.startswith(".")) and (not label.strip().startswith(" "))
 
 
 def valid_ipv4(ipv4) -> bool:
