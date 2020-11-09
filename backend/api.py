@@ -370,7 +370,7 @@ def zones_delete(zone):
 
 @app.route("/zone/<zone>/add", methods=["POST"])
 @zone_authentication_required
-def records_add(zone, username, is_admin):
+def records_add(zone, username):
     # Add a record to a zone
 
     if not valid_zone(zone):
@@ -534,7 +534,8 @@ def records_add(zone, username, is_admin):
 
     # BEGIN HACK
 
-    if is_proxied and not is_admin:
+    user_doc = users.find_one({"username": username})
+    if is_proxied and not user_doc.get("admin"):
         return jsonify({"success": False, "message": "Proxied records is not available on your account. Please contact info@delivr.dev for more information"})
 
     # END HACK
