@@ -161,7 +161,7 @@ def zone_authentication_required(f):
         if user_doc["username"] not in zone_doc["users"] and (not user_doc.get("admin")):
             return jsonify({"success": False, "message": "Access Denied"})
 
-        return f(*args, **kwargs)
+        return f(*args, **kwargs, user_doc=user_doc)
 
     return decorated_function
 
@@ -370,7 +370,7 @@ def zones_delete(zone):
 
 @app.route("/zone/<zone>/add", methods=["POST"])
 @zone_authentication_required
-def records_add(zone, username, is_admin):
+def records_add(zone, user_doc):
     # Add a record to a zone
 
     if not valid_zone(zone):
@@ -530,11 +530,11 @@ def records_add(zone, username, is_admin):
         if proxied:
             is_proxied = True
             new_record["proxied"] = True
-            add_queue_message("send_email", args={"recipient": username, "subject": "[delivr.dev] Proxied record added", "body": proxied_record_template.render(domain=zone)})
+            add_queue_message("send_email", args={"recipient": user_doc["username"], "subject": "[delivr.dev] Proxied record added", "body": proxied_record_template.render(domain=zone)})
 
     # BEGIN HACK
 
-    if is_proxied and not is_admin:
+    if is_proxied and not user_doc.get("admin"):
         return jsonify({"success": False, "message": "Proxied records is not available on your account. Please contact info@delivr.dev for more information"})
 
     # END HACK
