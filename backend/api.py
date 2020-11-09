@@ -350,7 +350,7 @@ def zones_list(username, is_admin):
 
 @app.route("/zone/<zone>/delete", methods=["POST"])
 @zone_authentication_required
-def zones_delete(zone):
+def zones_delete(zone, user_doc):
     # Delete a zone
 
     if not valid_zone(zone):
@@ -554,7 +554,7 @@ def records_add(zone, user_doc):
 
 @app.route("/zone/<zone>/records", methods=["GET"])
 @zone_authentication_required
-def records_list(zone):
+def records_list(zone, user_doc):
     # Get a list of all the records of a zone
 
     if not valid_zone(zone):
@@ -569,7 +569,7 @@ def records_list(zone):
 
 @app.route("/zone/<zone>/delete_record/<index>", methods=["POST"])
 @zone_authentication_required
-def record_delete(zone, index):
+def record_delete(zone, index, user_doc):
     # Delete a zone's record by index
 
     if not valid_zone(zone):
