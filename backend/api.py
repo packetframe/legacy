@@ -534,8 +534,12 @@ def records_add(zone, user_doc):
 
     # BEGIN HACK
 
-    if is_proxied and not user_doc.get("admin"):
-        return jsonify({"success": False, "message": "Proxied records is not available on your account. Please contact info@delivr.dev for more information"})
+    if is_proxied:
+        if not user_doc.get("admin"):
+            return jsonify({"success": False, "message": "Proxied records is not available on your account. Please contact info@delivr.dev for more information."})
+
+        if not user_doc.get("acl") and len(user_doc.get("acl")) > 0:
+            return jsonify({"success": False, "message": "You must configure an ACL before adding a proxied record. See https://delivr.dev/docs/caching-proxy for more information."})
 
     # END HACK
 
