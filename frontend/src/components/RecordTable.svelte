@@ -79,13 +79,15 @@
     }
 
     function deleteRecord(index) {
-        fetch("https://dash.delivr.dev/api/zone/" + zone + "/delete_record/" + index, {
-            method: "POST",
-            credentials: "include"
-        })
-            .then(response => response.json())
-            .then(data => addSnackbar("delete_record", data["message"], data["success"] ? "green" : "red"))
-            .then(() => loadRecords());
+        if (confirm("Are you sure you want to delete this record?")) {
+            fetch("https://dash.delivr.dev/api/zone/" + zone + "/delete_record/" + index, {
+                method: "POST",
+                credentials: "include"
+            })
+                .then(response => response.json())
+                .then(data => addSnackbar("delete_record", data["message"], data["success"] ? "green" : "red"))
+                .then(() => loadRecords());
+        }
     }
 
     function loadRecords(nothing) {
