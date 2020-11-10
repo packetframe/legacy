@@ -206,7 +206,7 @@ def auth_signup():
     if user_doc:
         return jsonify({"success": False, "message": "User already exists"})
 
-    add_queue_message("send_email", args={"recipient": username, "subject": "[delivr.dev] Welcome to delivr.dev!", "body": welcome_template.render()})
+    add_queue_message("send_email", args={"recipient": username, "subject": "[delivr.dev] Welcome to delivr.dev!", "body": welcome_template.render(email=username)})
 
     users.insert_one({
         "username": username,
