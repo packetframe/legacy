@@ -351,8 +351,4 @@
         margin-right: 20px;
         max-height: 400px;
     }
-
-    option:not(:checked) {
-        color: black;
-    }
 </style>
