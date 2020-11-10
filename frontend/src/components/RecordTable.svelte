@@ -448,4 +448,8 @@
     .capital {
         text-transform: uppercase;
     }
+
+    option:not(:checked) {
+        color: black;
+    }
 </style>
