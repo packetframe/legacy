@@ -18,11 +18,11 @@
         border: 1px solid white;
         border-radius: 5px;
         margin: 2px;
-        padding: 10px;
         color: white;
         background: url(https://dash.delivr.dev/img/arrow.png) 96% / 25% no-repeat #000;
         -webkit-appearance: none;
         -moz-appearance: none;
         appearance: none;
+        padding: 10px 22px 10px 10px;
     }
 </style>

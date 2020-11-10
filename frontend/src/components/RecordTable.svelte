@@ -420,8 +420,6 @@
         flex-direction: column;
         margin: 5px;
         justify-content: center;
-        width: 25%;
-        flex: 0 0 content;
     }
 
     .table-wrapper {
