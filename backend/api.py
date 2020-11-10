@@ -918,6 +918,19 @@ def eca_pull(eca, zone):
     }})
 
 
+@app.route("/eca/registry")
+@eca_auth_required
+def eca_registry(eca):
+    # Get the zone registry file
+
+    zones_file = ""
+
+    for zone in db["zones"].find():
+        zones_file += utils.render_local(zone["zone"])
+
+    return jsonify({"success": True, "message": zones_file})
+
+
 @app.route("/eca/check")
 @eca_auth_required
 def eca_check(eca):

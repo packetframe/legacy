@@ -55,6 +55,8 @@ while not disabled:
     check_response(r)
     server_manifest = r.json()["message"]["zones"]
 
+    should_pull_registry = False
+
     for zone in server_manifest:
         server_serial = server_manifest[zone]
         local_serial = local_manifest.get(zone)
@@ -68,6 +70,17 @@ while not disabled:
                 zone_file.write(r.json()["message"]["file"])
 
             local_manifest[zone] = r.json()["message"]["serial"]
+
+            should_pull_registry = True
+
+    if should_pull_registry:
+        print("Pulling zone registry")
+        r = query("registry")
+
+        with open("/etc/bind/named.conf.local", "w") as local_file:
+            local_file.write(r.json()["message"])
+
+    os.system("rndc reload")
 
     print("Waiting for next pull")
     time.sleep(60)
