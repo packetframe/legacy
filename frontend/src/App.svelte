@@ -212,6 +212,7 @@
                     <div class="nav-item" on:click={() => {
                         $Page = "login";
                         document.cookie = "";
+                        location.hash = "";
                     }} slot="right-side">Logout
                     </div>
                 </Navbar>
