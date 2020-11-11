@@ -62,12 +62,12 @@ with open("templates/welcome.j2", "r") as welcome_template_file:
 
 def valid_zone(zone) -> bool:
     # Validates a DNS zone (example.com)
-    return zone and (re.match(r"^(((?!-))(xn--|_)?[a-z0-9-]{0,61}[a-z0-9]\.)*(xn--)?([a-z0-9][a-z0-9\-]{0,60}|[a-z0-9-]{1,30}\.[a-z]{2,})$", zone) is not None) and (zone != ".")
+    return zone and (re.match(r"^(((?!-))(xn--|_)?[a-z0-9-]{0,61}[a-z0-9]\.)*(xn--)?([a-z0-9][a-z0-9\-]{0,60}|[a-z0-9-]{1,30}\.[a-z]{2,})$", zone) is not None) and (zone != ".") and (" " not in zone)
 
 
 def valid_label(label) -> bool:
     # Validates a DNS zone label (www, @, example.com.)
-    return label and (re.match(r"^(?![0-9]+$)(?!-)[a-zA-Z0-9-]{,63}(?<!-)$", label) is None) and (not label.startswith(".")) and (not label.strip().startswith(" "))
+    return label and (re.match(r"^(?![0-9]+$)(?!-)[a-zA-Z0-9-]{,63}(?<!-)$", label) is None) and (not label.startswith(".")) and (not label.strip().startswith(" ")) and (" " not in label)
 
 
 def valid_ipv4(ipv4) -> bool:
