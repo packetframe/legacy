@@ -233,7 +233,7 @@
                 <Button onclick={() => addZone()} rpadded>Add Zone</Button>
 
                 {#if zones}
-                    <Dropdown width="100%" bind:content={selected_zone}>
+                    <Dropdown width="100%" bind:content={selected_zone} size="15%">
                         {#each zones as zone}
                             <option value="{zone['zone']}">{zone['zone']}</option>
                         {/each}
@@ -351,5 +351,9 @@
         width: 40%;
         margin-right: 20px;
         max-height: 400px;
+    }
+
+    select {
+        background: url(https://dash.delivr.dev/img/arrow.png) 96% / 15% no-repeat #000;
     }
 </style>

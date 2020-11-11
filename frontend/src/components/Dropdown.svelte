@@ -3,6 +3,7 @@
     export let id;
     export let content = "";
     export let onchange;
+    export let size = "25%";
 </script>
 
 <main>
@@ -19,7 +20,7 @@
         border-radius: 5px;
         margin: 2px;
         color: white;
-        background: url(https://dash.delivr.dev/img/arrow.png) 96% / 25% no-repeat #000;
+        background: url(https://dash.delivr.dev/img/arrow.png) 96% / var(--size) no-repeat #000;
         -webkit-appearance: none;
         -moz-appearance: none;
         appearance: none;
