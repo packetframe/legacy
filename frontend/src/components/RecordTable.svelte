@@ -197,7 +197,7 @@
         {#if showAddRecord}
             <div class="record-add-container">
                 <div class="record-add-element-select">
-                    <Dropdown id="add-type" bind:content={type}>
+                    <Dropdown id="add-type" bind:content={type} small>
                         {#if zone && zone.endsWith("arpa")}
                             <option value="PTR">PTR</option>
                         {:else}

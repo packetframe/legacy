@@ -233,7 +233,7 @@
                 <Button onclick={() => addZone()} rpadded>Add Zone</Button>
 
                 {#if zones}
-                    <Dropdown width="100%" bind:content={selected_zone} size="15%">
+                    <Dropdown width="100%" bind:content={selected_zone} large>
                         {#each zones as zone}
                             <option value="{zone['zone']}">{zone['zone']}</option>
                         {/each}
