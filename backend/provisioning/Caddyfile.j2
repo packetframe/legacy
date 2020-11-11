@@ -18,25 +18,45 @@ respond /json `{
 }`
 
 respond / `
-<!DOCTYPE html>
 <html>
-
-<style>
-  body {
-      color: #ffffff;
-      background-color: #000;
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
-      text-align: center;
-      padding-top: 25px;
-  }
-</style>
+<head>
+    <title>delivr.dev</title>
+    <link rel="stylesheet" href="https://dash.delivr.dev/5xx.css">
+    <link rel="icon" type="image/png" href="https://dash.delivr.dev/favicon.png">
+</head>
 
 <body>
-<p>You're connected to <u>{{ inventory_hostname }}</u></p>
-</body>
+<div class="navbar">
+    <div class="nav-element">
+        <a href="https://delivr.dev/">
+            <img style="width: 225px" src="https://dash.delivr.dev/img/full.png" alt="delivr.dev">
+        </a>
+    </div>
 
+    <div class="nav-element" style="float: right">
+        <a href="https://dash.delivr.dev/" style="text-decoration: none;">Dashboard</a>
+    </div>
+</div>
+
+<h1>DELIVR.DEV</h1>
+<h2>You're connected to {{ inventory_hostname }}</h2>
+<div class="container">
+    <div class="figure-element">
+        <img class="image" src="https://dash.delivr.dev/img/laptop.png" alt="User">
+        <div class="text-container">
+            <p>Browser</p>
+            <img class="icon" src="https://dash.delivr.dev/img/check.png" alt="">
+        </div>
+    </div>
+
+    <div class="figure-element">
+        <img class="image" src="https://dash.delivr.dev/img/delivr.png" alt="delivr.dev">
+        <div class="text-container">
+            <p>DELIVR.DEV</p>
+            <img class="icon" src="https://dash.delivr.dev/img/check.png" alt="">
+        </div>
+    </div>
+</div>
+</body>
 </html>
 `
