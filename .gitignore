@@ -3,3 +3,5 @@ ssh-key*
 provisioning/hosts.yml
 provisioning/*.retry
 provisioning/vars.yml
+eca/debian/
+eca/delivr-eca.deb
