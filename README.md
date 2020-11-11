@@ -5,14 +5,15 @@
   <a href="https://delivr.dev/docs/record-management"><img alt="Documentation" src="https://img.shields.io/badge/docs-delivr.dev-blue?style=for-the-badge"></a>
 </p>
 
-
 ## delivr.dev
 
 delivr.dev is an open source CDN platform, currently in beta.
 
 #### Installation
+
 Set up Caddy
-```bash
+
+``` bash
 # Download and install
 rm /etc/caddy/Caddyfile
 ln -s /home/nate/delivr/Caddyfile /etc/caddy/Caddyfile
@@ -24,7 +25,8 @@ ln -s /home/nate/delivr/delivr-orchestrator.service /etc/systemd/system/delivr-o
 ```
 
 #### Project Structure
-```
+
+``` 
 .
 ├── backend # All code that runs server side
 │   ├── acme # LetsEncrypt automation for ACME challenges
@@ -46,3 +48,7 @@ ln -s /home/nate/delivr/delivr-orchestrator.service /etc/systemd/system/delivr-o
     └── src
         └── components # Individual Svelte components
 ```
+
+## License
+
+delivr is licensed under the [AGPL-3.0 License](./LICENSE).
