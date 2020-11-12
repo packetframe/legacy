@@ -5,6 +5,7 @@
     import {addSnackbar} from "../utils";
 
     let acl, address, password, password_confirm;
+    export let email;
 
 
     function loadAcl() {
@@ -62,12 +63,16 @@
 
 <main>
     <div class="flex-item">
-        <h2>User Settings <span style="font-weight: lighter; font-size: 0.75em">for nate@delivr.dev</span></h2>
+        {#if email}
+            <h2>User Settings <span style="font-weight: lighter; font-size: 0.75em">for {email}</span></h2>
+        {:else}
+            <h2>User Settings</h2>
+        {/if}
 
         <div class="container">
-            <TextInput password placeholder="Password" tbpadded bind:content={password}/>
-            <TextInput password placeholder="Repeat Password" tbpadded bind:content={password_confirm}/>
-            <Button icon="check" inverted tbpadded onclick={() => changePassword()}>Submit</Button>
+            <TextInput bind:content={password} password placeholder="Password" tbpadded/>
+            <TextInput bind:content={password_confirm} password placeholder="Repeat Password" tbpadded/>
+            <Button icon="check" inverted onclick={() => changePassword()} tbpadded>Submit</Button>
         </div>
     </div>
 
@@ -84,8 +89,8 @@
                 <p>No ACL rules defined</p>
             {/if}
 
-            <TextInput placeholder="Add ACL rule (CIDR notation)" tbpadded bind:content={address}/>
-            <Button icon="check" inverted tbpadded onclick={() => appendAcl()}>Submit</Button>
+            <TextInput bind:content={address} placeholder="Add ACL rule (CIDR notation)" tbpadded/>
+            <Button icon="check" inverted onclick={() => appendAcl()} tbpadded>Submit</Button>
         </div>
     </div>
 </main>
