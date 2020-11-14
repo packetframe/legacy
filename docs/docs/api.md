@@ -18,6 +18,7 @@ Authenticated routes require the `X-API-Key` request header to be set to your AP
 | /zone/[ZONE]/delete                | POST    | Remove [ZONE] from delivr            |
 | /zone/[ZONE]/add                   | POST    | Add a record to [ZONE]               |
 | /zone/[ZONE/records                | GET     | Get records for [ZONE]               |
+| /zone/[ZONE/users                  | GET     | Get users for [ZONE]                 |
 | /zone/[ZONE]/delete_record/[INDEX] | POST    | Delete record at [INDEX] from [ZONE] |
 | /zone/[ZONE]/export | GET   | Download RFC 1035 zone file for [ZONE] |
 | /admin | GET   | Check if the authenticated user is an admin or not |

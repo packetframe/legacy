@@ -365,6 +365,22 @@ def zones_delete(zone, user_doc):
     else:
         return jsonify({"success": False, "message": "Zone " + zone + " doesn't exist"})
 
+
+@app.route("/zone/<zone>/users", methods=["GET"])
+@zone_authentication_required
+def zones_users(zone, user_doc):
+    # Get a zone's users
+
+    if not valid_zone(zone):
+        return jsonify({"success": False, "message": "Invalid zone"})
+
+    zone_doc = zones.find_one({"zone": zone})
+    if zone_doc:
+        return jsonify({"success": True, "message": zone["users"]})
+    else:
+        return jsonify({"success": False, "message": "Zone " + zone + " doesn't exist"})
+
+
 # Record management
 
 @app.route("/zone/<zone>/add", methods=["POST"])
