@@ -15,6 +15,7 @@ Categories:
   zones         Get list of zones
   records zone  Get records for zone
   acl           Get user ACL
+  users zone    Get users for zone
 """
 
 API_KEY = os.environ.get("DELIVR_API_KEY")
@@ -53,6 +54,12 @@ if sys.argv[1] == "get":
         print("ACL:")
         for address in _get("user/acl", None).json()["message"]:
             print("- " + address)
+
+    elif sys.argv[2] == "users":
+        zone = sys.argv[3]
+        print(f"Users for {zone}")
+        for user in _get("zone/" + zone + "/users", None).json()["message"]:
+            print("- " + user)
 
 else:
     print(help_text)
