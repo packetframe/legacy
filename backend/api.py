@@ -376,7 +376,7 @@ def zones_users(zone, user_doc):
 
     zone_doc = zones.find_one({"zone": zone})
     if zone_doc:
-        return jsonify({"success": True, "message": zone["users"]})
+        return jsonify({"success": True, "message": zone_doc["users"]})
     else:
         return jsonify({"success": False, "message": "Zone " + zone + " doesn't exist"})
 
