@@ -27,6 +27,10 @@ def _get(endpoint, body):
     return requests.get("https://dash.delivr.dev/api/" + endpoint, headers={"X-API-Key": API_KEY}, json=body)
 
 
+def _truncate(string):
+    return string if len(string) < 50 else string[:50] + "..."
+
+
 if len(sys.argv) == 1:
     print(help_text)
     exit(1)
@@ -42,7 +46,7 @@ if sys.argv[1] == "get":
         zone = sys.argv[3]
         table = [("\033[4mLabel\033[0m", "\033[4mTTL\033[0m", "\033[4mProxied\033[0m", "\033[4mValue\033[0m")]
         for record in _get("zone/" + zone + "/records", None).json()["message"]:
-            table.append((record["label"], record["ttl"], "✓" if record.get("proxied") else "x", record["value"]))
+            table.append((_truncate(record["label"]), record["ttl"], "✓" if record.get("proxied") else "x", _truncate(record["value"])))
         print(SingleTable(table).table)
 
     elif sys.argv[2] == "acl":
