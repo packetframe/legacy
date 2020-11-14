@@ -40,7 +40,7 @@ for zone in db["zones"].find():
         if valid_nameservers(nameservers):
             print("\033[92mOK\033[0m")
         else:
-            print("\033[91m" + ", ".join(nameservers) + "\033[0m")
+            print("\033[91m Incorrect nameservers: " + ", ".join(nameservers) + "\033[0m")
     else:
         print("\033[91m" + str(err) + "\033[0m")
 
