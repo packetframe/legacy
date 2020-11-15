@@ -114,9 +114,9 @@
       when: bind_config.changed
 
     - name: Check if bind_exporter exists
-        stat:
-          path: /usr/bin/bind_exporter
-        register: bind_exporter_stat
+      stat:
+        path: /usr/bin/bind_exporter
+      register: bind_exporter_stat
 
     - name: Get bind_exporter
       unarchive:
