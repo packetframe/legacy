@@ -23,8 +23,6 @@ $TTL	86400
 {{ record["label"] }}    60    IN    AAAA    {{ proxy6 }}
 {%- else %}
 {{ record["label"] }}    {{ record["ttl"] }}    IN    {{ record["type"] }}    {{ record["value"] }}
-{%- endif %}
-{%- endif %}
-{%- endfor %}
-
-
+{% endif %}
+{% endif %}
+{% endfor %}
