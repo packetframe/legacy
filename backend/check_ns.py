@@ -63,13 +63,14 @@ for zone in db["zones"].find():
     if error_message:
         print("\033[91m" + error_message + "\033[0m")
 
-        template = nameserver_issue_template.render(
-            nameservers=configuration["dns"]["nameservers"],
-            domain=zone["zone"],
-            error=error_message
-        )
+        if send_emails:
+            template = nameserver_issue_template.render(
+                nameservers=configuration["dns"]["nameservers"],
+                domain=zone["zone"],
+                error=error_message
+            )
 
-        print("Sending email to", zone["users"])
-        add_queue_message("send_email", args={"recipients": zone["users"], "subject": "[delivr.dev] Attention Needed: nameserver update", "body": template})
+            print("Sending email to", zone["users"])
+            add_queue_message("send_email", args={"recipients": zone["users"], "subject": "[delivr.dev] Attention Needed: nameserver update", "body": template})
 
     time.sleep(0.1)
