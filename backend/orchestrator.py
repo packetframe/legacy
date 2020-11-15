@@ -50,8 +50,13 @@ while True:
 
             zone = db["zones"].find_one({"zone": args["zone"]})
 
+            if args.get("node"):
+                _query = {"name": args["node"]}
+            else:
+                _query = {}
+
             # Loop over the nodes and send the updated zone file to each one, then reload the configuration
-            for node in db["nodes"].find():
+            for node in db["nodes"].find(_query):
                 print("... now updating " + node["name"] + " " + node["management_ip"] + " " + node["location"])
 
                 print("    - sending updated zone file")
@@ -89,8 +94,13 @@ while True:
             with open("/tmp/named.conf.local", "w") as named_file:
                 named_file.write(zones_file)
 
+            if args.get("node"):
+                _query = {"name": args["node"]}
+            else:
+                _query = {}
+
             # Loop over the nodes and send the updated zone file to each one, then reload the configuration
-            for node in db["nodes"].find():
+            for node in db["nodes"].find(_query):
                 print("... now updating " + node["name"] + " " + node["management_ip"] + " " + node["location"])
 
                 print("    - sending updated zone file")
