@@ -57,6 +57,10 @@ with open("templates/welcome.j2", "r") as welcome_template_file:
     # noinspection JinjaAutoinspect
     welcome_template = Template(welcome_template_file.read())
 
+with open("templates/collector_bird.j2", "r") as collector_bird_template_file:
+    # noinspection JinjaAutoinspect
+    collector_bird_template = Template(collector_bird_template_file.read())
+
 
 # Regex Validators
 
@@ -663,6 +667,13 @@ def nodes_add(username, is_admin):
         "location": location,
         "management_ip": management_ip,
     })
+
+    _nodes = {}
+    for node in nodes.find():
+        _nodes[node["name"]] = node["management_ip"]
+
+    with open("bird.conf", "w") as bird_config_file:
+        bird_config_file.write(collector_bird_template.render(nodes=_nodes))
 
     if add_op.acknowledged:
         return jsonify({"success": True, "message": "Added " + name})

@@ -1,0 +1,46 @@
+define ASN = 34553;
+
+log syslog all;
+router id 192.0.2.1;
+protocol device {};
+
+protocol direct {
+  ipv4;
+  ipv6;
+}
+
+protocol kernel {
+  ipv4 {
+    import none;
+    export none;
+  };
+}
+
+protocol kernel {
+  ipv4 {
+    import none;
+    export none;
+  };
+}
+
+template bgp peer4 {
+  local as ASN;
+
+  ipv4 {
+    import all;
+    export none;
+  };
+
+  ipv6 {
+    import all;
+    export none;
+  };
+}
+
+
+// Nodes
+
+{{ for node in nodes }}
+protocol bgp {{ node }} from peer {
+  neighbor {{ nodes[node] }} as ASN;
+}
