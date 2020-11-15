@@ -1,4 +1,4 @@
-define ASN = 34553;
+define ASN = {{ asn }};
 
 log syslog all;
 router id 192.0.2.1;
@@ -17,13 +17,13 @@ protocol kernel {
 }
 
 protocol kernel {
-  ipv4 {
+  ipv6 {
     import none;
     export none;
   };
 }
 
-template bgp peer4 {
+template bgp collector_peer {
   local as ASN;
 
   ipv4 {
@@ -38,10 +38,10 @@ template bgp peer4 {
 }
 
 
-// Nodes
+# Nodes
 
 {% for node in nodes %}
-protocol bgp {{ node }} from peer {
+protocol bgp {{ node.upper() }} from collector_peer {
   neighbor {{ nodes[node] }} as ASN;
 }
 {% endfor %}
