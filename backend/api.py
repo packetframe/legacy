@@ -206,7 +206,7 @@ def auth_signup():
     if user_doc:
         return jsonify({"success": False, "message": "User already exists"})
 
-    add_queue_message("send_email", args={"recipient": username, "subject": "[delivr.dev] Welcome to delivr.dev!", "body": welcome_template.render(email=username)})
+    add_queue_message("send_email", args={"recipients": [username], "subject": "[delivr.dev] Welcome to delivr.dev!", "body": welcome_template.render(email=username)})
 
     users.insert_one({
         "username": username,
@@ -321,7 +321,7 @@ def zones_add(username, is_admin):
         return jsonify({"success": False, "message": "Zone already exists"})
     else:
         mail_template = new_domain_template.render(domain=zone, nameservers=configuration["dns"]["nameservers"])
-        add_queue_message("send_email", args={"recipient": username, "subject": "[delivr.dev] Domain added to delivr.dev", "body": mail_template})
+        add_queue_message("send_email", args={"recipients": [username], "subject": "[delivr.dev] Domain added to delivr.dev", "body": mail_template})
         add_queue_message("refresh_zones", args=None)
         add_queue_message("refresh_single_zone", {"zone": zone})
 
@@ -545,7 +545,7 @@ def records_add(zone, user_doc):
         if proxied:
             is_proxied = True
             new_record["proxied"] = True
-            add_queue_message("send_email", args={"recipient": user_doc["username"], "subject": "[delivr.dev] Proxied record added", "body": proxied_record_template.render(domain=zone)})
+            add_queue_message("send_email", args={"recipients": [user_doc["username"]], "subject": "[delivr.dev] Proxied record added", "body": proxied_record_template.render(domain=zone)})
 
     # BEGIN HACK
 

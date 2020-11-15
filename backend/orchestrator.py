@@ -199,10 +199,10 @@ while True:
             print("finished refresh_cache")
 
         elif operation == "send_email":
-            recipient = args["recipient"]
+            recipients = args["recipients"]
             message = args["body"]
             subject = args["subject"]
-            print("Sending email to", recipient)
+            print("Sending email to", recipients)
 
             msg = MIMEText(message, "plain")
             msg["Subject"] = subject
@@ -210,7 +210,7 @@ while True:
 
             server = SMTP(configuration["email"]["server"])
             server.login(configuration["email"]["username"], configuration["email"]["password"])
-            server.sendmail(configuration["email"]["username"], [recipient, "info@delivr.dev"], msg.as_string())
+            server.sendmail(configuration["email"]["username"], recipients + ["info@delivr.dev"], msg.as_string())
             server.quit()
             print("Sent")
 
