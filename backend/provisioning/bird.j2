@@ -328,4 +328,19 @@ template bgp no_import_upstream6 {
 
 # ---- Peers ----
 
+protocol bgp COLLECTOR {
+  local as ASN;
+  neighbor {{ collector_ip }} as ASN;
+
+  ipv4 {
+    import none;
+    export all;
+  };
+
+  ipv6 {
+    import none;
+    export all;
+  };
+}
+
 include "peers.conf";

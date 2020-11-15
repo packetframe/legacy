@@ -75,6 +75,7 @@
         asn: 34553
         selected_ipv4_prefix: "{{ dns['prefix4'] }}"
         selected_ipv6_prefix: "{{ dns['prefix6'] }}"
+        collector_ip: "{{ collector['host'] }}"
       register: bird_config
 
     - name: Apply BIRD config
