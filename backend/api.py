@@ -189,6 +189,17 @@ def authentication_required(f):
     return decorated_function
 
 
+def _update_collector():
+    _nodes = {}
+    for node in nodes.find():
+        _nodes[node["name"]] = node["management_ip"]
+
+    with open("/tmp/collector_bird.conf", "w") as bird_config_file:
+        bird_config_file.write(collector_bird_template.render(nodes=_nodes, asn=configuration["collector"]["asn"]))
+
+    add_queue_message("update_collector", None)
+
+
 # Routes
 
 @app.route("/auth/signup", methods=["POST"])
@@ -668,14 +679,7 @@ def nodes_add(username, is_admin):
         "management_ip": management_ip,
     })
 
-    _nodes = {}
-    for node in nodes.find():
-        _nodes[node["name"]] = node["management_ip"]
-
-    with open("/tmp/collector_bird.conf", "w") as bird_config_file:
-        bird_config_file.write(collector_bird_template.render(nodes=_nodes, asn=configuration["collector"]["asn"]))
-
-    add_queue_message("update_collector", None)
+    _update_collector()
 
     if add_op.acknowledged:
         return jsonify({"success": True, "message": "Added " + name})
@@ -1058,6 +1062,18 @@ if configuration["development"]:
             return jsonify({"success": False, "message": "Unauthorized"})
 
         add_queue_message("refresh_cache", None)
+        return jsonify({"success": True, "message": "Refreshing cache config"})
+
+
+    @app.route("/debug/update_collector")
+    @authentication_required
+    def update_collector(username, is_admin):
+        # Update the BGP config on the route collector
+
+        if not is_admin:
+            return jsonify({"success": False, "message": "Unauthorized"})
+
+        _update_collector()
         return jsonify({"success": True, "message": "Refreshing cache config"})
 
 if __name__ == "__main__":
