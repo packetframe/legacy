@@ -331,6 +331,7 @@ template bgp no_import_upstream6 {
 protocol bgp COLLECTOR {
   local as ASN;
   neighbor {{ collector_ip }} as ASN;
+  rr client;
 
   ipv4 {
     import none;
