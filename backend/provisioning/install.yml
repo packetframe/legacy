@@ -175,8 +175,13 @@
           ff02::2 ip6-allrouters
         dest: /etc/hosts
 
+    - name: Check hostname
+      shell: hostname
+      register: node_hostname
+
     - name: Set persistent hostname
       shell: hostnamectl set-hostname "{{ inventory_hostname }}"
+      when: node_hostname.stdout != "{{ inventory_hostname }}"
 
     - name: Create Caddy directory
       file:
