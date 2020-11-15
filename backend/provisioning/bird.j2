@@ -22,7 +22,7 @@ timeformat log iso long;
 timeformat protocol iso long;
 timeformat route iso long;
 
-log "/etc/bird/log.txt" all;
+log syslog all;
 
 router id {{ ansible_host }};
 

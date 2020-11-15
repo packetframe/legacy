@@ -32,14 +32,6 @@
         name: bird2
         default_release: sid
 
-    - name: Create BIRD2 log file
-      copy:
-        content: ""
-        dest: /etc/bird/log.txt
-        force: no
-        owner: bird
-        group: bird
-
     - name: Check if GoRTR is installed
       command: dpkg-query -W gortr
       register: gortr_installed
