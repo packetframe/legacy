@@ -91,13 +91,31 @@
         bind_addresses6: "{{ dns['bind_addresses6']}}"
       register: bind_config
 
+    - name: Remove default zones
+      file:
+        path: /etc/bind/named.conf.default-zones
+        state: absent
+
     - name: Copy named.conf
       copy:
         content: |
           include "/etc/bind/named.conf.options";
           include "/etc/bind/named.conf.local";
-          include "/etc/bind/named.conf.default-zones";
         dest: /etc/bind/named.conf
+
+    - name: Create zone cleanup script
+      copy:
+        content: |
+          #!/bin/bash
+
+          for zone in $(ls /etc/bind/db.*); do
+          	if ! [[ -n $(grep \"$zone\" /etc/bind/named.conf.local) ]]; then
+          		echo "$zone"
+          		rm "$zone"
+          	fi
+          done
+        dest: /root/cleanup-zones.sh
+        mode: +x
 
     - name: Reload BIND config
       shell: rndc reload
