@@ -113,14 +113,21 @@
       shell: rndc reload
       when: bind_config.changed
 
+    - name: Check if bind_exporter exists
+        stat:
+          path: /usr/bin/bind_exporter
+        register: bind_exporter_stat
+
     - name: Get bind_exporter
       unarchive:
         src: https://github.com/prometheus-community/bind_exporter/releases/download/v0.3.0/bind_exporter-0.3.0.linux-amd64.tar.gz
         dest: /tmp/
         remote_src: yes
+      when: bind_exporter_stat.stat.exists == False
 
     - name: Move bind_exporter to path
       command: mv /tmp/bind_exporter-0.3.0.linux-amd64/bind_exporter /usr/bin/
+      when: bind_exporter_stat.stat.exists == False
 
     - name: Create bind_exporter service
       copy:
@@ -139,6 +146,7 @@
           WantedBy=multi-user.target
         dest: /etc/systemd/system/bind-exporter.service
       register: bind_exporter
+      when: bind_exporter_stat.stat.exists == False
 
     - name: Enable and start bind_exporter
       systemd:
