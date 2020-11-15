@@ -40,7 +40,8 @@ template bgp peer4 {
 
 // Nodes
 
-{{ for node in nodes }}
+{% for node in nodes %}
 protocol bgp {{ node }} from peer {
   neighbor {{ nodes[node] }} as ASN;
 }
+{% endfor %}

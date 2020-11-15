@@ -672,8 +672,10 @@ def nodes_add(username, is_admin):
     for node in nodes.find():
         _nodes[node["name"]] = node["management_ip"]
 
-    with open("bird.conf", "w") as bird_config_file:
-        bird_config_file.write(collector_bird_template.render(nodes=_nodes))
+    with open("/tmp/collector_bird.conf", "w") as bird_config_file:
+        bird_config_file.write(collector_bird_template.render(nodes=_nodes, asn=configuration["collector"]["asn"]))
+
+    add_queue_message("update_collector", None)
 
     if add_op.acknowledged:
         return jsonify({"success": True, "message": "Added " + name})

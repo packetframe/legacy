@@ -214,6 +214,19 @@ while True:
             server.quit()
             print("Sent")
 
+        elif operation == "update_collector":
+            try:
+                ssh.connect(configuration["collector"]["host"], username="root", port=34553, key_filename=configuration["ssh-key"])
+            except (TimeoutError, NoValidConnectionsError):
+                error = "- Collector timed out."
+                print(error)
+            else:
+                with SCPClient(ssh.get_transport()) as scp:
+                    scp.put("/tmp/collector_bird.conf", "/etc/bird/bird.conf")
+
+                run_ssh_command("birdc conf")
+                ssh.close()
+
         else:
             print("ERROR: This task isn't recognized")
 

@@ -53,3 +53,7 @@ proxy:
     - 192.0.2.5
 
 monitoring_host: user@monitoring.example.com
+
+collector:
+  host: 192.0.2.100
+  asn: 65530
