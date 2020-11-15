@@ -1,0 +1,23 @@
+- name: Status
+  hosts: nodes
+  tasks:
+    - name: Check service status
+      command: systemctl status "{{ item }}"
+      with_items:
+        - bind9
+        - caddy
+        - bird
+      register: result
+      ignore_errors: yes
+
+#    - name: Check HTTP query
+#      uri:
+#        url: https://local.delivr.dev/
+#        return_content: yes
+#      register: this
+#      failed_when: this.x_pop_tag != inventory_hostname
+
+    - name: Check DNS query
+      shell: dig +short TXT id.server chaos @ns1.delivr.dev | tr -d '"'
+      register: this
+      failed_when: this.stdout != inventory_hostname
