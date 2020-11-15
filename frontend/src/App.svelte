@@ -190,6 +190,17 @@
             });
     }
 
+    function updateCollector() {
+        fetch("https://dash.delivr.dev/api/debug/update_collector", {
+            method: "GET",
+            credentials: "include"
+        })
+            .then(response => response.json())
+            .then(data => {
+                addSnackbar("update_collector", data["message"], data["success"] ? "green" : "red")
+            });
+    }
+
     let isEnabled = false;
 </script>
 
@@ -267,6 +278,7 @@
                     <Button padded onclick={() => addNode()}>Add Node</Button>
                     <Button padded onclick={() => {showUserTable = !showUserTable}}>Toggle user table</Button>
                     <Button padded onclick={() => showSystemStats()}>System Stats</Button>
+                    <Button padded onclick={() => updateCollector()}>Update Collector</Button>
                 </ButtonBar>
             {/if}
 
