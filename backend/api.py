@@ -307,21 +307,11 @@ def zones_add(username, is_admin):
         return jsonify({"success": False, "message": str(e)})
 
     if not valid_zone(zone):
-        if "/" in zone:
-            try:
-                address = ipaddress.ip_network(zone)
-                if type(address) == ipaddress.IPv4Network and not (address.prefixlen == 24 or address.prefixlen == 16 or address.prefixlen == 8):
-                    return jsonify({"success": False, "message": "IPv4 prefix length must be on an octet boundary"})
-                elif type(address) == ipaddress.IPv6Network and not (address.prefixlen == 48):  # TODO: What other lengths is allowed here?
-                    return jsonify({"success": False, "message": "IPv6 prefix length must be on an octet boundary"})
-            except (ipaddress.AddressValueError, ValueError):
-                return jsonify({"success": False, "message": "Invalid CIDR notation"})
+        return jsonify({"success": False, "message": "Invalid zone"})
 
-            zone = address.network_address.reverse_pointer.lstrip("0.")
-            zone_type = "reverse"
-        else:
-            return jsonify({"success": False, "message": "Invalid zone"})
-    else:  # If valid forward zone
+    if "arpa" in zone:
+        zone_type = "reverse"
+    else:
         zone_type = "forward"
 
     try:
