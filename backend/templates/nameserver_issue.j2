@@ -1,0 +1,12 @@
+Hello!
+
+{{ domain }} has been configured on the delivr.dev CDN platform but it's nameservers haven't been properly configured on your end. We're seeing the following error:
+
+{{ error }}
+
+Make sure to update your nameservers to the following:
+{% for nameserver in nameservers -%}
+{{ nameserver }}
+{% endfor %}
+Cheers,
+delivr.dev
