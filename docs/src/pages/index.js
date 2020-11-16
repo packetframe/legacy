@@ -50,6 +50,12 @@ function Home() {
         "width": "17vw",
     }
 
+    const textGradient = {
+        "background": "linear-gradient(90deg, rgba(99,8,111,1) 0%, rgba(222,22,230,1) 76%, rgba(255,164,252,1) 100%)",
+        "-webkit-background-clip": "text",
+        "-webkit-text-fill-color": "transparent"
+    }
+
     return (
         <Layout
             title={`${siteConfig.title}`}
@@ -59,14 +65,14 @@ function Home() {
                 <div style={containerStyle}>
                     <div style={{"padding-bottom": "25px"}}>
                         <div className="container" style={{"text-align": "center"}}>
-                            <h1 className="hero__title">{siteConfig.title}</h1>
+                            <h1 className="hero__title"><span style={textGradient}>{siteConfig.title}</span></h1>
                             <p className="hero__subtitle">Welcome to delivr.dev, the Open Source CDN for technology enthusiasts.<br/>The platform is currently in private beta, contact <span style={{"unicode-bidi": "bidi-override", direction: "rtl"}}>ved.rviled@ofni</span> for more information!</p>
                             <a className="button button--outline button--secondary button--lg" href="https://dash.delivr.dev/">Get Started</a>
                         </div>
                     </div>
 
                     <div>
-                        <img src="https://dash.delivr.dev/favicon-noborder.png" alt="delivr.dev" style={{"width": "350px"}}/>
+                        <img src="https://dash.delivr.dev/favicon-noborder.png" alt="delivr.dev" style={{"width": "300px"}}/>
                     </div>
                 </div>
             </header>
