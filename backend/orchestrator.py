@@ -50,10 +50,13 @@ while True:
 
             zone = db["zones"].find_one({"zone": args["zone"]})
 
-            if args["node"] == "all":
+            if not args.get("node"):
                 _query = {}
             else:
-                _query = {"name": args["node"]}
+                if args["node"] == "all":
+                    _query = {}
+                else:
+                    _query = {"name": args["node"]}
 
             # Loop over the nodes and send the updated zone file to each one, then reload the configuration
             for node in db["nodes"].find(_query):
@@ -94,10 +97,13 @@ while True:
             with open("/tmp/named.conf.local", "w") as named_file:
                 named_file.write(zones_file)
 
-            if args["node"] == "all":
+            if not args.get("node"):
                 _query = {}
             else:
-                _query = {"name": args["node"]}
+                if args["node"] == "all":
+                    _query = {}
+                else:
+                    _query = {"name": args["node"]}
 
             # Loop over the nodes and send the updated zone file to each one, then reload the configuration
             for node in db["nodes"].find(_query):
