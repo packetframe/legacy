@@ -42,7 +42,7 @@ Authenticated routes require the `X-API-Key` request header to be set to your AP
 | ---------------------------------- | ------- | ------------------------------------ |
 | /debug/refresh_zones | GET   | Refresh all zone registry file |
 | /debug/refresh_single_zone/[ZONE] | GET   | Refresh [ZONE]'s zone file |
-| /debug/refresh_all_zones | GET   | Refresh all zone files |
+| /debug/refresh_all_zones/[NODE] | GET   | Refresh all zone files and registry for [NODE] ("all" for all nodes) |
 | /debug/clear_queue | GET   | Clear opqueue |
 | /debug/queue_status | GET   | Get number of running and ready tasks |
 | /debug/refresh_cache | GET   | Refresh cache's varnish and caddy configs |

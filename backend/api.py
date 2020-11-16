@@ -998,19 +998,22 @@ if configuration["development"]:
         return jsonify({"success": True, "message": "Refreshing single zone"})
 
 
-    @app.route("/debug/refresh_all_zones")
+    @app.route("/debug/refresh_all_zones/<node>")
     @authentication_required
-    def refresh_all_zones(username, is_admin):
+    def refresh_all_zones(username, is_admin, node):
         # Refresh all db.<zone> files and the named.conf.local file
 
         if not is_admin:
             return jsonify({"success": False, "message": "Unauthorized"})
 
+        if not node:
+            return jsonify({"success": False, "message": "Required URI path attribute node is empty"})
+
         for zone in zones.find():
-            add_queue_message("refresh_single_zone", {"zone": zone["zone"]})
+            add_queue_message("refresh_single_zone", {"zone": zone["zone"], "node": node})
 
         add_queue_message("refresh_zones", args=None)
-        return jsonify({"success": True, "message": "Refreshing all zones"})
+        return jsonify({"success": True, "message": "Refreshing all zones", "node": node})
 
 
     @app.route("/debug/clear_queue")

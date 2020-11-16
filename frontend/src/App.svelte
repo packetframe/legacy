@@ -83,7 +83,7 @@
     }
 
     function refreshAllZones() {
-        fetch("https://dash.delivr.dev/api/debug/refresh_all_zones", {
+        fetch("https://dash.delivr.dev/api/debug/refresh_all_zones/" + prompt("Which node do you want to refresh? (all for all nodes)"), {
             method: "GET",
             credentials: "include"
         })
