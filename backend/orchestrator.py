@@ -50,7 +50,7 @@ while True:
 
             zone = db["zones"].find_one({"zone": args["zone"]})
 
-            if not args.get("node"):
+            if not args or not args.get("node"):
                 _query = {}
             else:
                 if args["node"] == "all":
@@ -97,7 +97,7 @@ while True:
             with open("/tmp/named.conf.local", "w") as named_file:
                 named_file.write(zones_file)
 
-            if not args.get("node"):
+            if not args or not args.get("node"):
                 _query = {}
             else:
                 if args["node"] == "all":

@@ -1012,7 +1012,7 @@ if configuration["development"]:
         for zone in zones.find():
             add_queue_message("refresh_single_zone", {"zone": zone["zone"], "node": node})
 
-        add_queue_message("refresh_zones", args=None)
+        add_queue_message("refresh_zones", args={"node": node})
         return jsonify({"success": True, "message": "Refreshing all zones", "node": node})
 
 
