@@ -194,6 +194,9 @@ def _update_collector():
     for node in nodes.find():
         _nodes[node["name"]] = node["management_ip"]
 
+    for node in cache_nodes.find():
+        _nodes["CACHE_" + node["name"]] = node["management_ip"]
+
     with open("/tmp/collector_bird.conf", "w") as bird_config_file:
         bird_config_file.write(collector_bird_template.render(nodes=_nodes, asn=configuration["collector"]["asn"]))
 
