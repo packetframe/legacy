@@ -1,5 +1,6 @@
 vcl 4.0;
 
+/*
 {% for acl in acls -%}
 acl {{ acl }} {
 {%- for address in acls[acl] %}
@@ -8,6 +9,7 @@ acl {{ acl }} {
 }
 
 {% endfor %}
+*/
 
 {% for backend in backends -%}
 backend {{ backend }} {
@@ -22,12 +24,14 @@ sub vcl_recv {
         set req.http.host = "{{ domain }}";
         set req.backend_hint = {{ domains[domain] }};
 
+        /*
         if (req.method == "PURGE") {
             if (!client.ip ~ {{ normalize(domain) }}) {
                 return(synth(405,"Not allowed."));
             }
             return (purge);
         }
+        */
     }
     {% endfor %}
 }
