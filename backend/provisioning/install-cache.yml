@@ -76,14 +76,21 @@
         state: restarted
       when: varnish_config.changed
 
+    - name: Check if varnish_exporter exists
+      stat:
+        path: /usr/bin/varnish_exporter
+      register: varnish_exporter_stat
+
     - name: Get varnish_exporter
       unarchive:
         src: https://github.com/jonnenauha/prometheus_varnish_exporter/releases/download/1.5.2/prometheus_varnish_exporter-1.5.2.linux-amd64.tar.gz
         dest: /tmp/
         remote_src: yes
+      when: varnish_exporter_stat.stat.exists == False
 
     - name: Move bind_exporter to path
       command: mv /tmp/prometheus_varnish_exporter-1.5.2.linux-amd64/prometheus_varnish_exporter /usr/bin/varnish_exporter
+      when: varnish_exporter_stat.stat.exists == False
 
     - name: Create varnish_exporter service
       copy:
@@ -101,11 +108,11 @@
           [Install]
           WantedBy=multi-user.target
         dest: /etc/systemd/system/varnish-exporter.service
-      register: varnish_exporter
+      when: varnish_exporter_stat.stat.exists == False
 
     - name: Enable and start varnish_exporter
       systemd:
         name: varnish-exporter
         enabled: yes
         state: restarted
-      when: varnish_exporter.changed
+      when: varnish_exporter_stat.stat.exists == False
