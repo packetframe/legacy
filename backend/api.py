@@ -220,6 +220,9 @@ def auth_signup():
     if len(password) > 200:
         return jsonify({"success": False, "message": "Password must not be longer than 200 characters"})
 
+    if len(password) < 16:
+        return jsonify({"success": False, "message": "Password must be longer than 16 characters"})
+
     user_doc = users.find_one({"username": username})
     if user_doc:
         return jsonify({"success": False, "message": "User already exists"})
@@ -244,9 +247,6 @@ def auth_login():
         username, password = get_args("username", "password")
     except ValueError as e:
         return jsonify({"success": False, "message": str(e)})
-
-    if len(password) < 16:
-        return jsonify({"success": False, "message": "Password must be longer than 16 characters"})
 
     user_doc = users.find_one({"username": username})
     if not user_doc:
