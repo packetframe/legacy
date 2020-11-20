@@ -1,0 +1,14 @@
+#!/bin/bash
+ip link del local
+ip link add local type dummy
+{% for addr in dns["bind_addresses4"] %}
+ip addr add {{ addr }}/24 dev local
+{% endfor %}
+{% for addr in dns["bind_addresses6"] %}
+ip addr add {{ addr }}/48 dev local
+{% endfor %}
+{% if http %}
+ip addr add proxy["prefix4"] dev local
+ip addr add proxy["prefix6"] dev local
+{% endif %}
+ip link set dev local up

@@ -3,9 +3,256 @@
   tasks:
     - name: Include vars
       include_vars: /home/nate/delivr/config.yml
-  roles:
-    - packages
-    - varnish
-    - bind
-    - bird
-    - network
+
+    # Packages
+
+    - name: Add debian sid repo
+      apt_repository:
+        repo: "{{ item }}"
+        state: present
+      with_items:
+        - deb http://deb.debian.org/debian/ sid main
+        - deb [trusted=yes] https://apt.fury.io/caddy/ /
+
+    - name: Set default release
+      copy:
+        content: APT::Default-Release "stable";
+        dest: /etc/apt/apt.conf.d/default-release
+
+    - name: Install rsync, bind9, dnsutils, caddy, ufw
+      apt:
+        update_cache: yes
+        pkg:
+          - rsync
+          - bind9
+          - curl
+          - dnsutils
+          - caddy
+
+    - name: Install BIRD2 from sid
+      apt:
+        name: bird2
+        default_release: sid
+
+    - name: Check if GoRTR is installed
+      command: dpkg-query -W gortr
+      register: gortr_installed
+      failed_when: gortr_installed.rc > 1
+      changed_when: gortr_installed.rc == 1
+
+    - name: Get GoRTR package
+      get_url:
+        url: https://github.com/cloudflare/gortr/releases/download/v0.14.6/gortr_0.14.6_amd64.deb
+        dest: /root/gortr.deb
+      when: gortr_installed.rc == 1
+
+    - name: Install GoRTR
+      apt:
+        deb: /root/gortr.deb
+      when: gortr_installed.rc == 1
+
+    - name: Start GoRTR
+      systemd:
+        name: gortr
+        state: started
+        enabled: yes
+
+    - name: Reload RPKI protocol
+      shell: birdc reload rpki1
+      when: gortr_installed.rc == 1
+
+    # Network
+
+    - name: Create network config
+      copy:
+        content: |
+          #!/bin/bash
+          ip link del local
+          ip link add local type dummy
+
+        dest: /root/network.sh
+        mode: +x
+      register: network_config
+
+    - name: Apply network config
+      shell: bash /root/network.sh
+      when: network_config.changed
+
+    - name: Set hosts file
+      copy:
+        content: |
+          127.0.0.1	localhost
+          ::1     localhost ip6-localhost ip6-loopback
+          ff02::1 ip6-allnodes
+          ff02::2 ip6-allrouters
+        dest: /etc/hosts
+
+    - name: Check hostname
+      shell: hostname
+      register: node_hostname
+      changed_when: False
+
+    - name: Set persistent hostname
+      shell: hostnamectl set-hostname "{{ inventory_hostname }}"
+      when: node_hostname.stdout != inventory_hostname
+
+    # Varnish (cache nodes)
+
+    - name: Install varnish on HTTP nodes
+      apt:
+        pkg: varnish
+      when: "http"
+
+    - name: Copy varnish service
+      template:
+        src: varnish.service.j2
+        dest: /lib/systemd/system/varnish.service
+      register: varnish_config
+      when: "http"
+
+    - name: Restart varnishd
+      systemd:
+        daemon_reload: yes
+        name: varnish
+        state: restarted
+      when: varnish_config.changed and http
+
+    - name: Check if varnish_exporter exists
+      stat:
+        path: /usr/bin/varnish_exporter
+      register: varnish_exporter_stat
+      when: "http"
+
+    - name: Get varnish_exporter
+      unarchive:
+        src: https://github.com/jonnenauha/prometheus_varnish_exporter/releases/download/1.5.2/prometheus_varnish_exporter-1.5.2.linux-amd64.tar.gz
+        dest: /tmp/
+        remote_src: yes
+      when: (varnish_exporter_stat.stat.exists == False) and http
+
+    - name: Move bind_exporter to path
+      command: mv /tmp/prometheus_varnish_exporter-1.5.2.linux-amd64/prometheus_varnish_exporter /usr/bin/varnish_exporter
+      when: (varnish_exporter_stat.stat.exists == False) and http
+
+    - name: Create varnish_exporter service
+      copy:
+        content: |
+          [Unit]
+          Description=Varnish Exporter
+          After=network.target
+
+          [Service]
+          User=root
+          Group=root
+          Type=simple
+          ExecStart=/usr/bin/varnish_exporter -web.listen-address="{{ ansible_host }}:9131"
+
+          [Install]
+          WantedBy=multi-user.target
+        dest: /etc/systemd/system/varnish-exporter.service
+      when: varnish_exporter_stat.stat.exists == False and http
+
+    - name: Enable and start varnish_exporter
+      systemd:
+        name: varnish-exporter
+        enabled: yes
+        state: restarted
+      when: (varnish_exporter_stat.stat.exists == False) and http
+
+    # BIND
+
+    - name: Create unique BIND config
+      template:
+        src: named.conf.options.j2
+        dest: /etc/bind/named.conf.options
+      register: bind_config
+
+    - name: Remove default zones
+      file:
+        path: /etc/bind/named.conf.default-zones
+        state: absent
+
+    - name: Copy named.conf
+      copy:
+        content: |
+          include "/etc/bind/named.conf.options";
+          include "/etc/bind/named.conf.local";
+        dest: /etc/bind/named.conf
+
+    - name: Create zone cleanup script
+      copy:
+        content: |
+          #!/bin/bash
+          for zone in $(ls /etc/bind/db.*); do
+          	if ! [[ -n $(grep \"$zone\" /etc/bind/named.conf.local) ]]; then
+          		echo "$zone"
+          		rm "$zone"
+          	fi
+          done
+        dest: /root/cleanup-zones.sh
+        mode: +x
+
+    - name: Reload BIND config
+      shell: rndc reload
+      when: bind_config.changed
+
+    # BIND Exporter
+
+    - name: Check if bind_exporter exists
+      stat:
+        path: /usr/bin/bind_exporter
+      register: bind_exporter_stat
+
+    - name: Get bind_exporter
+      unarchive:
+        src: https://github.com/prometheus-community/bind_exporter/releases/download/v0.3.0/bind_exporter-0.3.0.linux-amd64.tar.gz
+        dest: /tmp/
+        remote_src: yes
+      when: bind_exporter_stat.stat.exists == False
+
+    - name: Move bind_exporter to path
+      command: mv /tmp/bind_exporter-0.3.0.linux-amd64/bind_exporter /usr/bin/
+      when: bind_exporter_stat.stat.exists == False
+
+    - name: Create bind_exporter service
+      copy:
+        content: |
+          [Unit]
+          Description=BIND Exporter
+          After=network.target
+
+          [Service]
+          User=root
+          Group=root
+          Type=simple
+          ExecStart=/usr/bin/bind_exporter -web.listen-address="{{ ansible_host }}:9119"
+
+          [Install]
+          WantedBy=multi-user.target
+        dest: /etc/systemd/system/bind-exporter.service
+      register: bind_exporter
+      when: bind_exporter_stat.stat.exists == False
+
+    - name: Enable and start bind_exporter
+      systemd:
+        name: bind-exporter
+        enabled: yes
+        state: restarted
+      when: bind_exporter.changed
+
+    # BIRD
+
+    - name: Copy BIRD2 config
+      template:
+        src: bird.j2
+        dest: /etc/bird/bird.conf
+      vars:
+        asn: 34553
+        selected_ipv4_prefix: "{{ dns['prefix4'] }}"
+        selected_ipv6_prefix: "{{ dns['prefix6'] }}"
+        collector_ip: "{{ collector['host'] }}"
+      register: bird_config
+
+    - name: Apply BIRD config
+      shell: birdc config
+      when: bird_config.changed
