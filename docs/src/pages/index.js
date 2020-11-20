@@ -25,12 +25,12 @@ function Home() {
         "align-items": "center",
         "margin-top": "50px",
         "box-sizing": "unset",
-        "flex-wrap": "wrap",
+        "flex-wrap": "wrap-reverse",
     }
 
     const featureBlock = {
         "display": "flex",
-        "justify-content": "space-between",
+        "justify-content": "center",
         "align-items": "center",
         "margin-top": "85px",
         "flex-wrap": "wrap",
@@ -39,14 +39,27 @@ function Home() {
         "margin-right": "auto"
     }
 
+    const featureBlockReverse = {
+        "display": "flex",
+        "justify-content": "center",
+        "align-items": "center",
+        "margin-top": "85px",
+        "flex-wrap": "wrap-reverse",
+        "width": "clamp(0px, 950px, 95%)",
+        "margin-left": "auto",
+        "margin-right": "auto"
+    }
+
     const featureCaption = {
         "width": "clamp(0px, 500px, 95%)",
         "font-size": "larger",
-        "margin-left": "2px"
+        "margin-left": "30px",
+        "margin-right": "30px"
     }
 
     const featureImage = {
         "width": "min(50%, 350px)",
+        "margin": "5px"
     }
 
     const textGradient = {
@@ -67,18 +80,14 @@ function Home() {
             description="The open source CDN for technology enthusiasts.">
             <div style={wrapper}>
                 <header>
-                    <br/>
                     <div style={containerStyle}>
-                        <div style={{"padding-bottom": "25px"}}>
+                        <div style={{"width": "clamp(0px, 950px, 95%)"}}>
                             <div className="container" style={{"text-align": "center"}}>
+                                <img style={{"width": "10rem", "display": "inline-block"}} src="https://dash.delivr.dev/favicon-noborder.png" alt="delivr.dev"/>
                                 <h1 className="hero__title"><span style={textGradient}>{siteConfig.title}</span></h1>
-                                <p className="hero__subtitle">Welcome to delivr.dev, the Open Source CDN for technology enthusiasts.<br/>The platform is currently in private beta, contact <span style={{"unicode-bidi": "bidi-override", direction: "rtl"}}>ved.rviled@ofni</span> for more information!</p>
+                                <p className="hero__subtitle">Welcome to delivr.dev, the Open Source CDN for technology enthusiasts. The platform is currently in private beta, contact <span style={{"unicode-bidi": "bidi-override", direction: "rtl"}}>ved.rviled@ofni</span> for more information!</p>
                                 <a className="button button--outline button--secondary button--lg" href="https://dash.delivr.dev/">Get Started</a>
                             </div>
-                        </div>
-
-                        <div>
-                            <img src="https://dash.delivr.dev/favicon-noborder.png" alt="delivr.dev" style={{"width": "300px"}}/>
                         </div>
                     </div>
                 </header>
@@ -91,7 +100,7 @@ function Home() {
                     </div>
                 </div>
 
-                <div style={featureBlock}>
+                <div style={featureBlockReverse}>
                     <div style={featureCaption}>
                         <h1>Globally Distributed</h1>
                         <p>There are currently {nodes} PoPs across {locations} cities and with a presence in all 6 consumer-inhabited continents. (If you know of a datacenter in Antarctica, let me know!)</p>
