@@ -1,10 +1,11 @@
 - name: Install
   hosts: nodes
+  tasks:
+    - name: Include vars
+      include_vars: /home/nate/delivr/config.yml
   roles:
-    - include_vars: /home/nate/delivr/config.yml
     - packages
     - varnish
     - bind
     - bird
     - network
-    - caddy
