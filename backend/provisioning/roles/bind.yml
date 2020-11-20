@@ -1,0 +1,81 @@
+- name: Create unique BIND config
+  template:
+    src: named.conf.options.j2
+    dest: /etc/bind/named.conf.options
+  vars:
+    bind_addresses4: "{{ dns['bind_addresses4']}}"
+    bind_addresses6: "{{ dns['bind_addresses6']}}"
+  register: bind_config
+
+- name: Remove default zones
+  file:
+    path: /etc/bind/named.conf.default-zones
+    state: absent
+
+- name: Copy named.conf
+  copy:
+    content: |
+      include "/etc/bind/named.conf.options";
+      include "/etc/bind/named.conf.local";
+    dest: /etc/bind/named.conf
+
+- name: Create zone cleanup script
+  copy:
+    content: |
+      #!/bin/bash
+      for zone in $(ls /etc/bind/db.*); do
+      	if ! [[ -n $(grep \"$zone\" /etc/bind/named.conf.local) ]]; then
+      		echo "$zone"
+      		rm "$zone"
+      	fi
+      done
+    dest: /root/cleanup-zones.sh
+    mode: +x
+
+- name: Reload BIND config
+  shell: rndc reload
+  when: bind_config.changed
+
+# BIND Exporter
+
+- name: Check if bind_exporter exists
+  stat:
+    path: /usr/bin/bind_exporter
+  register: bind_exporter_stat
+
+- name: Get bind_exporter
+  unarchive:
+    src: https://github.com/prometheus-community/bind_exporter/releases/download/v0.3.0/bind_exporter-0.3.0.linux-amd64.tar.gz
+    dest: /tmp/
+    remote_src: yes
+  when: bind_exporter_stat.stat.exists == False
+
+- name: Move bind_exporter to path
+  command: mv /tmp/bind_exporter-0.3.0.linux-amd64/bind_exporter /usr/bin/
+  when: bind_exporter_stat.stat.exists == False
+
+- name: Create bind_exporter service
+  copy:
+    content: |
+      [Unit]
+      Description=BIND Exporter
+      After=network.target
+
+      [Service]
+      User=root
+      Group=root
+      Type=simple
+      ExecStart=/usr/bin/bind_exporter -web.listen-address="{{ ansible_host }}:9119"
+
+      [Install]
+      WantedBy=multi-user.target
+    dest: /etc/systemd/system/bind-exporter.service
+  register: bind_exporter
+  when: bind_exporter_stat.stat.exists == False
+
+- name: Enable and start bind_exporter
+  systemd:
+    name: bind-exporter
+    enabled: yes
+    state: restarted
+  when: bind_exporter.changed

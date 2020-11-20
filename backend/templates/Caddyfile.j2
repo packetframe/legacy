@@ -3,14 +3,28 @@
     admin {{ host }}:2019
 }
 
-(respond_metadata) {
+(primary_site) {
     header PoP {{ hostname }}
+    header / -Server
 }
 
+https://local.delivr.dev {
+    import primary_site
+
+    tls /etc/caddy/local.delivr.dev-chain.pem /etc/caddy/local.delivr.dev-key.pem
+
+    respond / `{
+        "pop": "{{ inventory_hostname }}",
+        "http": "{{ http }}"
+    }`
+}
+
+{% if http %}
 {% for domain in domains %}
 https://{{ domain }} {
-    import respond_metadata
+    import primary_site
     tls /etc/caddy/{{ domain }}-chain.pem /etc/caddy/{{ domain }}-key.pem
     reverse_proxy http://localhost:8000
 }
 {% endfor %}
+{% endif %}

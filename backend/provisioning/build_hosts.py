@@ -15,14 +15,6 @@ _config = {
             "ansible_port": 34553,
             "ansible_ssh_private_key_file": config["ssh-key"]
         }
-    },
-    "cache": {
-        "hosts": {},
-        "vars": {
-            "ansible_user": "root",
-            "ansible_port": 34553,
-            "ansible_ssh_private_key_file": config["ssh-key"]
-        }
     }
 }
 
@@ -48,7 +40,8 @@ scrape_configs:
 
 for node in db_client["cdn"]["nodes"].find():
     _config["nodes"]["hosts"][node["name"]] = {
-        "ansible_host": node["management_ip"]
+        "ansible_host": node["management_ip"],
+        "http": node["http"]
     }
 
     prometheus_config += """
@@ -64,11 +57,7 @@ prometheus_config += """
   - job_name: cache_nodes_caddy
     static_configs:"""
 
-for node in db_client["cdn"]["cache_nodes"].find():
-    _config["cache"]["hosts"]["cache-" + node["name"]] = {
-        "ansible_host": node["management_ip"]
-    }
-
+for node in db_client["cdn"]["nodes"].find({"http": True}):
     prometheus_config += """
       - targets: ['""" + node["management_ip"] + """:2019']
         labels:
@@ -81,7 +70,7 @@ prometheus_config += """
   - job_name: cache_nodes_varnish
     static_configs:"""
 
-for node in db_client["cdn"]["cache_nodes"].find():
+for node in db_client["cdn"]["nodes"].find({"http": True}):
     prometheus_config += """
       - targets: ['""" + node["management_ip"] + """:9131']
         labels:

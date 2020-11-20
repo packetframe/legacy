@@ -1,0 +1,59 @@
+- name: Add debian sid repo
+  apt_repository:
+    repo: "{{ item }}"
+    state: present
+  with_items:
+    - deb http://deb.debian.org/debian/ sid main
+    - deb [trusted=yes] https://apt.fury.io/caddy/ /
+
+- name: Set default release
+  copy:
+    content: APT::Default-Release "stable";
+    dest: /etc/apt/apt.conf.d/default-release
+
+- name: Install rsync, bind9, dnsutils, caddy, ufw
+  apt:
+    update_cache: yes
+    pkg:
+      - rsync
+      - bind9
+      - curl
+      - dnsutils
+      - caddy
+
+- name: Install varnish on cache nodes
+  apt:
+    pkg: varnish
+  when: "http"
+
+- name: Install BIRD2 from sid
+  apt:
+    name: bird2
+    default_release: sid
+
+- name: Check if GoRTR is installed
+  command: dpkg-query -W gortr
+  register: gortr_installed
+  failed_when: gortr_installed.rc > 1
+  changed_when: gortr_installed.rc == 1
+
+- name: Get GoRTR package
+  get_url:
+    url: https://github.com/cloudflare/gortr/releases/download/v0.14.6/gortr_0.14.6_amd64.deb
+    dest: /root/gortr.deb
+  when: gortr_installed.rc == 1
+
+- name: Install GoRTR
+  apt:
+    deb: /root/gortr.deb
+  when: gortr_installed.rc == 1
+
+- name: Start GoRTR
+  systemd:
+    name: gortr
+    state: started
+    enabled: yes
+
+- name: Reload RPKI protocol
+  shell: birdc reload rpki1
+  when: gortr_installed.rc == 1
