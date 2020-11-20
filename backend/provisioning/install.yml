@@ -97,14 +97,14 @@
     - name: Install varnish on HTTP nodes
       apt:
         pkg: varnish
-      when: "http"
+      when: http
 
     - name: Copy varnish service
       template:
         src: varnish.service.j2
         dest: /lib/systemd/system/varnish.service
       register: varnish_config
-      when: "http"
+      when: http
 
     - name: Restart varnishd
       systemd:
@@ -117,18 +117,18 @@
       stat:
         path: /usr/bin/varnish_exporter
       register: varnish_exporter_stat
-      when: "http"
+      when: http
 
     - name: Get varnish_exporter
       unarchive:
         src: https://github.com/jonnenauha/prometheus_varnish_exporter/releases/download/1.5.2/prometheus_varnish_exporter-1.5.2.linux-amd64.tar.gz
         dest: /tmp/
         remote_src: yes
-      when: (varnish_exporter_stat.stat.exists == False) and http
+      when: http and not varnish_exporter_stat.stat.exists
 
     - name: Move bind_exporter to path
       command: mv /tmp/prometheus_varnish_exporter-1.5.2.linux-amd64/prometheus_varnish_exporter /usr/bin/varnish_exporter
-      when: (varnish_exporter_stat.stat.exists == False) and http
+      when: http and not varnish_exporter_stat.stat.exists
 
     - name: Create varnish_exporter service
       copy:
@@ -146,14 +146,14 @@
           [Install]
           WantedBy=multi-user.target
         dest: /etc/systemd/system/varnish-exporter.service
-      when: varnish_exporter_stat.stat.exists == False and http
+      when: htp and not varnish_exporter_stat.stat.exists
 
     - name: Enable and start varnish_exporter
       systemd:
         name: varnish-exporter
         enabled: yes
         state: restarted
-      when: (varnish_exporter_stat.stat.exists == False) and http
+      when: htp and not varnish_exporter_stat.stat.exists
 
     # BIND
 
@@ -204,11 +204,11 @@
         src: https://github.com/prometheus-community/bind_exporter/releases/download/v0.3.0/bind_exporter-0.3.0.linux-amd64.tar.gz
         dest: /tmp/
         remote_src: yes
-      when: bind_exporter_stat.stat.exists == False
+      when: not bind_exporter_stat.stat.exists
 
     - name: Move bind_exporter to path
       command: mv /tmp/bind_exporter-0.3.0.linux-amd64/bind_exporter /usr/bin/
-      when: bind_exporter_stat.stat.exists == False
+      when: not bind_exporter_stat.stat.exists
 
     - name: Create bind_exporter service
       copy:
@@ -227,7 +227,7 @@
           WantedBy=multi-user.target
         dest: /etc/systemd/system/bind-exporter.service
       register: bind_exporter
-      when: bind_exporter_stat.stat.exists == False
+      when: not bind_exporter_stat.stat.exists
 
     - name: Enable and start bind_exporter
       systemd:
