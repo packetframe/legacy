@@ -64,12 +64,8 @@
     # Network
 
     - name: Create network config
-      copy:
-        content: |
-          #!/bin/bash
-          ip link del local
-          ip link add local type dummy
-
+      template:
+        src: network.sh.j2
         dest: /root/network.sh
         mode: +x
       register: network_config
