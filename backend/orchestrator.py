@@ -189,7 +189,7 @@ while True:
                 vcl_file.write(utils.render_vcl(backends, domains, acls, normalize))
 
             # Deploy the vcl file and reload
-            for node in db["cache_nodes"].find():
+            for node in db["nodes"].find({"http": True}):
                 print("... now updating " + node["name"] + " " + node["management_ip"] + " " + node["location"])
                 print("    - sending updated vcl/caddy configs")
 

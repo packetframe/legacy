@@ -6,19 +6,17 @@ from functools import wraps
 from os import urandom
 from time import strftime
 
+import utils
 # noinspection PyPackageRequirements
 from argon2 import PasswordHasher
 # noinspection PyPackageRequirements
 from argon2.exceptions import VerifyMismatchError
+from config import configuration
 from flask import Flask, request, jsonify, make_response
 from jinja2 import Template
 from pymongo import MongoClient, ASCENDING
 from pymongo.errors import DuplicateKeyError
 from pystalk import BeanstalkClient
-
-from config import configuration
-
-import utils
 
 app = Flask(__name__)
 if configuration["development"]:
@@ -32,7 +30,6 @@ db = client["cdn"]
 # Collections
 zones = db["zones"]
 nodes = db["nodes"]
-cache_nodes = db["cache_nodes"]
 users = db["users"]
 ecas = db["ecas"]
 zones.create_index([("zone", ASCENDING)], unique=True)
@@ -193,9 +190,6 @@ def _update_collector():
     _nodes = {}
     for node in nodes.find():
         _nodes[node["name"]] = node["management_ip"]
-
-    for node in cache_nodes.find():
-        _nodes["CACHE_" + node["name"]] = node["management_ip"]
 
     with open("/tmp/collector_bird.conf", "w") as bird_config_file:
         bird_config_file.write(collector_bird_template.render(nodes=_nodes, asn=configuration["collector"]["asn"]))
@@ -680,35 +674,6 @@ def nodes_add(username, is_admin):
         return jsonify({"success": False, "message": "Unable to add node" + name})
 
 
-@app.route("/cache_nodes/add", methods=["POST"])
-@authentication_required
-def cache_nodes_add(username, is_admin):
-    # Add a cache node
-
-    if not is_admin:
-        return 404
-
-    try:
-        name, provider, connectivity, datacenter, geoloc, location, management_ip = get_args("name", "provider", "connectivity", "datacenter", "geoloc", "location", "management_ip")
-    except ValueError as e:
-        return jsonify({"success": False, "message": str(e)})
-
-    add_op = cache_nodes.insert_one({
-        "name": name,
-        "provider": provider,
-        "connectivity": connectivity,
-        "datacenter": datacenter,
-        "geoloc": geoloc,
-        "location": location,
-        "management_ip": management_ip
-    })
-
-    if add_op.acknowledged:
-        return jsonify({"success": True, "message": "Added " + name})
-    else:
-        return jsonify({"success": False, "message": "Unable to add cache node" + name})
-
-
 @app.route("/nodes/list", methods=["GET"])
 @authentication_required
 def nodes_list(username, is_admin):
@@ -736,29 +701,11 @@ def counters():
     for node in nodes.find():
         node_count += 1
         unique_locations.add(node["location"])
-    for cache_node in cache_nodes.find():
-        unique_locations.add(cache_node["location"])
 
     return jsonify({"success": True, "message": {
         "nodes": node_count,
         "locations": len(unique_locations)
     }})
-
-
-@app.route("/cache_nodes/list", methods=["GET"])
-@authentication_required
-def cache_nodes_list(username, is_admin):
-    # Get a list of all nodes
-
-    _nodes = list(cache_nodes.find())
-
-    for node in _nodes:
-        del node["_id"]
-
-        if not is_admin:  # If user isn't admin, remove sensitive info
-            del node["management_ip"]
-
-    return jsonify({"success": True, "message": _nodes})
 
 
 @app.route("/nodes/power", methods=["POST"])
@@ -797,8 +744,6 @@ def stats(username, is_admin):
     unique_locations = set()
     for node in nodes.find():
         unique_locations.add(node["location"])
-    for cache_node in cache_nodes.find():
-        unique_locations.add(cache_node["location"])
 
     return jsonify({"success": True, "message": {
         "nodes": nodes.count_documents({}),
