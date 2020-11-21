@@ -914,72 +914,73 @@ def eca_check(eca):
     return jsonify({"success": True, "message": eca})
 
 
-# Debug
+# Admin control
 
-if configuration["development"]:
-    @app.route("/debug/refresh_zones")
-    @authentication_required
-    def refresh_zones(username, is_admin):
-        # Refresh the named.conf.local file
+@app.route("/debug/refresh_all_zones")
+@authentication_required
+def refresh_zones(username, is_admin):
+    # Refresh the named.conf.local file
 
-        if not is_admin:
-            return jsonify({"success": False, "message": "Unauthorized"})
+    if not is_admin:
+        return jsonify({"success": False, "message": "Unauthorized"})
 
-        add_queue_message("refresh_all_zones", args=None)
-        return jsonify({"success": True, "message": "Refreshing zones"})
-
-    @app.route("/debug/clear_queue")
-    @authentication_required
-    def clear_queue(username, is_admin):
-        # Clear the beanstalk queue
-
-        if not is_admin:
-            return jsonify({"success": False, "message": "Unauthorized"})
-
-        for job in queue.reserve_iter():
-            queue.delete_job(job.job_id)
-
-        return jsonify({"success": True, "message": "Cleared queue"})
+    add_queue_message("refresh_all_zones", args=None)
+    return jsonify({"success": True, "message": "Refreshing zones"})
 
 
-    @app.route("/debug/queue_stats")
-    @authentication_required
-    def queue_stats(username, is_admin):
-        # Clear the beanstalk queue
+@app.route("/debug/clear_queue")
+@authentication_required
+def clear_queue(username, is_admin):
+    # Clear the beanstalk queue
 
-        if not is_admin:
-            return jsonify({"success": False, "message": "Unauthorized"})
+    if not is_admin:
+        return jsonify({"success": False, "message": "Unauthorized"})
 
-        stats = queue.stats()
+    for job in queue.reserve_iter():
+        queue.delete_job(job.job_id)
 
-        return jsonify({"success": True, "message": {
-            "current_ready": stats["current-jobs-ready"],
-            "current_reserved": stats["current-jobs-reserved"]
-        }})
+    return jsonify({"success": True, "message": "Cleared queue"})
 
 
-    @app.route("/debug/refresh_cache")
-    @authentication_required
-    def refresh_cache(username, is_admin):
-        # Refresh the default.vcl cache file
+@app.route("/debug/queue_stats")
+@authentication_required
+def queue_stats(username, is_admin):
+    # Clear the beanstalk queue
 
-        if not is_admin:
-            return jsonify({"success": False, "message": "Unauthorized"})
+    if not is_admin:
+        return jsonify({"success": False, "message": "Unauthorized"})
 
-        add_queue_message("refresh_cache", None)
-        return jsonify({"success": True, "message": "Refreshing cache config"})
+    stats = queue.stats()
+
+    return jsonify({"success": True, "message": {
+        "current_ready": stats["current-jobs-ready"],
+        "current_reserved": stats["current-jobs-reserved"]
+    }})
 
 
-    @app.route("/debug/update_collector")
-    @authentication_required
-    def update_collector(username, is_admin):
-        # Update the BGP config on the route collector
+@app.route("/debug/refresh_cache")
+@authentication_required
+def refresh_cache(username, is_admin):
+    # Refresh the default.vcl cache file
 
-        if not is_admin:
-            return jsonify({"success": False, "message": "Unauthorized"})
+    if not is_admin:
+        return jsonify({"success": False, "message": "Unauthorized"})
 
-        _update_collector()
-        return jsonify({"success": True, "message": "Refreshing cache config"})
+    add_queue_message("refresh_cache", None)
+    return jsonify({"success": True, "message": "Refreshing cache config"})
+
+
+@app.route("/debug/update_collector")
+@authentication_required
+def update_collector(username, is_admin):
+    # Update the BGP config on the route collector
+
+    if not is_admin:
+        return jsonify({"success": False, "message": "Unauthorized"})
+
+    _update_collector()
+    return jsonify({"success": True, "message": "Refreshing cache config"})
+
 
 if __name__ == "__main__":
     app.run(debug=configuration["development"])

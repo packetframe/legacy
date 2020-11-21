@@ -74,36 +74,14 @@
 
     $: loadRecordDropdown($Page)
 
-    function refreshZoneRegistry() {
-        fetch("https://dash.delivr.dev/api/debug/refresh_zones", {
-            method: "GET",
-            credentials: "include"
-        })
-            .then(response => response.json())
-            .then(data => {
-                addSnackbar("refresh_zone_registry", data["message"], data["success"] ? "green" : "red")
-            });
-    }
-
     function refreshAllZones() {
-        fetch("https://dash.delivr.dev/api/debug/refresh_all_zones/" + prompt("Which node do you want to refresh? (all for all nodes)"), {
+        fetch("https://dash.delivr.dev/api/debug/refresh_all_zones/", {
             method: "GET",
             credentials: "include"
         })
             .then(response => response.json())
             .then(data => {
                 addSnackbar("refresh_all_zones", data["message"], data["success"] ? "green" : "red")
-            });
-    }
-
-    function refreshSingleZone() {
-        fetch("https://dash.delivr.dev/api/debug/refresh_single_zone/" + prompt("Which zone do you want to refresh?"), {
-            method: "GET",
-            credentials: "include"
-        })
-            .then(response => response.json())
-            .then(data => {
-                addSnackbar("refresh_single_zone", data["message"], data["success"] ? "green" : "red")
             });
     }
 
@@ -252,10 +230,8 @@
                 {/if}
 
                 <ButtonBar>
-                    <Button padded onclick={() => refreshZoneRegistry()}>Refresh zone registry</Button>
                     <Button padded onclick={() => refreshAllZones()}>Refresh all zones</Button>
                     <Button padded onclick={() => clearQueue()}>Clear queue</Button>
-                    <Button padded onclick={() => refreshSingleZone()}>Refresh single zone</Button>
                     <Button padded onclick={() => refreshCache()}>Refresh cache</Button>
                     <Button padded onclick={() => showQueueStats()}>Queue Stats</Button>
                     <Button padded onclick={() => addNode()}>Add Node</Button>
