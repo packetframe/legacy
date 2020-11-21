@@ -317,6 +317,9 @@
             interface: {{ dns["resolver6"] }}
             root-hints: "/usr/share/dns/root.hints"
             trust-anchor-file: "/usr/share/dns/root.key"
+            harden-dnssec-stripped: yes
+            access-control: 0.0.0.0/0 allow
+            access-control: ::/0 allow
 
           remote-control:
             control-enable: yes
