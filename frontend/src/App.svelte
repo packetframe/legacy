@@ -25,7 +25,7 @@
     let showUserTable = false;
     let showSettings = false;
 
-    onMount(() => {
+    $:{
         if ($Page === "login") {
             fetch("https://dash.delivr.dev/api/authenticated", {
                 credentials: "include"
@@ -37,7 +37,7 @@
                     }
                 })
         }
-    })
+    }
 
     function loadRecordDropdown(page) {
         fetch("https://dash.delivr.dev/api/admin", {
