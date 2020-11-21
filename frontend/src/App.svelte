@@ -75,7 +75,7 @@
     $: loadRecordDropdown($Page)
 
     function refreshAllZones() {
-        fetch("https://dash.delivr.dev/api/debug/refresh_all_zones/", {
+        fetch("https://dash.delivr.dev/api/debug/refresh_all_zones", {
             method: "GET",
             credentials: "include"
         })
