@@ -132,7 +132,7 @@ while True:
             # Clean up the tmp files
             shutil.rmtree("/tmp/delivrdeploy/")
 
-            print("finished refresh_zone task")
+            print("finished refresh_all_zones task")
 
         elif operation == "delete_zone":
             print("deleting " + args["zone"])
