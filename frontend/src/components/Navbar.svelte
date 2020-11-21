@@ -37,7 +37,7 @@
     <div class="right" style="display: flex;">
         {#if $Page === "dashboard"}
             <div class="nav-item" on:click={() => {
-                        $Page = "login";
+                        $Page = "index";
                         document.cookie = "";
                         location.hash = "";
                     }}>Logout

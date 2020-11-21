@@ -26,15 +26,17 @@
     let showSettings = false;
 
     onMount(() => {
-        fetch("https://dash.delivr.dev/api/authenticated", {
-            credentials: "include"
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data["message"]) { // If you are authenticated
-                    $Page = "dashboard";
-                }
+        if ($Page === "login") {
+            fetch("https://dash.delivr.dev/api/authenticated", {
+                credentials: "include"
             })
+                .then(response => response.json())
+                .then(data => {
+                    if (data["message"]) { // If you are authenticated
+                        $Page = "dashboard";
+                    }
+                })
+        }
     })
 
     function loadRecordDropdown(page) {
