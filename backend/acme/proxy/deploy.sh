@@ -1,6 +1,6 @@
 #!/bin/bash
 
-nodes=$(mongo --quiet --eval 'db.cache_nodes.find().forEach(function(node) {print(node.management_ip);});' cdn)
+nodes=$(mongo --quiet --eval 'db.nodes.find({"http": true).forEach(function(node) {print(node.management_ip);});' cdn)
 
 for node in $nodes ; do
 	echo Copying to $node

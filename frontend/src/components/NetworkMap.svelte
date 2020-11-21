@@ -71,46 +71,6 @@
                     }
                 }
             })
-
-        fetch("https://dash.delivr.dev/api/cache_nodes/list", {
-            credentials: "include"
-        })
-            .then(response => response.json())
-            .then((data) => {
-                const nodes = data["message"];
-                for (const i in nodes) {
-                    const lat = nodes[i]["geoloc"].split(", ")[0];
-                    const lon = nodes[i]["geoloc"].split(", ")[1];
-                    if (admin) {
-                        L.marker([lat, lon])
-                            .addTo(mymap)
-                            .bindPopup(`
-                            <b>${nodes[i]["name"]}</b>
-                            <br>
-                            ${nodes[i]["location"]}
-                            <br>
-                            ${nodes[i]["provider"]}
-                            <br>
-                            ${nodes[i]["datacenter"]}
-                            <br>
-                            <a href='#' onclick='setNode("${nodes[i]["name"]}", "on")'>Start</a>
-                            <a href='#' onclick='setNode("${nodes[i]["name"]}", "off")'>Stop</a>
-                        `)
-                    } else {
-                        L.marker([lat, lon])
-                            .addTo(mymap)
-                            .bindPopup(`
-                            <b>${nodes[i]["name"]}</b>
-                            <br>
-                            ${nodes[i]["location"]}
-                            <br>
-                            ${nodes[i]["provider"]}
-                            <br>
-                            ${nodes[i]["datacenter"]}
-                        `)
-                    }
-                }
-            })
     })
 </script>
 
