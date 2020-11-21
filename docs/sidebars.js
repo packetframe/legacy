@@ -4,6 +4,7 @@ module.exports = {
         {type: "doc", id: "api"},
         {type: "doc", id: "cli"},
         {type: "doc", id: "eca"},
+        {type: "doc", id: "license"},
         {type: "doc", id: "privacy-policy"},
     ]
 };
