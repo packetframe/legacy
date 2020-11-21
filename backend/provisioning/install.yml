@@ -321,3 +321,12 @@
           remote-control:
             control-enable: yes
             control-interface: 127.0.0.1
+        dest: /etc/unbound/unbound.conf
+      register: unbound_config
+
+    - name: Restart unbound
+      systemd:
+        name: unbound
+        enabled: yes
+        state: restarted
+      when: unbound_config.changed
