@@ -21,9 +21,8 @@
 
 <main>
     <div class="table-wrapper">
-        <table class="sethjs-table">
-            <thead>
-            <tr>
+        <table class="sethjs-table" style="overflow-y: auto">
+            <tr style="position: sticky; top: 0">
                 <th>Name ({nodeNum})</th>
                 <th>Location</th>
                 <th>Datacenter</th>
@@ -32,7 +31,6 @@
                     <th>IP</th>
                 {/if}
             </tr>
-            </thead>
 
             <tbody>
             {#if nodes}
@@ -78,7 +76,6 @@
     :global(.sethjs-table th) {
         padding-top: 16px;
         padding-bottom: 16px;
-        padding-left: 20px;
         text-align: left;
         background-color: #202020;
         border-bottom: 1px solid #555555;
@@ -87,7 +84,7 @@
     }
 
     :global(.sethjs-table tr) {
-        width: 100%;
+        display: table-row !important;
     }
 
     :global(.sethjs-table tr:nth-child(odd)) {
@@ -103,16 +100,12 @@
 
     .table-wrapper {
         width: 100%;
+        overflow-y: scroll;
+        max-height: calc(100% - 20px);
+        margin-top: 10px;
     }
 
-    tbody {
-        overflow-y: auto;
-        max-height: calc(400px - 65px);
-        display: block;
-    }
-
-    thead, tbody tr {
-        display: table;
+    thead {
         width: 100%;
     }
 </style>
