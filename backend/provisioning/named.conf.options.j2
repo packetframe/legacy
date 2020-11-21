@@ -7,13 +7,13 @@ options {
     server-id hostname;
 
     listen-on {
-    {% for address in "{{ dns['bind_addresses4']}}" %}
+    {% for address in dns['bind_addresses4'] %}
         {{ address }};
     {% endfor -%}
     };
 
     listen-on-v6 {
-    {% for address in "{{ dns['bind_addresses6']}}" %}
+    {% for address in dns['bind_addresses6'] %}
         {{ address }};
     {% endfor -%}
     };

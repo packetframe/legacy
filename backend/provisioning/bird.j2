@@ -22,13 +22,15 @@ define LOCAL_v6 = [
 protocol static {
   ipv4;
   route {{ dns["prefix4"] }} reject;
-  {% if http %}route {{ proxy["prefix4"] }} reject;{% else %}
+  {% if http %}route {{ proxy["prefix4"] }} reject;{% endif %}
+
 }
 
 protocol static {
   ipv6;
   route {{ dns["prefix6"] }} reject;
-  {% if http %}route {{ proxy["prefix6"] }} reject;{% else %}
+  {% if http %}route {{ proxy["prefix6"] }} reject;{% endif %}
+
 }
 
 # ---- Parameters ----

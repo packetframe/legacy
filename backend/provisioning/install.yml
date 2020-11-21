@@ -77,7 +77,7 @@
     - name: Set hosts file
       copy:
         content: |
-          127.0.0.1	localhost
+          127.0.0.1	localhost {{ inventory_hostname }}
           ::1     localhost ip6-localhost ip6-loopback
           ff02::1 ip6-allnodes
           ff02::2 ip6-allrouters
@@ -244,10 +244,59 @@
         dest: /etc/bird/bird.conf
       vars:
         asn: 34553
-        selected_ipv4_prefix: "{{ dns['prefix4'] }}"
-        selected_ipv6_prefix: "{{ dns['prefix6'] }}"
       register: bird_config
 
     - name: Apply BIRD config
       shell: birdc config
       when: bird_config.changed
+
+    # Util
+    - name: Installing zsh and git
+      apt: pkg=zsh,git state=latest
+      register: installation
+
+    - name: Check if .zshrc exists
+      stat:
+        path: ~/.zshrc
+      register: dotzshrc
+
+    - name: Check if .oh-my-zsh exists
+      stat:
+        path: ~/.oh-my-zsh
+      register: stat_oh_my_zsh_result
+
+    - name: Cloning oh-my-zsh
+      git:
+        repo: https://github.com/robbyrussell/oh-my-zsh
+        dest: /root/.oh-my-zsh
+      when: not stat_oh_my_zsh_result.stat.exists
+
+    - name: Get autocompletion
+      git:
+        repo: https://github.com/zsh-users/zsh-autosuggestions
+        dest: /root/.oh-my-zsh/custom/plugins/zsh-autosuggestions
+      when: not stat_oh_my_zsh_result.stat.exists
+
+    - name: Creating new ~/.zshrc
+      copy:
+        content: |
+          export ZSH="/root/.oh-my-zsh"
+          ZSH_THEME="af-magic"
+          plugins=(git zsh-autosuggestions)
+          source $ZSH/oh-my-zsh.sh
+          alias b="birdc"
+          alias bgpc="b conf"
+          alias bgps="b s p | column -t"
+          compinit
+        dest: /root/.zshrc
+      when: not dotzshrc.stat.exists
+
+    - name: Get ZSH completion
+      get_url:
+        url: https://raw.githubusercontent.com/natesales/zsh-bird-completions/master/_birdc
+        dest: /usr/share/zsh/functions/Completion/Linux/_birdc
+
+    - name: Change shell to zsh
+      user:
+        name: root
+        shell: /usr/bin/zsh
