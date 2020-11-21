@@ -7,22 +7,7 @@
 
 ## delivr.dev
 
-delivr.dev is an open source CDN platform, currently in beta.
-
-#### Installation
-
-Set up Caddy
-
-``` bash
-# Download and install
-rm /etc/caddy/Caddyfile
-ln -s /home/nate/delivr/Caddyfile /etc/caddy/Caddyfile
-caddy reload -config /etc/caddy/Caddyfile
-
-# Link services
-ln -s /home/nate/delivr/delivr-api.service /etc/systemd/system/delivr-api.service
-ln -s /home/nate/delivr/delivr-orchestrator.service /etc/systemd/system/delivr-orchestrator.service
-```
+delivr.dev is an open source (AGPL-3.0) anycast CDN platform, currently in beta. If you're interested in an account, send an email to the address listed on the front page of the delivr site or reach out in #delivr on freenode. 
 
 #### Project Structure
 
@@ -48,7 +33,3 @@ ln -s /home/nate/delivr/delivr-orchestrator.service /etc/systemd/system/delivr-o
     └── src
         └── components # Individual Svelte components
 ```
-
-## License
-
-delivr is licensed under the [AGPL-3.0 License](./LICENSE).
