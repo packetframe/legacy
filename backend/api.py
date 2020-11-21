@@ -567,7 +567,7 @@ def records_add(zone, user_doc):
     if is_proxied:
         add_queue_message("refresh_cache", None)
 
-        add_queue_message("refresh_all_zones", args=None)
+    add_queue_message("refresh_all_zones", args=None)
 
     return jsonify({"success": True, "message": "Record added to " + zone})
 
