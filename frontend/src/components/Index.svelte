@@ -40,7 +40,7 @@
             <img alt="community image" class="featureImage" src="/img/main/community.svg"/>
             <div class="featureCaption">
                 <h1>Community Centric</h1>
-                <p>While the code is written by one person (<a href="https://natesales.net">me!</a>), the open source community plays a huge role in the CDN infrastructure. Special thanks to <a href="https://fosshost.org">fosshost</a> for their support and partnership in the project. Want to get involved? Feel free to send an email to <span style={{"unicode-bidi": "bidi-override", direction: "rtl"}}>ved.rviled@ofni</span> or hop in #delivr on <a href="https://freenode.net/kb/answer/chat">freenode</a> and ask away!</p>
+                <p>While the code is written by one person (<a href="https://natesales.net">me!</a>), the open source community plays a huge role in the CDN infrastructure. Special thanks to <a href="https://fosshost.org">fosshost</a> for their support and partnership in the project. Want to get involved? Feel free to send an email to <span style="unicode-bidi: bidi-override; direction: rtl">ved.rviled@ofni</span> or hop in #delivr on <a href="https://freenode.net/kb/answer/chat">freenode</a> and ask away!</p>
             </div>
         </div>
     </div>

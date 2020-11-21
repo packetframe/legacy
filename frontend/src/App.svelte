@@ -206,23 +206,7 @@
 </script>
 
 <main>
-    <Navbar>
-        <div on:click={() => {$Page = "index"}} slot="left-side"><img alt="delivr.dev" src="/full.png"></div>
-        <div slot="right-side" style="display: flex;">
-            {#if $Page === "dashboard"}
-                <div class="nav-item" on:click={() => {
-                        $Page = "login";
-                        document.cookie = "";
-                        location.hash = "";
-                    }} slot="right-side">Logout
-                </div>
-            {:else}
-                <div class="nav-item" on:click={() => {$Page = "signup"}}>Signup</div>
-                <div class="nav-item" on:click={() => {$Page = "login"}}>Login</div>
-            {/if}
-        </div>
-    </Navbar>
-
+    <Navbar/>
 
     <div class="body">
         {#if $Page === "dashboard"}
