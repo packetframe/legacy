@@ -4,7 +4,6 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin-bottom: 20px;
     }
     div {
         max-height: 100%;

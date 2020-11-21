@@ -16,6 +16,7 @@
     import NetworkTable from "./components/NetworkTable.svelte";
     import UserTable from "./components/UserTable.svelte";
     import Settings from "./components/Settings.svelte";
+    import Index from "./components/Index.svelte";
 
     let zones;
     let selected_zone = window.location.toString().split("zone=")[1];
@@ -205,31 +206,23 @@
 </script>
 
 <main>
-    {#if $Page === "login"}
-        <Navbar>
-            <div slot="left-side" on:click={() => {$Page = "dashboard"}}><img src="/full.png" alt="delivr.dev"></div>
-            <div class="nav-item" on:click={() => {$Page = "signup"}} slot="right-side">Signup</div>
-        </Navbar>
-    {:else}
-        {#if $Page === "signup"}
-            <Navbar>
-                <div slot="left-side" on:click={() => {$Page = "dashboard"}}><img src="/full.png" alt="delivr.dev"></div>
-                <div class="nav-item" on:click={() => {$Page = "login"}} slot="right-side">Login</div>
-            </Navbar>
-        {:else}
+    <Navbar>
+        <div on:click={() => {$Page = "index"}} slot="left-side"><img alt="delivr.dev" src="/full.png"></div>
+        <div slot="right-side" style="display: flex;">
             {#if $Page === "dashboard"}
-                <Navbar>
-                    <div slot="left-side" on:click={() => {$Page = "dashboard"}}><img src="/full.png" alt="delivr.dev"></div>
-                    <div class="nav-item" on:click={() => {
+                <div class="nav-item" on:click={() => {
                         $Page = "login";
                         document.cookie = "";
                         location.hash = "";
                     }} slot="right-side">Logout
-                    </div>
-                </Navbar>
+                </div>
+            {:else}
+                <div class="nav-item" on:click={() => {$Page = "signup"}}>Signup</div>
+                <div class="nav-item" on:click={() => {$Page = "login"}}>Login</div>
             {/if}
-        {/if}
-    {/if}
+        </div>
+    </Navbar>
+
 
     <div class="body">
         {#if $Page === "dashboard"}
@@ -260,8 +253,12 @@
 
             {#if showAdmin && $IsAdmin}
                 <div class="admin-container">
-                    <div class="admin-map"><NetworkMap admin/></div>
-                    <div class="admin-table"><NetworkTable admin/></div>
+                    <div class="admin-map">
+                        <NetworkMap admin/>
+                    </div>
+                    <div class="admin-table">
+                        <NetworkTable admin/>
+                    </div>
                 </div>
 
                 {#if showUserTable}
@@ -299,6 +296,8 @@
             <EntryForm type="login"/>
         {:else if $Page === "signup"}
             <EntryForm type="signup"/>
+        {:else if $Page === "index"}
+            <Index/>
         {/if}
 
         <SnackbarGroup/>
