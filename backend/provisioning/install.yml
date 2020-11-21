@@ -16,7 +16,7 @@
         content: APT::Default-Release "stable";
         dest: /etc/apt/apt.conf.d/default-release
 
-    - name: Install rsync, bind9, dnsutils, ufw
+    - name: Install rsync, bind9, dnsutils, ufw, unbound
       apt:
         update_cache: yes
         pkg:
@@ -303,3 +303,21 @@
       user:
         name: root
         shell: /usr/bin/zsh
+
+    # Configure unbound resolver
+
+    - name: Copy unbound config
+      copy:
+        content: |
+          server:
+            directory: "/etc/unbound"
+            username: unbound
+            verbosity: 0
+            interface: {{ dns["resolver4"] }}
+            interface: {{ dns["resolver6"] }}
+            root-hints: "/var/lib/unbound/root.hints"
+            trust-anchor-file: "/var/lib/unbound/root.key"
+
+          remote-control:
+            control-enable: yes
+            control-interface: 127.0.0.1

@@ -7,6 +7,8 @@ ip addr add {{ addr }}/24 dev local
 {% for addr in dns["bind_addresses6"] %}
 ip addr add {{ addr }}/48 dev local
 {% endfor %}
+ip addr add {{ dns["resolver4"] }}/24 dev local
+ip addr add {{ dns["resolver6"] }}/48 dev local
 {% if http %}
 ip addr add {{ proxy["server4"] }}/24 dev local
 ip addr add {{ proxy["server6"] }}/48 dev local
