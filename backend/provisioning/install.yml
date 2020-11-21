@@ -315,8 +315,8 @@
             verbosity: 0
             interface: {{ dns["resolver4"] }}
             interface: {{ dns["resolver6"] }}
-            root-hints: "/var/lib/unbound/root.hints"
-            trust-anchor-file: "/var/lib/unbound/root.key"
+            root-hints: "/usr/share/dns/root.hints"
+            trust-anchor-file: "/usr/share/dns/root.key"
 
           remote-control:
             control-enable: yes
