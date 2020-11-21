@@ -8,18 +8,15 @@
 
     - name: Add debian sid repo
       apt_repository:
-        repo: "{{ item }}"
+        repo: deb http://deb.debian.org/debian/ sid main
         state: present
-      with_items:
-        - deb http://deb.debian.org/debian/ sid main
-        - deb [trusted=yes] https://apt.fury.io/caddy/ /
 
     - name: Set default release
       copy:
         content: APT::Default-Release "stable";
         dest: /etc/apt/apt.conf.d/default-release
 
-    - name: Install rsync, bind9, dnsutils, caddy, ufw
+    - name: Install rsync, bind9, dnsutils, ufw
       apt:
         update_cache: yes
         pkg:
@@ -27,7 +24,6 @@
           - bind9
           - curl
           - dnsutils
-          - caddy
 
     - name: Install BIRD2 from sid
       apt:
@@ -92,11 +88,18 @@
       shell: hostnamectl set-hostname "{{ inventory_hostname }}"
       when: node_hostname.stdout != inventory_hostname
 
-    # Varnish (cache nodes)
+    # Cache nodes
 
-    - name: Install varnish on HTTP nodes
+    - name: Add caddy repo
+      apt_repository:
+        repo: deb [trusted=yes] https://apt.fury.io/caddy/ /
+      when: http
+
+    - name: Install varnish/caddy on HTTP nodes
       apt:
-        pkg: varnish
+        pkg:
+          - varnish
+          - caddy
       when: http
 
     - name: Copy varnish service
