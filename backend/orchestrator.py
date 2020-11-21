@@ -1,4 +1,7 @@
 import json
+import os
+import shutil
+import tarfile
 import time
 
 from paramiko import SSHClient, AutoAddPolicy
@@ -45,83 +48,89 @@ while True:
         operation = content["operation"]
         args = content["args"]
 
-        if operation == "refresh_single_zone":
-            print("refreshing " + args["zone"])
+        # if operation == "refresh_single_zone":
+        #     print("refreshing " + args["zone"])
+        #
+        #     zone = db["zones"].find_one({"zone": args["zone"]})
+        #
+        #     if not args or not args.get("node"):
+        #         _query = {}
+        #     else:
+        #         if args["node"] == "all":
+        #             _query = {}
+        #         else:
+        #             _query = {"name": args["node"]}
+        #
+        #     # Loop over the nodes and send the updated zone file to each one, then reload the configuration
+        #     for node in db["nodes"].find(_query):
+        #         print("... now updating " + node["name"] + " " + node["management_ip"] + " " + node["location"])
+        #
+        #         zone_file = utils.render_zone(zone, node)
+        #
+        #         with open("/tmp/db." + zone["zone"], "w") as zone_file_writer:
+        #             zone_file_writer.write(zone_file)
+        #
+        #         print("    - sending updated zone file")
+        #         try:
+        #             ssh.connect(node["management_ip"], username="root", port=34553, key_filename=configuration["ssh-key"])
+        #         except (TimeoutError, NoValidConnectionsError):
+        #             error = "- ERROR: " + node["name"] + " timed out."
+        #             print(error)
+        #         else:
+        #             with SCPClient(ssh.get_transport()) as scp:
+        #                 scp.put("/tmp/db." + zone["zone"], "/etc/bind/db." + zone["zone"])
+        #
+        #             run_ssh_command("rndc reload")
+        #             ssh.close()
+        #
+        #     print("finished refresh_single_zone")
 
-            zone = db["zones"].find_one({"zone": args["zone"]})
-
-            if not args or not args.get("node"):
-                _query = {}
-            else:
-                if args["node"] == "all":
-                    _query = {}
-                else:
-                    _query = {"name": args["node"]}
-
-            # Loop over the nodes and send the updated zone file to each one, then reload the configuration
-            for node in db["nodes"].find(_query):
-                print("... now updating " + node["name"] + " " + node["management_ip"] + " " + node["location"])
-
-                print("    - sending updated zone file")
-
-                zone_file = utils.render_zone(zone, node)
-
-                with open("/tmp/db." + zone["zone"], "w") as zone_file_writer:
-                    zone_file_writer.write(zone_file)
-
-                print("    - sending updated zone file")
-                try:
-                    ssh.connect(node["management_ip"], username="root", port=34553, key_filename=configuration["ssh-key"])
-                except (TimeoutError, NoValidConnectionsError):
-                    error = "- ERROR: " + node["name"] + " timed out."
-                    print(error)
-                else:
-                    with SCPClient(ssh.get_transport()) as scp:
-                        scp.put("/tmp/db." + zone["zone"], "/etc/bind/db." + zone["zone"])
-
-                    run_ssh_command("rndc reload")
-                    ssh.close()
-
-            print("finished refresh_single_zone")
-
-        elif operation == "refresh_zones":
+        if operation == "refresh_all_zones":
             print("refreshing local zones file")
 
-            zones_file = ""
+            try:
+                shutil.rmtree("/tmp/delivrdeploy/")
+            except FileNotFoundError:
+                pass
 
-            # Assemble named.local.conf based on zones
-            for zone in db["zones"].find():
-                zones_file += utils.render_local(zone["zone"])
+            os.mkdir("/tmp/delivrdeploy/")
 
-            # Write the named.conf.local tmp file
-            with open("/tmp/named.conf.local", "w") as named_file:
-                named_file.write(zones_file)
+            for node in db["nodes"].find():
+                print(f"Build archive for {node['name']}")
+                os.mkdir("/tmp/delivrdeploy/" + node["name"])
 
-            if not args or not args.get("node"):
-                _query = {}
-            else:
-                if args["node"] == "all":
-                    _query = {}
-                else:
-                    _query = {"name": args["node"]}
+                zone_registry = ""
+                for zone in db["zones"].find():
+                    zone_registry += utils.render_local(zone["zone"])
 
-            # Loop over the nodes and send the updated zone file to each one, then reload the configuration
-            for node in db["nodes"].find(_query):
-                print("... now updating " + node["name"] + " " + node["management_ip"] + " " + node["location"])
+                    zone_file = utils.render_zone(zone, node)
 
-                print("    - sending updated zone file")
+                    with open(f"/tmp/delivrdeploy/{node['name']}/db.{zone['zone']}", "w") as zone_file_writer:
+                        zone_file_writer.write(zone_file)
+
+                with open(f"/tmp/delivrdeploy/{node['name']}/named.conf.local", "w") as named_file:
+                    named_file.write(zone_registry)
+
+                with tarfile.open(f"/tmp/delivrdeploy/{node['name']}.tar.gz", "w:gz") as tar:
+                    output_file = f"/tmp/delivrdeploy/{node['name']}/"
+                    tar.add(output_file, arcname=os.path.basename(output_file))
 
                 try:
                     ssh.connect(node["management_ip"], username="root", port=34553, key_filename=configuration["ssh-key"])
                 except (TimeoutError, NoValidConnectionsError):
-                    error = "- ERROR: " + node["name"] + " timed out."
-                    print(error)
+                    print(node["name"] + " unable to connect.")
                 else:
                     with SCPClient(ssh.get_transport()) as scp:
-                        scp.put("/tmp/named.conf.local", "/etc/bind/named.conf.local")
+                        scp.put(f"/tmp/delivrdeploy/{node['name']}.tar.gz", "/etc/bind/deploy.tar.gz")
 
-                    run_ssh_command("rndc reload")
-                    ssh.close()
+                    stdin, stdout, stderr = ssh.exec_command("tar -xvzf /etc/bind/deploy.tar.gz -C /etc/bind/ ; rm /etc/bind/deploy.tar.gz ; bash /root/cleanup-zones.sh ; rndc reload")
+                    for line in stdout:
+                        print(line.strip())
+                    if line in stderr:
+                        print(line.strip())
+
+            # Clean up the tmp files
+            shutil.rmtree("/tmp/delivrdeploy/")
 
             print("finished refresh_zone task")
 

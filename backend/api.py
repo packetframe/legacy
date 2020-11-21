@@ -324,8 +324,7 @@ def zones_add(username, is_admin):
     else:
         mail_template = new_domain_template.render(domain=zone, nameservers=configuration["dns"]["nameservers"])
         add_queue_message("send_email", args={"recipients": [username], "subject": "[delivr.dev] Domain added to delivr.dev", "body": mail_template})
-        add_queue_message("refresh_zones", args=None)
-        add_queue_message("refresh_single_zone", {"zone": zone})
+        add_queue_message("refresh_all_zones", args=None)
 
         return jsonify({"success": True, "message": "Added " + zone})
 
@@ -362,7 +361,7 @@ def zones_delete(zone, user_doc):
 
     if delete_op.deleted_count > 0:
         add_queue_message("delete_zone", args={"zone": zone})
-        add_queue_message("refresh_zones", args=None)
+        add_queue_message("refresh_all_zones", args=None)
         return jsonify({"success": True, "message": "Deleted " + zone})
     else:
         return jsonify({"success": False, "message": "Zone " + zone + " doesn't exist"})
@@ -568,7 +567,7 @@ def records_add(zone, user_doc):
     if is_proxied:
         add_queue_message("refresh_cache", None)
 
-    add_queue_message("refresh_single_zone", {"zone": zone})
+        add_queue_message("refresh_all_zones", args=None)
 
     return jsonify({"success": True, "message": "Record added to " + zone})
 
@@ -618,7 +617,7 @@ def record_delete(zone, index, user_doc):
         "serial": _get_current_serial()
     }})
 
-    add_queue_message("refresh_single_zone", {"zone": zone})
+    add_queue_message("refresh_all_zones", args=None)
 
     return jsonify({"success": True, "message": "Record deleted at index " + str(index) + " from " + zone})
 
@@ -926,43 +925,8 @@ if configuration["development"]:
         if not is_admin:
             return jsonify({"success": False, "message": "Unauthorized"})
 
-        add_queue_message("refresh_zones", args=None)
+        add_queue_message("refresh_all_zones", args=None)
         return jsonify({"success": True, "message": "Refreshing zones"})
-
-
-    @app.route("/debug/refresh_single_zone/<zone>")
-    @authentication_required
-    def refresh_single_zone(zone, username, is_admin):
-        # Refresh the db.<zone> file
-
-        if not is_admin:
-            return jsonify({"success": False, "message": "Unauthorized"})
-
-        zone_doc = zones.find_one({"zone": zone})
-        if not zone_doc:
-            return jsonify({"success": False, "message": "zone doesn't exist"})
-
-        add_queue_message("refresh_single_zone", {"zone": zone})
-        return jsonify({"success": True, "message": "Refreshing single zone"})
-
-
-    @app.route("/debug/refresh_all_zones/<node>")
-    @authentication_required
-    def refresh_all_zones(username, is_admin, node):
-        # Refresh all db.<zone> files and the named.conf.local file
-
-        if not is_admin:
-            return jsonify({"success": False, "message": "Unauthorized"})
-
-        if not node:
-            return jsonify({"success": False, "message": "Required URI path attribute node is empty"})
-
-        for zone in zones.find():
-            add_queue_message("refresh_single_zone", {"zone": zone["zone"], "node": node})
-
-        add_queue_message("refresh_zones", args={"node": node})
-        return jsonify({"success": True, "message": "Refreshing all zones", "node": node})
-
 
     @app.route("/debug/clear_queue")
     @authentication_required
