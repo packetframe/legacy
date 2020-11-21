@@ -2,17 +2,33 @@
 
 define ASN = {{ asn }};
 
-define LOCAL_v4 = [{{ selected_ipv4_prefix }}];
-define LOCAL_v6 = [{{ selected_ipv6_prefix }}];
+define LOCAL_v4 = [
+{% if http %}
+  {{ dns["prefix4"] }},
+  {{ proxy["prefix4"] }}
+{% else %}
+  {{ dns["prefix4"] }}
+{% endif %}
+];
+define LOCAL_v6 = [
+{% if http %}
+  {{ dns["prefix6"] }},
+  {{ proxy["prefix6"] }}
+{% else %}
+  {{ dns["prefix6"] }}
+{% endif %}
+];
 
 protocol static {
   ipv4;
-  route {{ selected_ipv4_prefix }} reject;
+  route {{ dns["prefix4"] }} reject;
+  {% if http %}route {{ proxy["prefix4"] }} reject;{% else %}
 }
 
 protocol static {
   ipv6;
-  route {{ selected_ipv6_prefix }} reject;
+  route {{ dns["prefix6"] }} reject;
+  {% if http %}route {{ proxy["prefix6"] }} reject;{% else %}
 }
 
 # ---- Parameters ----
@@ -330,7 +346,7 @@ template bgp no_import_upstream6 {
 
 protocol bgp COLLECTOR {
   local as ASN;
-  neighbor {{ collector_ip }} as ASN;
+  neighbor {{ collector["host"] }} as ASN;
   rr client;
 
   ipv4 {
