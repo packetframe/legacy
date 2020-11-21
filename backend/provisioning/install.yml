@@ -146,14 +146,14 @@
           [Install]
           WantedBy=multi-user.target
         dest: /etc/systemd/system/varnish-exporter.service
-      when: htp and not varnish_exporter_stat.stat.exists
+      when: http and not varnish_exporter_stat.stat.exists
 
     - name: Enable and start varnish_exporter
       systemd:
         name: varnish-exporter
         enabled: yes
         state: restarted
-      when: htp and not varnish_exporter_stat.stat.exists
+      when: http and not varnish_exporter_stat.stat.exists
 
     # BIND
 
