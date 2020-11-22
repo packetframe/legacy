@@ -83,7 +83,9 @@ def valid_ipv6(ipv6) -> bool:
 
 def valid_email(email) -> bool:
     # Validates an email address (example@example.com)
-    return email and (re.match(r"^[a-z0-9]+[._]?[a-z0-9]+[@]\w+[.]\w{2,3}$", email) is not None)
+    # TODO: Fix this regex. There really isn't a great way to validate email addresses
+    # return email and (re.match(r"^[a-z0-9]+[._]?[a-z0-9]+[@]\w+[.]\w{2,3}$", email) is not None)
+    return (email is not None) and ('@' in email) and ("." in email) and (" " not in email)
 
 
 # Helpers
