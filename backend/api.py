@@ -91,7 +91,7 @@ def valid_email(email) -> bool:
 # Helpers
 
 def _get_current_serial():
-    return strftime("%Y%m%d%S")
+    return strftime("%Y%m%d%H%M%S")
 
 
 def get_random_key():
