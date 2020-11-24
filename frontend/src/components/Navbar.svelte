@@ -12,14 +12,15 @@
 
 <main>
     <div class="left">
-        <a href="/"><img alt="delivr.dev" src="/full.png" style="width: 20rem"></a>
+        <a href="/#/"><img alt="delivr.dev" src="/full.png" style="width: 20rem"></a>
     </div>
-    <div class="right" style="display: flex;">
+    <div class="right">
+        <a href="/#/docs">Docs</a>
         {#if $location === "/dashboard"}
             <div on:click={() => logout()}>Logout</div>
         {:else}
-            <a class="nav-item" href="/#/signup">Signup</a>
-            <a class="nav-item" href="/#/login">Login</a>
+            <a href="/#/signup">Signup</a>
+            <a href="/#/login">Login</a>
         {/if}
     </div>
 </main>
@@ -41,13 +42,17 @@
 
     .left {
         padding-top: 12px;
+        display: flex;
+        align-items: center;
     }
 
     .right {
         padding-right: 35px;
+        display: flex;
+        align-items: center;
     }
 
-    .right a {
+    .right a, .left a {
         color: white;
         text-decoration: none;
         padding-left: 5px;

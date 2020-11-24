@@ -5,6 +5,7 @@
     import Login from "./pages/Login.svelte";
     import Signup from "./pages/Signup.svelte";
     import Dashboard from "./pages/Dashboard.svelte";
+    import Docs from "./pages/Docs.svelte";
     import NotFound from "./pages/NotFound.svelte";
     import SnackbarGroup from "./components/SnackbarGroup.svelte";
 
@@ -13,6 +14,7 @@
         "/login": Login,
         "/signup": Signup,
         "/dashboard": Dashboard,
+        "/docs": Docs,
         "*": NotFound
     }
 </script>
