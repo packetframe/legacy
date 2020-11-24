@@ -662,7 +662,7 @@ def nodes_add(username, is_admin):
         return 404
 
     try:
-        name, provider, connectivity, datacenter, geoloc, location, management_ip = get_args("name", "provider", "connectivity", "datacenter", "geoloc", "location", "management_ip")
+        name, provider, connectivity, datacenter, geoloc, location, management_ip, http = get_args("name", "provider", "connectivity", "datacenter", "geoloc", "location", "management_ip", "http")
     except ValueError as e:
         return jsonify({"success": False, "message": str(e)})
 
@@ -674,6 +674,7 @@ def nodes_add(username, is_admin):
         "geoloc": geoloc,
         "location": location,
         "management_ip": management_ip,
+        "http": http
     })
 
     _update_collector()
