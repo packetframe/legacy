@@ -4,7 +4,7 @@ import json
 import re
 from functools import wraps
 from os import urandom
-from time import strftime
+from time import time
 
 import utils
 # noinspection PyPackageRequirements
@@ -91,7 +91,7 @@ def valid_email(email) -> bool:
 # Helpers
 
 def _get_current_serial():
-    return strftime("%Y%m%d%S")
+    return str(int(time()))
 
 
 def get_random_key():
