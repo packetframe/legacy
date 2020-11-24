@@ -1,12 +1,13 @@
 <script>
     import {onMount} from "svelte";
     import Button from "./Button.svelte";
-    import {addSnackbar} from '../utils'
+    import {addSnackbar} from '../utils';
+    import {API} from "../stores";
 
     let users;
 
     function getUsers() {
-        fetch("https://dash.delivr.dev/api/users", {
+        fetch($API + "users", {
             credentials: "include"
         })
             .then(response => response.json())
@@ -18,7 +19,7 @@
     onMount(() => getUsers());
 
     function toggleState(user) {
-        fetch("https://dash.delivr.dev/api/user/" + user + "/toggle", {
+        fetch($API + "user/" + user + "/toggle", {
             method: "POST",
             credentials: "include"
         })

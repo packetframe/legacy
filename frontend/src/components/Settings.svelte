@@ -3,13 +3,14 @@
     import Button from "./Button.svelte";
     import {onMount} from "svelte";
     import {addSnackbar} from "../utils";
+    import {API} from "../stores";
 
     let acl, address, password, password_confirm;
     export let email;
 
 
     function loadAcl() {
-        fetch("https://dash.delivr.dev/api/user/acl", {
+        fetch($API + "user/acl", {
             credentials: "include"
         })
             .then(response => response.json())
@@ -23,7 +24,7 @@
     }
 
     function appendAcl() {
-        fetch("https://dash.delivr.dev/api/user/acl", {
+        fetch($API + "user/acl", {
             credentials: "include",
             method: "PUT",
             body: JSON.stringify({
@@ -44,7 +45,7 @@
         if (password !== password_confirm) {
             addSnackbar("change_password", "Passwords don't match", "red")
         } else {
-            fetch("https://dash.delivr.dev/api/user/change_password", {
+            fetch($API + "user/change_password", {
                 credentials: "include",
                 method: "POST",
                 body: JSON.stringify({

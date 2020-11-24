@@ -1,12 +1,13 @@
 <script>
     import {onMount} from "svelte";
+    import {API} from "../stores";
 
     let nodes;
     let nodeNum;
     export let admin = false;
 
     function getNodes() {
-        fetch("https://dash.delivr.dev/api/nodes/list", {
+        fetch($API + "nodes/list", {
             credentials: "include"
         })
             .then(response => response.json())

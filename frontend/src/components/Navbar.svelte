@@ -1,6 +1,28 @@
 <script>
-    import {Page} from "../stores.js";
+    import {API} from "../stores";
+    import {location} from 'svelte-spa-router'
+
+    function logout() {
+        fetch($API + "auth/logout", {
+            credentials: "include",
+            method: "POST"
+        }).then(() => window.location = "/")
+    }
 </script>
+
+<main>
+    <div class="left">
+        <a href="/"><img alt="delivr.dev" src="/full.png" style="width: 20rem"></a>
+    </div>
+    <div class="right" style="display: flex;">
+        {#if $location === "/dashboard"}
+            <div on:click={() => logout()}>Logout</div>
+        {:else}
+            <a class="nav-item" href="/#/signup">Signup</a>
+            <a class="nav-item" href="/#/login">Login</a>
+        {/if}
+    </div>
+</main>
 
 <style>
     main {
@@ -8,9 +30,10 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
+        cursor: pointer;
     }
 
-    div {
+    a {
         max-height: 100%;
         align-items: center;
         cursor: pointer;
@@ -24,27 +47,10 @@
         padding-right: 35px;
     }
 
-    .right div {
+    .right a {
+        color: white;
+        text-decoration: none;
         padding-left: 5px;
         padding-right: 5px;
     }
 </style>
-
-<main>
-    <div class="left">
-        <img style="width: 20rem" alt="delivr.dev" on:click={() => {$Page = "index"}} src="/full.png">
-    </div>
-    <div class="right" style="display: flex;">
-        {#if $Page === "dashboard"}
-            <div class="nav-item" on:click={() => {
-                        $Page = "index";
-                        document.cookie = "";
-                        location.hash = "";
-                    }}>Logout
-            </div>
-        {:else}
-            <div class="nav-item" on:click={() => {$Page = "signup"}}>Signup</div>
-            <div class="nav-item" on:click={() => {$Page = "login"}}>Login</div>
-        {/if}
-    </div>
-</main>

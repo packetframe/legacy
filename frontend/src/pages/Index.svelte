@@ -1,6 +1,5 @@
 <script>
-    import Button from "./Button.svelte";
-    import {Page} from "../stores.js";
+    import Button from "../components/Button.svelte";
 
     let nodes, locations = 0;
 </script>
@@ -14,14 +13,13 @@
                         <img alt="delivr.dev" src="https://dash.delivr.dev/favicon-noborder.png" style="width: 15rem; display: inline-block"/>
                         <h1><span class="textGradient">DELIVR.DEV</span></h1>
                         <p>Welcome to delivr.dev, the Open Source CDN for technology enthusiasts. The platform is currently in private beta, contact <span style="unicode-bidi: bidi-override; direction: rtl">ved.rviled@ofni</span> for more information!</p>
-                        <Button inverted onclick={() => $Page = "login"} size="1.2rem">Get Started</Button>
+                        <Button inverted onclick={() => window.location.hash = "#/dashboard"} size="1.2rem">Get Started</Button>
                     </div>
                 </div>
             </div>
         </header>
-        <!--{/*HEX IS #6D2BD8*/}-->
         <div class="featureBlock">
-            <img alt="code image" class="featureImage" src="/img/main/code.svg"/>
+            <img alt="code" class="featureImage" src="/img/main/code.svg"/>
             <div class="featureCaption">
                 <h1>Built for Developers</h1>
                 <p>delivr.dev was built with developers in mind. With delivr.dev, the only thing kept private is <a href="https://delivr.dev/docs/privacy-policy">your data</a> and keys to the infrastructure. Every function of the dashboard is exposed via the <a href="https://delivr.dev/docs/api">API</a> and the entire codebase is <a href="https://github.com/natesales/delivr">open source</a>.</p>
@@ -33,11 +31,11 @@
                 <h1>Globally Distributed</h1>
                 <p>There are currently {nodes} PoPs across {locations} cities and with a presence in all 6 consumer-inhabited continents. (If you know of a datacenter in Antarctica, let me know!)</p>
             </div>
-            <img alt="world image" class="featureImage" src="/img/main/world.svg"/>
+            <img alt="world" class="featureImage" src="/img/main/world.svg"/>
         </div>
 
         <div class="featureBlock">
-            <img alt="community image" class="featureImage" src="/img/main/community.svg"/>
+            <img alt="community" class="featureImage" src="/img/main/community.svg"/>
             <div class="featureCaption">
                 <h1>Community Centric</h1>
                 <p>While the code is written by one person (<a href="https://natesales.net">me!</a>), the open source community plays a huge role in the CDN infrastructure. Special thanks to <a href="https://fosshost.org">fosshost</a> for their support and partnership in the project. Want to get involved? Feel free to send an email to <span style="unicode-bidi: bidi-override; direction: rtl">ved.rviled@ofni</span> or hop in #delivr on <a href="https://freenode.net/kb/answer/chat">freenode</a> and ask away!</p>
@@ -122,3 +120,5 @@
         flex-direction: column;
     }
 </style>
+
+<!--{/*HEX IS #6D2BD8*/}-->

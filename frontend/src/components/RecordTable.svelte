@@ -4,10 +4,10 @@
     import Dropdown from "./Dropdown.svelte";
     import {onMount} from "svelte";
     import NumberInput from "./NumberInput.svelte";
-    import {SnackBars} from "../stores";
     import {addSnackbar} from '../utils'
     import ToggleButton from "./ToggleButton.svelte";
     import CheckBoxes from "./CheckBoxes.svelte";
+    import {API} from "../stores";
 
     let showAddRecord = false;
 
@@ -65,7 +65,7 @@
             body["pinned_nodes"] = getPinnedNodes()
         }
 
-        fetch("https://dash.delivr.dev/api/zone/" + zone + "/add", {
+        fetch($API + "zone/" + zone + "/add", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -80,7 +80,7 @@
 
     function deleteRecord(index) {
         if (confirm("Are you sure you want to delete this record?")) {
-            fetch("https://dash.delivr.dev/api/zone/" + zone + "/delete_record/" + index, {
+            fetch($API + "zone/" + zone + "/delete_record/" + index, {
                 method: "POST",
                 credentials: "include"
             })
@@ -92,7 +92,7 @@
 
     function loadRecords(nothing) {
         if (zone !== undefined) {
-            fetch("https://dash.delivr.dev/api/zone/" + zone + "/records", {
+            fetch($API + "zone/" + zone + "/records", {
                 credentials: "include"
             })
                 .then(response => response.json())
@@ -109,7 +109,7 @@
     }
 
     function exportRecords() {
-        fetch("https://dash.delivr.dev/api/zones/" + zone + "/export", {
+        fetch($API + "zones/" + zone + "/export", {
             credentials: "include"
         })
             .then(response => response.json())
@@ -129,7 +129,7 @@
 
     function deleteZone() {
         if (confirm("Are you sure you want to delete this zone?")) {
-            fetch("https://dash.delivr.dev/api/zone/" + zone + "/delete", {
+            fetch($API + "zone/" + zone + "/delete", {
                 credentials: "include",
                 method: "POST"
             })
@@ -143,7 +143,7 @@
     }
 
     function loadNodes() {
-        fetch("https://dash.delivr.dev/api/nodes/list", {
+        fetch($API + "nodes/list", {
             credentials: "include"
         })
             .then(response => response.json())
@@ -167,12 +167,6 @@
         loadRecords();
         loadNodes();
     });
-
-    $: {
-        if (zone !== undefined) {
-            location.hash = zone;
-        }
-    }
 </script>
 
 <main>

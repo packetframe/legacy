@@ -1,8 +1,7 @@
 <script defer>
     import L from 'leaflet';
     import {onMount} from "svelte";
-    import {addSnackbar} from "../utils";
-    import {SnackBars} from "../stores";
+    import {API} from "../stores";
 
     export let admin = false;
 
@@ -32,7 +31,7 @@
             CartoDB_DarkMatter.addTo(mymap)
         }
 
-        fetch("https://dash.delivr.dev/api/nodes/list", {
+        fetch($API + "nodes/list", {
             credentials: "include"
         })
             .then(response => response.json())

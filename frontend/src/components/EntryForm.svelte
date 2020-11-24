@@ -1,16 +1,15 @@
 <script>
     import Button from "./Button.svelte";
     import TextInput from "./TextInput.svelte";
-    import {SnackBars} from "../stores";
-    import {Page} from "../stores";
     import {addSnackbar} from "../utils";
+    import {API} from "../stores";
 
     export let type;
 
     let username, password;
 
     function submitForm() {
-        fetch("https://dash.delivr.dev/api/auth/" + type, {
+        fetch($API + "auth/" + type, {
             method: "POST",
             credentials: "include",
             headers: {"Content-Type": "application/json"},
@@ -25,9 +24,9 @@
                     addSnackbar(type.charAt(0).toUpperCase() + type.slice(1), data["message"], data["success"] ? "green" : "red");
                 } else {
                     if (type === "login") {
-                        Page.set("dashboard");
+                        window.location.hash = "#/dashboard";
                     } else {
-                        Page.set("login");
+                        window.location.hash = "#/login";
                     }
                 }
             });
