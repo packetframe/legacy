@@ -10,12 +10,22 @@ options {
     {% for address in dns['bind_addresses4'] %}
         {{ address }};
     {% endfor -%}
+    {% if http %}
+    {% for address in dns['secondary_addresses4'] %}
+        {{ address }};
+    {% endfor -%}
+    {% endif %}
     };
 
     listen-on-v6 {
     {% for address in dns['bind_addresses6'] %}
         {{ address }};
     {% endfor -%}
+    {% if http %}
+    {% for address in dns['secondary_addresses6'] %}
+        {{ address }};
+    {% endfor -%}
+    {% endif %}
     };
 };
 
