@@ -93,10 +93,16 @@
       copy:
         content: |
           #!/bin/bash
-          ufw allow 34553
+          ufw disable
+          echo "y" | ufw reset
+          {% if http %}
           ufw allow 80
           ufw allow 443
+          {% endif %}
           ufw allow 53
+          {% for host in allowed_hosts %}
+          ufw allow from {{ host }}
+          {% endfor %}
           echo "y" | ufw enable
         dest: /root/ufw.sh
         mode: +x
