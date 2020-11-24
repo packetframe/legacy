@@ -24,6 +24,7 @@
           - bind9
           - curl
           - dnsutils
+          - ufw
 
     - name: Install BIRD2 from sid
       apt:
@@ -87,6 +88,23 @@
     - name: Set persistent hostname
       shell: hostnamectl set-hostname "{{ inventory_hostname }}"
       when: node_hostname.stdout != inventory_hostname
+
+    - name: Setup UFW
+      copy:
+        content: |
+          #!/bin/bash
+          ufw allow 34553
+          ufw allow 80
+          ufw allow 443
+          ufw allow 53
+          echo "y" | ufw enable
+        dest: /root/ufw.sh
+        mode: +x
+      register: ufw_config
+
+    - name: Apply ufw config
+      shell: bash /root/ufw.sh
+      when: ufw_config.changed
 
     # Cache nodes
 
@@ -305,31 +323,41 @@
         shell: /usr/bin/zsh
 
     # Configure unbound resolver
-
-    - name: Copy unbound config
-      copy:
-        content: |
-          server:
-            directory: "/etc/unbound"
-            username: unbound
-            verbosity: 0
-            interface: {{ dns["resolver4"] }}
-            interface: {{ dns["resolver6"] }}
-            root-hints: "/usr/share/dns/root.hints"
-            trust-anchor-file: "/usr/share/dns/root.key"
-            harden-dnssec-stripped: yes
-            access-control: 0.0.0.0/0 allow
-            access-control: ::/0 allow
-
-          remote-control:
-            control-enable: yes
-            control-interface: 127.0.0.1
-        dest: /etc/unbound/unbound.conf
-      register: unbound_config
-
-    - name: Restart unbound
-      systemd:
-        name: unbound
-        enabled: yes
-        state: restarted
-      when: unbound_config.changed
+#    - name: Get DNS config
+#      shell: dig . NS @161.97.219.84 > /etc/unbound/opennic.cache
+#
+#    - name: Copy unbound config
+#      copy:
+#        content: |
+#          server:
+#            directory: "/etc/unbound"
+#            username: unbound
+#            interface: {{ dns["resolver4"] }}
+#            interface: {{ dns["resolver6"] }}
+#            root-hints: "/etc/unbound/opennic.cache"
+#            harden-dnssec-stripped: yes
+#            access-control: 0.0.0.0/0 allow
+#            access-control: ::/0 allow
+#
+#            hide-identity: yes
+#            hide-version: yes
+#            hide-trustanchor: yes
+#            minimal-responses: yes
+#            log-queries: no
+#
+#            ip-ratelimit: 20
+#            ip-ratelimit-factor: 0
+#            ratelimit: 1000
+#
+#          remote-control:
+#            control-enable: yes
+#            control-interface: 127.0.0.1
+#        dest: /etc/unbound/unbound.conf
+#      register: unbound_config
+#
+#    - name: Restart unbound
+#      systemd:
+#        name: unbound
+#        enabled: yes
+#        state: restarted
+#      when: unbound_config.changed
