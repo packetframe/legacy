@@ -4,7 +4,7 @@ import json
 import re
 from functools import wraps
 from os import urandom
-from time import time
+from time import time, strftime
 
 import utils
 # noinspection PyPackageRequirements
@@ -262,6 +262,15 @@ def auth_login():
                 return jsonify({"success": False, "message": "This account is inactive. Please contact info@delivr.dev for more information."})
 
     return jsonify({"success": False, "message": "Invalid username or password"})
+
+
+@app.route("/auth/logout", methods=["POST"])
+def auth_logout():
+    # Log a user out
+
+    resp = make_response(jsonify({"success": True, "message": "Logged out"}))
+    resp.set_cookie("apikey", None)
+    return resp
 
 
 @app.route("/user/acl", methods=["GET", "PUT"])
