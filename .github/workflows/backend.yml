@@ -40,4 +40,4 @@ jobs:
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
-          script: sudo systemctl daemon-reload ; sudo systemctl restart delivr-orchestrator ; sudo systemctl restart delivr-api
+          script: sudo systemctl daemon-reload ; sudo systemctl restart packetframe-orchestrator ; sudo systemctl restart packetframe-api
