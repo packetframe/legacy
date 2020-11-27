@@ -547,35 +547,28 @@ def records_add(zone, user_doc):
 
         new_record["pinned_nodes"] = pinned_nodes_list
 
-    is_proxied = False
     try:
         # noinspection PyUnboundLocalVariable
         _proxied = proxied
     except NameError:  # If not an A/AAAA record
-        pass
-    else:
-        if proxied:
-            is_proxied = True
-            new_record["proxied"] = True
-            add_queue_message("send_email", args={"recipients": [user_doc["username"]], "subject": "[delivr.dev] Proxied record added", "body": proxied_record_template.render(domain=zone)})
+        proxied = False
 
-    # BEGIN HACK
-
-    if is_proxied:
+    if proxied:
         if not user_doc.get("admin"):
-            return jsonify({"success": False, "message": "Proxied records is not available on your account. Please contact info@delivr.dev for more information."})
+            return jsonify({"success": False, "message": "Proxied records are not available on your account. Please contact info@delivr.dev for more information."})
 
-        if not user_doc.get("acl") and len(user_doc.get("acl")) > 0:
+        if (not user_doc.get("acl")) or len(user_doc.get("acl")) < 1:
             return jsonify({"success": False, "message": "You must configure an ACL before adding a proxied record. See https://delivr.dev/docs/caching-proxy for more information."})
 
-    # END HACK
+        new_record["proxied"] = True
+        add_queue_message("send_email", args={"recipients": [user_doc["username"]], "subject": "[delivr.dev] Proxied record added", "body": proxied_record_template.render(domain=zone)})
 
     zones.update_one({"zone": zone}, {
         "$push": {"records": new_record},
         "$set": {"serial": _get_current_serial()}
     })
 
-    if is_proxied:
+    if proxied:
         add_queue_message("refresh_cache", None)
 
     add_queue_message("refresh_all_zones", args=None)
