@@ -31,3 +31,4 @@ jobs:
           port: ${{ secrets.PORT }}
           source: "frontend/public/"
           target: "/home/nate/"
+          strip_components: 1
