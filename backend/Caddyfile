@@ -24,7 +24,7 @@ delivr.dev {
 }
 
 dash.delivr.dev {
-	root * /home/nate/delivr/frontend/public/
+	root * /home/nate/public/
 	file_server
 
 #	@prometheus_config {
