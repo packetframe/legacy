@@ -31,6 +31,13 @@
 </main>
 
 <style>
+    :global(::selection) {
+        background: #d000ff;
+    }
+    :global(::-moz-selection) {
+        background: #d000ff;
+    }
+
     footer {
         margin-top: 20px;
         margin-bottom: 15px;
