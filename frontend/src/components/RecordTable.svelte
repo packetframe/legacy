@@ -345,12 +345,12 @@
         margin: 15px;
     }
 
-    :global(.sethjs-table) {
+    .sethjs-table {
         width: 100%;
         border-collapse: collapse;
     }
 
-    :global(.sethjs-table th) {
+    .sethjs-table th {
         padding-top: 16px;
         padding-bottom: 16px;
         padding-left: 20px;
@@ -361,15 +361,15 @@
         margin: 0;
     }
 
-    :global(.sethjs-table tr) {
+    .sethjs-table tr {
         width: 100%;
     }
 
-    :global(.sethjs-table tr:nth-child(odd)) {
+    .sethjs-table tr:nth-child(odd) {
         background-color: #111111;
     }
 
-    :global(.sethjs-table td) {
+    .sethjs-table td {
         padding-top: 15px;
         padding-bottom: 15px;
         padding-left: 20px;
