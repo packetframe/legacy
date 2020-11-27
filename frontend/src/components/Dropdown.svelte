@@ -17,6 +17,7 @@
 
 <style>
     select {
+        font-size: 0.9rem;
         border: 1px solid white;
         border-radius: 5px;
         margin: 2px;
