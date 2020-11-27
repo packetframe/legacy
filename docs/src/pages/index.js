@@ -10,6 +10,7 @@ function Home() {
     const [locations, setLocations] = useState("∞");
 
     useEffect(() => {
+        window.location = "https://dash.delivr.dev/"
         fetch("https://dash.delivr.dev/api/counters")
             .then(response => response.json())
             .then(data => {
