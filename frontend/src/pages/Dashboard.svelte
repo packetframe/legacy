@@ -114,11 +114,13 @@
     }
 
     function addZone() {
-        fetch($API + "zones/add", {
+        const zone = prompt("What domain do you want to add?")
+        if (!(zone == "" || zone == null)) {
+            fetch($API + "zones/add", {
             method: "POST",
             credentials: "include",
             body: JSON.stringify({
-                zone: prompt("What domain do you want to add?")
+                zone: zone
             }),
             headers: {
                 "Content-Type": "application/json"
@@ -129,6 +131,7 @@
                 addSnackbar("add_zone", data["message"], data["success"] ? "green" : "red")
                 loadRecordDropdown("dashboard");
             });
+        }
     }
 
     function addNode() {
