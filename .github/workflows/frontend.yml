@@ -14,10 +14,12 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Build frontend
+      - name: Set up NodeJS
         uses: actions/setup-node@v1
         with:
           node-version: "12.x"
+
+      - name: Build frontend
       - run: cd frontend/ ; yarn install ; yarn build
 
       - name: Copy files to server
