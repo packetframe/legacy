@@ -27,15 +27,15 @@ dash.delivr.dev {
 	root * /home/nate/delivr/frontend/public/
 	file_server
 
-    @prometheus_config {
-        remote_ip MONITORING_SERVER_IP
-        path /prometheus.yml
-    }
-
-    route @prometheus_config {
-        root * /home/nate/delivr/intra/
-        file_server
-    }
+#	@prometheus_config {
+#		remote_ip MONITORING_SERVER_IP
+#		path /prometheus.yml
+#	}
+#
+#	route @prometheus_config {
+#		root * /home/nate/delivr/intra/
+#		file_server
+#	}
 
 	route /api/* {
 		uri strip_prefix /api
