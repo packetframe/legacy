@@ -6,7 +6,7 @@
     import Signup from "./pages/Signup.svelte";
     import Dashboard from "./pages/Dashboard.svelte";
     import Docs from "./pages/Docs.svelte";
-    import Peering from "./pages/Peering.svelte";
+    // import Peering from "./pages/Peering.svelte";
     import NotFound from "./pages/NotFound.svelte";
     import SnackbarGroup from "./components/SnackbarGroup.svelte";
 
