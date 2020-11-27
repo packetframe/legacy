@@ -11,8 +11,8 @@
                 <div style="width: clamp(0px, 950px, 95%)">
                     <div class="hero">
                         <img alt="delivr.dev" src="https://dash.delivr.dev/favicon-noborder.png" style="width: 15rem; display: inline-block"/>
-                        <h1><span class="textGradient">DELIVR.DEV</span></h1>
-                        <p>Welcome to delivr.dev, the Open Source CDN for technology enthusiasts. The platform is currently in private beta, contact <span style="unicode-bidi: bidi-override; direction: rtl">ved.rviled@ofni</span> for more information!</p>
+                        <h1><span class="textGradient">PacketFrame CDN</span></h1>
+                        <p>Welcome to PacketFrame, the Open Source CDN for technology enthusiasts. The platform is currently in private beta, contact <span style="unicode-bidi: bidi-override; direction: rtl">ved.rviled@ofni</span> for more information.</p>
                         <Button inverted onclick={() => window.location.hash = "#/dashboard"} size="1.2rem">Get Started</Button>
                     </div>
                 </div>
