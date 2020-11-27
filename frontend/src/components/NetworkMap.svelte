@@ -1,5 +1,4 @@
 <script defer>
-    import L from 'leaflet';
     import {onMount} from "svelte";
     import {API} from "../stores";
 
