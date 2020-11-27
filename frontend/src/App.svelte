@@ -15,7 +15,7 @@
         "/login": Login,
         "/signup": Signup,
         "/dashboard": Dashboard,
-        "/peering": Peering,
+        // "/peering": Peering,
         "/docs": Docs,
         "*": NotFound
     }
