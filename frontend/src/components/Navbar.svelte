@@ -12,7 +12,7 @@
 
 <main>
     <div class="left">
-        <a href="/#/"><img alt="delivr.dev" src="/img/logo.png" style="width: 20rem"></a>
+        <a href="/#/"><img alt="Logo" src="/static/img/logo.png" style="width: 20rem"></a>
     </div>
     <div class="right">
         <a href="/#/docs">Docs</a>
