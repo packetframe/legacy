@@ -1,7 +1,8 @@
 <script>
     import Button from "../components/Button.svelte";
 
-    let nodes, locations = 0;
+    let nodes = 27;
+    let locations = 22;
 </script>
 
 <main>
