@@ -223,7 +223,7 @@ def auth_signup():
     if user_doc:
         return jsonify({"success": False, "message": "User already exists"})
 
-    add_queue_message("send_email", args={"recipients": [username], "subject": "[delivr.dev] Welcome to delivr.dev!", "body": welcome_template.render(email=username)})
+    add_queue_message("send_email", args={"recipients": [username], "subject": "[PacketFrame] Welcome to PacketFrame!", "body": welcome_template.render(email=username)})
 
     users.insert_one({
         "username": username,
@@ -259,7 +259,7 @@ def auth_login():
                 resp.set_cookie("apikey", user_doc["key"])
                 return resp
             else:
-                return jsonify({"success": False, "message": "This account is inactive. Please contact info@delivr.dev for more information."})
+                return jsonify({"success": False, "message": "This account is inactive. Please contact info@packetframe.com for more information."})
 
     return jsonify({"success": False, "message": "Invalid username or password"})
 
@@ -334,7 +334,7 @@ def zones_add(username, is_admin):
         return jsonify({"success": False, "message": "Zone already exists"})
     else:
         mail_template = new_domain_template.render(domain=zone, nameservers=configuration["dns"]["nameservers"])
-        add_queue_message("send_email", args={"recipients": [username], "subject": "[delivr.dev] Domain added to delivr.dev", "body": mail_template})
+        add_queue_message("send_email", args={"recipients": [username], "subject": "[PacketFrame] Domain added to PacketFrame", "body": mail_template})
         add_queue_message("refresh_all_zones", args=None)
 
         return jsonify({"success": True, "message": "Added " + zone})
@@ -555,13 +555,13 @@ def records_add(zone, user_doc):
 
     if proxied:
         if not user_doc.get("admin"):
-            return jsonify({"success": False, "message": "Proxied records are not available on your account. Please contact info@delivr.dev for more information."})
+            return jsonify({"success": False, "message": "Proxied records are not available on your account. Please contact info@packetframe.com for more information."})
 
         if (not user_doc.get("acl")) or len(user_doc.get("acl")) < 1:
             return jsonify({"success": False, "message": "You must configure an ACL before adding a proxied record. See https://delivr.dev/docs/caching-proxy for more information."})
 
         new_record["proxied"] = True
-        add_queue_message("send_email", args={"recipients": [user_doc["username"]], "subject": "[delivr.dev] Proxied record added", "body": proxied_record_template.render(domain=zone)})
+        add_queue_message("send_email", args={"recipients": [user_doc["username"]], "subject": "[PacketFrame] Proxied record added", "body": proxied_record_template.render(domain=zone)})
 
     zones.update_one({"zone": zone}, {
         "$push": {"records": new_record},
@@ -641,7 +641,7 @@ def zones_export(zone):
 
     zone_file = utils.render_zone(zone, {"name": "no-node-selected"})
 
-    return jsonify({"success": True, "message": "; " + zone["zone"] + " exported from delivr.dev at " + current_time + "\n\n" + zone_file})
+    return jsonify({"success": True, "message": "; " + zone["zone"] + " exported from PacketFrame at " + current_time + "\n\n" + zone_file})
 
 
 # Node
@@ -825,7 +825,7 @@ def eca_auth_required(f):
             return jsonify({"success": False, "message": "Cannot find ECA node"})
 
         if not eca["enabled"]:
-            return jsonify({"success": False, "message": "This ECA node is disabled. Please contact info@delivr.dev for more information"})
+            return jsonify({"success": False, "message": "This ECA node is disabled. Please contact info@packetframe.com for more information"})
 
         return f(*args, **kwargs, eca=eca)
 
