@@ -15,6 +15,7 @@
         <a href="/#/"><img alt="Logo" src="/static/img/logo.png" style="width: 20rem"></a>
     </div>
     <div class="right">
+        <a href="/#/community">Community</a>
         <a href="/#/docs">Docs</a>
         {#if $location === "/dashboard"}
             <div on:click={() => logout()}>Logout</div>
