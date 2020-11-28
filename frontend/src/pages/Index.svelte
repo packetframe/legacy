@@ -2,6 +2,7 @@
     import Button from "../components/Button.svelte";
     import {onMount} from "svelte";
     import {API} from "../stores";
+    import Email from "../components/Email.svelte";
 
     let nodes, locations;
 
@@ -23,7 +24,7 @@
                     <div class="hero">
                         <img alt="PacketFrame Icon" src="/static/img/icon.png" style="width: 15rem; display: inline-block"/>
                         <h1><span class="textGradient">PacketFrame CDN</span></h1>
-                        <p>Welcome to PacketFrame, the Open Source CDN for technology enthusiasts. The platform is currently in private beta, contact <span style="unicode-bidi: bidi-override; direction: rtl">moc.emarftekcap@ofni</span> for more information.</p>
+                        <p>Welcome to PacketFrame, the Open Source CDN for technology enthusiasts. The platform is currently in private beta, contact <Email/> for more information.</p>
                         <Button inverted onclick={() => window.location.hash = "#/dashboard"} size="1.2rem">Get Started</Button>
                     </div>
                 </div>
@@ -49,7 +50,7 @@
             <img alt="community" class="featureImage" src="/static/img/main/community.svg"/>
             <div class="featureCaption">
                 <h1>Community Centric</h1>
-                <p>While the code is written by one person (<a href="https://natesales.net">me!</a>), the open source community plays a huge role in the CDN infrastructure. Special thanks to <a href="https://fosshost.org">fosshost</a> for their support and partnership in the project. Want to get involved? Feel free to send an email to <span style="unicode-bidi: bidi-override; direction: rtl">moc.emarftekcap@ofni</span> or hop in #packetframe on <a href="https://freenode.net/kb/answer/chat">freenode</a> and ask away!</p>
+                <p>While the code is written by one person (<a href="https://natesales.net">me!</a>), the open source community plays a huge role in the CDN infrastructure. Special thanks to <a href="https://fosshost.org">fosshost</a> for their support and partnership in the project. Want to get involved? Feel free to send an email to <Email/> or hop in #packetframe on <a href="https://freenode.net/kb/answer/chat">freenode</a> and ask away!</p>
             </div>
         </div>
     </div>
