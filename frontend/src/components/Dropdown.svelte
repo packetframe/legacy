@@ -29,10 +29,10 @@
     }
 
     .small {
-        background: url(https://dash.delivr.dev/img/arrow.png) 96% / 25% no-repeat #000;
+        background: url(/static/img/arrow.png) 96% / 25% no-repeat #000;
     }
 
     .large {
-        background: url(https://dash.delivr.dev/img/arrow.png) 96% / 10% no-repeat #000;
+        background: url(/static/img/arrow.png) 96% / 10% no-repeat #000;
     }
 </style>
