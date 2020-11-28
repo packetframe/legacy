@@ -1,5 +1,5 @@
 [Unit]
-Description=delivr.dev orchestrator
+Description=PacketFrame CDN Orchestrator
 After=network.target
 
 [Service]

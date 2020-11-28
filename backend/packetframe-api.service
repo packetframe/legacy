@@ -1,5 +1,5 @@
 [Unit]
-Description=delivr.dev api
+Description=PacketFrame CDN API
 After=network.target
 
 [Service]
