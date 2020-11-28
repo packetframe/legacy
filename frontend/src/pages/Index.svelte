@@ -1,7 +1,18 @@
 <script>
     import Button from "../components/Button.svelte";
+    import {onMount} from "svelte";
+    import {API} from "../stores";
 
-    let nodes, locations = 0;
+    let nodes, locations;
+
+    onMount(() => {
+        fetch($API + "counters")
+            .then(response => response.json())
+            .then(data => {
+                nodes = data["message"]["nodes"]
+                locations = data["message"]["locations"]
+            })
+    })
 </script>
 
 <main>
