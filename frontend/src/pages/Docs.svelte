@@ -6,6 +6,9 @@
 <main>
     <DocsHome/>
 
+    <h2>Dashboard</h2>
+    The PacketFrame dashboard implements all the functionality of PacketFrame through the API. Records can be added though the dashboard by clicking the "Add Record" button. Each record type has specific required attributes which will be displayed as input fields after selecting the record type from the dropdown.
+
     <h2>Adding Zones</h2>
     To add a zone, log in and click the "Add Zone" button located near the top right corner of the page, and entering your domain name. PacketFrame supports reverse zones as well, which can be added by specifying the IP address block in CIDR notation.
 
