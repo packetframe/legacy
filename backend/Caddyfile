@@ -6,6 +6,15 @@ packetframe.com {
 	root * /home/nate/public/
 	file_server
 
+    @hashredir not {
+            path /
+            path /api/*
+            path /static/*
+            path /build/*
+            path /global.css
+    }
+    redir @hashredir /#{path}
+
 	route /api/* {
 		uri strip_prefix /api
 		reverse_proxy localhost:5000
