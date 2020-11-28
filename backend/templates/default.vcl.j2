@@ -63,21 +63,93 @@ sub vcl_synth {
     synthetic({"
         <html>
         <head>
-           <title>Error "} + resp.status + {" - delivr.dev</title>
-            <link rel="stylesheet" href="https://dash.delivr.dev/5xx.css">
-            <link rel="icon" type="image/png" href="https://dash.delivr.dev/favicon.png">
+           <title>Error "} + resp.status + {"</title>
+            <link rel="icon" type="image/png" href="https://packetframe.com/static/img/icon.png">
         </head>
+
+        <style>
+            * {
+                background-color: black;
+                color: white;
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+            }
+
+            .container {
+                display: flex;
+                justify-content: space-evenly;
+                align-items: center;
+                flex-wrap: wrap;
+                width: 75%;
+                margin: auto;
+            }
+
+            h1 {
+                text-align: center;
+                font-size: 3em;
+            }
+
+            h2 {
+                text-align: center;
+            }
+
+            .figure-element {
+                text-align: center;
+                margin-top: 15px;
+                font-size: 1.25em;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                flex-grow: 1;
+            }
+
+            .figure-element .image {
+                width: 200px;
+            }
+
+            .icon {
+                height: 50px;
+                width: 50px;
+            }
+
+            .navbar {
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+
+            .nav-element {
+                max-height: 100%;
+                align-items: center;
+                cursor: pointer;
+                margin: 15px;
+                text-decoration: none;
+            }
+
+            .footer {
+                position: fixed;
+                left: 0;
+                bottom: 0;
+                width: 100%;
+                text-align: center;
+            }
+
+            .text-container {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                flex-grow: 1;
+            }
+        </style>
 
         <body>
         <div class="navbar">
             <div class="nav-element">
-                <a href="https://delivr.dev/">
-                    <img style="width: 225px" src="/static/img/logo.png" alt="delivr.dev">
+                <a href="https://packetframe.com/">
+                    <img style="width: 225px" src="https://packetframe.com/static/img/logo.png" alt="Logo">
                 </a>
-            </div>
-
-            <div class="nav-element" style="float: right">
-                <a href="https://dash.delivr.dev/" style="text-decoration: none;">Dashboard</a>
             </div>
         </div>
 
@@ -85,33 +157,33 @@ sub vcl_synth {
        <h2>"} + resp.reason + {"</h2>
         <div class="container">
             <div class="figure-element">
-                <img class="image" src="/static/img/laptop.png" alt="User">
+                <img class="image" src="https://packetframe.com/static/img/laptop.png" alt="Laptop icon">
                 <div class="text-container">
                     <p>Browser</p>
-                    <img class="icon" src="/static/img/check.png" alt="">
+                    <img class="icon" src="https://packetframe.com/static/img/check.png" alt="Check icon">
                 </div>
             </div>
 
             <div class="figure-element">
-                <img class="image" src="/static/img/delivr.png" alt="delivr.dev">
+                <img class="image" src="https://packetframe.com/static/img/icon.png" alt="Icon">
                 <div class="text-container">
-                    <p>DELIVR.DEV</p>
-                    <img class="icon" src="/static/img/check.png" alt="">
+                    <p>PacketFrame</p>
+                    <img class="icon" src="https://packetframe.com/static/img/check.png" alt="">
                 </div>
             </div>
 
             <div class="figure-element">
-                <img class="image" style="height: 125px" src="/static/img/server.png" alt="">
+                <img class="image" style="height: 125px" src="https://packetframe.com/static/img/server.png" alt="Server icon">
                 <div class="text-container">
                     <p>Origin</p>
-                    <img class="icon" src="/static/img/cross.png" alt="">
+                    <img class="icon" src="https://packetframe.com/static/img/cross.png" alt="Negative icon">
                 </div>
             </div>
         </div>
 
         <div class="footer">
            <p>Error  "} + resp.status + {" origin "} + req.http.host + {" xid "} + req.xid + {"</p>
-           <p>&copy; 2020 Nate Sales.</p>
+           <p>&copy; 2020 PacketFrame.</p>
         </div>
 
         </body>
@@ -128,21 +200,93 @@ sub vcl_backend_error {
     synthetic({"
         <html>
         <head>
-           <title>Error "} + beresp.status + {" - delivr.dev</title>
-            <link rel="stylesheet" href="https://dash.delivr.dev/5xx.css">
-            <link rel="icon" type="image/png" href="https://dash.delivr.dev/favicon.png">
+           <title>Error "} + beresp.status + {"</title>
+            <link rel="icon" type="image/png" href="https://packetframe.com/static/img/icon.png">
         </head>
+
+        <style>
+            * {
+                background-color: black;
+                color: white;
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+            }
+
+            .container {
+                display: flex;
+                justify-content: space-evenly;
+                align-items: center;
+                flex-wrap: wrap;
+                width: 75%;
+                margin: auto;
+            }
+
+            h1 {
+                text-align: center;
+                font-size: 3em;
+            }
+
+            h2 {
+                text-align: center;
+            }
+
+            .figure-element {
+                text-align: center;
+                margin-top: 15px;
+                font-size: 1.25em;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                flex-grow: 1;
+            }
+
+            .figure-element .image {
+                width: 200px;
+            }
+
+            .icon {
+                height: 50px;
+                width: 50px;
+            }
+
+            .navbar {
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+
+            .nav-element {
+                max-height: 100%;
+                align-items: center;
+                cursor: pointer;
+                margin: 15px;
+                text-decoration: none;
+            }
+
+            .footer {
+                position: fixed;
+                left: 0;
+                bottom: 0;
+                width: 100%;
+                text-align: center;
+            }
+
+            .text-container {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                flex-grow: 1;
+            }
+        </style>
 
         <body>
         <div class="navbar">
             <div class="nav-element">
-                <a href="https://delivr.dev/">
-                    <img style="width: 225px" src="/static/img/full.png" alt="delivr.dev">
+                <a href="https://packetframe.com/">
+                    <img style="width: 225px" src="https://packetframe.com/static/img/logo.png" alt="Logo">
                 </a>
-            </div>
-
-            <div class="nav-element" style="float: right">
-                <a href="https://dash.delivr.dev/" style="text-decoration: none;">Dashboard</a>
             </div>
         </div>
 
@@ -150,33 +294,33 @@ sub vcl_backend_error {
        <h2>"} + beresp.reason + {"</h2>
         <div class="container">
             <div class="figure-element">
-                <img class="image" src="/static/img/laptop.png" alt="User">
+                <img class="image" src="https://packetframe.com/static/img/laptop.png" alt="Laptop icon">
                 <div class="text-container">
                     <p>Browser</p>
-                    <img class="icon" src="/static/img/check.png" alt="">
+                    <img class="icon" src="https://packetframe.com/static/img/check.png" alt="Check icon">
                 </div>
             </div>
 
             <div class="figure-element">
-                <img class="image" src="/static/img/delivr.png" alt="delivr.dev">
+                <img class="image" src="https://packetframe.com/static/img/icon.png" alt="Icon">
                 <div class="text-container">
-                    <p>DELIVR.DEV</p>
-                    <img class="icon" src="/static/img/check.png" alt="">
+                    <p>PacketFrame</p>
+                    <img class="icon" src="https://packetframe.com/static/img/check.png" alt="">
                 </div>
             </div>
 
             <div class="figure-element">
-                <img class="image" style="height: 125px" src="/static/img/server.png" alt="">
+                <img class="image" style="height: 125px" src="https://packetframe.com/static/img/server.png" alt="Server icon">
                 <div class="text-container">
                     <p>Origin</p>
-                    <img class="icon" src="/static/img/cross.png" alt="">
+                    <img class="icon" src="https://packetframe.com/static/img/cross.png" alt="Negative icon">
                 </div>
             </div>
         </div>
 
         <div class="footer">
            <p>Error  "} + beresp.status + {" origin "} + bereq.http.host + {" xid "} + bereq.xid + {"</p>
-           <p>&copy; 2020 Nate Sales.</p>
+           <p>&copy; 2020 PacketFrame.</p>
         </div>
 
         </body>
