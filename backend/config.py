@@ -2,7 +2,7 @@ import os
 
 import yaml
 
-CONFIG_FILE = "/home/nate/delivr/config.yml"
+CONFIG_FILE = "/home/nate/backend/config.yml"
 
 if not os.path.exists(CONFIG_FILE):
     print("No config.yml file found.")
