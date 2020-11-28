@@ -9,6 +9,7 @@
     // import Peering from "./pages/Peering.svelte";
     import NotFound from "./pages/NotFound.svelte";
     import SnackbarGroup from "./components/SnackbarGroup.svelte";
+    import Banner from "./components/Banner.svelte";
 
     const routes = {
         "/": Index,
@@ -27,6 +28,7 @@
 </script>
 
 <main>
+    <Banner>Delivr.dev is now PacketFrame! Same service, same projects, just a new name and domain. 😃</Banner>
     <Navbar/>
 
     <div class="body">
