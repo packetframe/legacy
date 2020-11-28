@@ -11,7 +11,7 @@
         </div>
 
         <div class="figure-element">
-            <img alt="delivr.dev" class="image" src="/static/img/icon.png">
+            <img alt="PacketFrame" class="image" src="/static/img/icon.png">
             <div class="text-container">
                 <p>PacketFrame</p>
                 <img alt="" class="icon" src="/static/img/check.png">

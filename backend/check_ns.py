@@ -71,6 +71,6 @@ for zone in db["zones"].find():
             )
 
             print("Sending email to", zone["users"])
-            add_queue_message("send_email", args={"recipients": zone["users"], "subject": "[delivr.dev] Attention Needed: nameserver update", "body": template})
+            add_queue_message("send_email", args={"recipients": zone["users"], "subject": "[PacketFrame] Attention Needed: nameserver update", "body": template})
 
     time.sleep(0.1)

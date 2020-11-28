@@ -4,7 +4,7 @@ import os
 
 db_client = MongoClient("mongodb://localhost:27017")
 
-with open("/home/nate/delivr/config.yml", "r") as config_file:
+with open("/home/nate/backend/config.yml", "r") as config_file:
     config = yaml.safe_load(config_file.read())
 
 _config = {
@@ -79,8 +79,8 @@ for node in db_client["cdn"]["nodes"].find({"http": True}):
 with open("hosts.yml", "w") as hosts_file:
     hosts_file.write(yaml.dump(_config, default_flow_style=False))
 
-with open("/home/nate/delivr/intra/prometheus.yml", "w") as prometheus_file:
-    prometheus_file.write(prometheus_config + "\n")
+# with open("/home/nate/backend/intra/prometheus.yml", "w") as prometheus_file:
+#     prometheus_file.write(prometheus_config + "\n")
 
 print("Deploying monitoring config...")
 os.system("ssh " + config["monitoring_host"] + " -i /home/nate/ssh-key \"pct exe 101 ./update-prometheus.sh\"")

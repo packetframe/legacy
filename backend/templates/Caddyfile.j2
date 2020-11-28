@@ -8,16 +8,16 @@
     header / -Server
 }
 
-https://local.delivr.dev {
-    import primary_site
-
-    tls /etc/caddy/local.delivr.dev-chain.pem /etc/caddy/local.delivr.dev-key.pem
-
-    respond / `{
-        "pop": "{{ inventory_hostname }}",
-        "http": "{{ http }}"
-    }`
-}
+# https://local.packetframe.com {
+#     import primary_site
+#
+#     tls /etc/caddy/local.packetframe.com-chain.pem /etc/caddy/local.packetframe.com-key.pem
+#
+#     respond / `{
+#         "pop": "{{ inventory_hostname }}",
+#         "http": "{{ http }}"
+#     }`
+# }
 
 {% for domain in domains %}
 https://{{ domain }} {

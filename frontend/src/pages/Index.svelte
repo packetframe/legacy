@@ -10,9 +10,9 @@
             <div class="containerStyle">
                 <div style="width: clamp(0px, 950px, 95%)">
                     <div class="hero">
-                        <img alt="delivr.dev" src="/static/img/icon.png" style="width: 15rem; display: inline-block"/>
+                        <img alt="PacketFrame Icon" src="/static/img/icon.png" style="width: 15rem; display: inline-block"/>
                         <h1><span class="textGradient">PacketFrame CDN</span></h1>
-                        <p>Welcome to PacketFrame, the Open Source CDN for technology enthusiasts. The platform is currently in private beta, contact <span style="unicode-bidi: bidi-override; direction: rtl">ved.rviled@ofni</span> for more information.</p>
+                        <p>Welcome to PacketFrame, the Open Source CDN for technology enthusiasts. The platform is currently in private beta, contact <span style="unicode-bidi: bidi-override; direction: rtl">moc.emarftekcap@ofni</span> for more information.</p>
                         <Button inverted onclick={() => window.location.hash = "#/dashboard"} size="1.2rem">Get Started</Button>
                     </div>
                 </div>
@@ -22,7 +22,7 @@
             <img alt="code" class="featureImage" src="/static/img/main/code.svg"/>
             <div class="featureCaption">
                 <h1>Built for Developers</h1>
-                <p>delivr.dev was built with developers in mind. With delivr.dev, the only thing kept private is <a href="https://delivr.dev/docs/privacy-policy">your data</a> and keys to the infrastructure. Every function of the dashboard is exposed via the <a href="https://delivr.dev/docs/api">API</a> and the entire codebase is <a href="https://github.com/natesales/delivr">open source</a>.</p>
+                <p>PacketFrame was built with developers in mind. With the PacketFrame CDN, the only thing kept private is <a href="https://packetframe.com/docs/privacy-policy">your data</a> and keys to the infrastructure. Every function of the dashboard is exposed via the <a href="https://packetframe.com/docs/api">API</a> and the entire codebase is <a href="https://github.com/packetframe/cdn">open source</a>.</p>
             </div>
         </div>
 
@@ -38,7 +38,7 @@
             <img alt="community" class="featureImage" src="/static/img/main/community.svg"/>
             <div class="featureCaption">
                 <h1>Community Centric</h1>
-                <p>While the code is written by one person (<a href="https://natesales.net">me!</a>), the open source community plays a huge role in the CDN infrastructure. Special thanks to <a href="https://fosshost.org">fosshost</a> for their support and partnership in the project. Want to get involved? Feel free to send an email to <span style="unicode-bidi: bidi-override; direction: rtl">ved.rviled@ofni</span> or hop in #delivr on <a href="https://freenode.net/kb/answer/chat">freenode</a> and ask away!</p>
+                <p>While the code is written by one person (<a href="https://natesales.net">me!</a>), the open source community plays a huge role in the CDN infrastructure. Special thanks to <a href="https://fosshost.org">fosshost</a> for their support and partnership in the project. Want to get involved? Feel free to send an email to <span style="unicode-bidi: bidi-override; direction: rtl">moc.emarftekcap@ofni</span> or hop in #packetframe on <a href="https://freenode.net/kb/answer/chat">freenode</a> and ask away!</p>
             </div>
         </div>
     </div>

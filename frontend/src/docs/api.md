@@ -13,9 +13,9 @@ Authenticated routes require the `X-API-Key` request header to be set to your AP
 | ---------------------------------- | ------- | ------------------------------------ |
 | /auth/signup                       | POST    | Create an account                    |
 | /auth/login                        | POST    | Get your API token                   |
-| /zones/add                         | POST    | Add a zone to delivr                 |
+| /zones/add                         | POST    | Add a zone                           |
 | /zones/list                        | GET     | Get all zones under your account     |
-| /zone/[ZONE]/delete                | POST    | Remove [ZONE] from delivr            |
+| /zone/[ZONE]/delete                | POST    | Remove [ZONE]                        |
 | /zone/[ZONE]/add                   | POST    | Add a record to [ZONE]               |
 | /zone/[ZONE/records                | GET     | Get records for [ZONE]               |
 | /zone/[ZONE/users                  | GET     | Get users for [ZONE]                 |

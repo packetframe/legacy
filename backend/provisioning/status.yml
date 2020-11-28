@@ -12,7 +12,7 @@
 
 #    - name: Check HTTP query
 #      uri:
-#        url: https://local.delivr.dev/
+#        url: https://local.example.com/
 #        return_content: yes
 #      register: this
 #      failed_when: this.x_pop_tag != inventory_hostname

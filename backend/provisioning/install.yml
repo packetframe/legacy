@@ -2,7 +2,7 @@
   hosts: nodes
   tasks:
     - name: Include vars
-      include_vars: /home/nate/delivr/config.yml
+      include_vars: /home/nate/backend/config.yml
 
     # Packages
 

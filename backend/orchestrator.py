@@ -89,15 +89,15 @@ while True:
             print("refreshing local zones file")
 
             try:
-                shutil.rmtree("/tmp/delivrdeploy/")
+                shutil.rmtree("/tmp/packetframedeploy/")
             except FileNotFoundError:
                 pass
 
-            os.mkdir("/tmp/delivrdeploy/")
+            os.mkdir("/tmp/packetframedeploy/")
 
             for node in db["nodes"].find():
                 print(f"Build archive for {node['name']}")
-                os.mkdir("/tmp/delivrdeploy/" + node["name"])
+                os.mkdir("/tmp/packetframedeploy/" + node["name"])
 
                 zone_registry = ""
                 for zone in db["zones"].find():
@@ -105,14 +105,14 @@ while True:
 
                     zone_file = utils.render_zone(zone, node)
 
-                    with open(f"/tmp/delivrdeploy/{node['name']}/db.{zone['zone']}", "w") as zone_file_writer:
+                    with open(f"/tmp/packetframedeploy/{node['name']}/db.{zone['zone']}", "w") as zone_file_writer:
                         zone_file_writer.write(zone_file)
 
-                with open(f"/tmp/delivrdeploy/{node['name']}/named.conf.local", "w") as named_file:
+                with open(f"/tmp/packetframedeploy/{node['name']}/named.conf.local", "w") as named_file:
                     named_file.write(zone_registry)
 
-                with tarfile.open(f"/tmp/delivrdeploy/{node['name']}.tar.gz", "w:gz") as tar:
-                    output_file = f"/tmp/delivrdeploy/{node['name']}/"
+                with tarfile.open(f"/tmp/packetframedeploy/{node['name']}.tar.gz", "w:gz") as tar:
+                    output_file = f"/tmp/packetframedeploy/{node['name']}/"
                     tar.add(output_file, arcname=os.path.basename(output_file))
 
                 try:
@@ -121,7 +121,7 @@ while True:
                     print(node["name"] + " unable to connect.")
                 else:
                     with SCPClient(ssh.get_transport()) as scp:
-                        scp.put(f"/tmp/delivrdeploy/{node['name']}.tar.gz", "/etc/bind/deploy.tar.gz")
+                        scp.put(f"/tmp/packetframedeploy/{node['name']}.tar.gz", "/etc/bind/deploy.tar.gz")
 
                     stdin, stdout, stderr = ssh.exec_command("tar -xvzf /etc/bind/deploy.tar.gz -C /etc/bind/ ; rm /etc/bind/deploy.tar.gz ; bash /root/cleanup-zones.sh ; rndc reload")
                     for line in stdout:
@@ -130,7 +130,7 @@ while True:
                         print(line.strip())
 
             # Clean up the tmp files
-            shutil.rmtree("/tmp/delivrdeploy/")
+            shutil.rmtree("/tmp/packetframedeploy/")
 
             print("finished refresh_all_zones task")
 
@@ -235,7 +235,7 @@ while True:
 
             server = SMTP(configuration["email"]["server"])
             server.login(configuration["email"]["username"], configuration["email"]["password"])
-            server.sendmail(configuration["email"]["username"], recipients + ["info@delivr.dev"], msg.as_string())
+            server.sendmail(configuration["email"]["username"], recipients + ["info@packetframe.com"], msg.as_string())
             server.quit()
             print("Sent")
 

@@ -558,7 +558,7 @@ def records_add(zone, user_doc):
             return jsonify({"success": False, "message": "Proxied records are not available on your account. Please contact info@packetframe.com for more information."})
 
         if (not user_doc.get("acl")) or len(user_doc.get("acl")) < 1:
-            return jsonify({"success": False, "message": "You must configure an ACL before adding a proxied record. See https://delivr.dev/docs/caching-proxy for more information."})
+            return jsonify({"success": False, "message": "You must configure an ACL before adding a proxied record."})
 
         new_record["proxied"] = True
         add_queue_message("send_email", args={"recipients": [user_doc["username"]], "subject": "[PacketFrame] Proxied record added", "body": proxied_record_template.render(domain=zone)})

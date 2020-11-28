@@ -7,7 +7,7 @@ import requests
 
 
 def log_error(err):
-    print("Unable to connect to ECA control plane. Please contact info@delivr.dev for more information. Error: " + str(err))
+    print("Unable to connect to ECA control plane. Please contact info@packetframe.com for more information. Error: " + str(err))
     exit(1)
 
 
@@ -20,7 +20,7 @@ def check_response(response):
         log_error("HTTP status code == " + str(response.status_code))
 
     if not response.json()["success"]:
-        log_error("(delivr.dev) " + str(response.json()["message"]))
+        log_error("(PacketFrame) " + str(response.json()["message"]))
 
 
 print("Clearing zone files")
@@ -31,7 +31,7 @@ for file in files:
 print("Checking credentials")
 auth_key = ""
 try:
-    with open("/etc/delivr-eca/auth") as auth_key_file:
+    with open("/etc/packetframe-eca/auth") as auth_key_file:
         auth_key = auth_key_file.read().strip()
 except Exception as e:
     print("Unable to read auth file: " + str(e))
@@ -43,7 +43,7 @@ r = query("check")
 check_response(r)
 print("Connected to ECA control plane successfully")
 
-with open("/var/delivr-eca/info", "w") as info_file:
+with open("/var/packetframe-eca/info", "w") as info_file:
     info_file.write(str(r.json()["message"]))
 
 disabled = False

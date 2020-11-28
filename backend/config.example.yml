@@ -6,8 +6,8 @@ ssh-key: /home/nate/ssh-key
 dns:
   rname: info.example.com
   nameservers:
-    - ns1.delivr.dev
-    - ns2.delivr.dev
+    - ns1.example.dev
+    - ns2.example.dev
   prefix4: 203.0.113.0/24
   prefix6: 2001:db8:2::/48
   bind_addresses4:

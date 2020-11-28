@@ -1,12 +1,12 @@
 #!/usr/bin/python3
-# CLI utility for delivr.dev
+# CLI utility for the PacketFrame CDN
 
 import os
 import sys
 import requests
 from terminaltables import SingleTable
 
-help_text = """Usage: delivrctl command category [args]
+help_text = """Usage: packetframectl command category [args]
 
 Commands:
   get    Retrieve data
@@ -18,9 +18,9 @@ Categories:
   users zone    Get users for zone
 """
 
-API_KEY = os.environ.get("DELIVR_API_KEY")
+API_KEY = os.environ.get("PACKETFRAME_API_KEY")
 if not API_KEY:
-    print("DELIVR_API_KEY environment variable not found.")
+    print("PACKETFRAME_API_KEY environment variable not found.")
     exit(1)
 
 
