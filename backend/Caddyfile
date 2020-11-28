@@ -12,7 +12,7 @@ packetframe.com {
 	}
 
 	log {
-		output file /var/log/access-dash.delivr.dev.log {
+		output file /var/log/access-packetframe.log {
 			roll_size 1gb
 			roll_keep 1
 			roll_keep_for 7d

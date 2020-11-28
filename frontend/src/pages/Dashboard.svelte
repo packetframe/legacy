@@ -281,4 +281,3 @@
         background: url(/static/img/arrow.png) 96% / 15% no-repeat #000;
     }
 </style>
-

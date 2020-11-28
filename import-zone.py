@@ -15,7 +15,7 @@ def _post_record(domain, data):
     if dryrun:
         print(data)
     else:
-        r = requests.post("https://dash.delivr.dev/api/zone/" + domain + "/add", json=data, headers={"X-API-Key": apikey})
+        r = requests.post("https://packetframe.com/api/zone/" + domain + "/add", json=data, headers={"X-API-Key": apikey})
         if not r.json()["success"]:
             print(data, r.json())
 

@@ -3,7 +3,7 @@ id: api
 title: API
 ---
 
-All API routes are under `https://dash.delivr.dev/api/`
+All API routes are under `https://packetframe.com/api/`
 
 Authenticated routes require the `X-API-Key` request header to be set to your API key.
 

@@ -16,7 +16,7 @@ for _zone in zones.find():
         cdn_zone = _zone["zone"]
         break
 
-r = requests.post("https://dash.delivr.dev/api/zone/" + cdn_zone + "/add", headers={"X-API-Key": API_KEY}, json={
+r = requests.post("https://packetframe.com/api/zone/" + cdn_zone + "/add", headers={"X-API-Key": API_KEY}, json={
     "type": "TXT",
     "ttl": 300,
     "label": "_acme-challenge." + zone + ".",

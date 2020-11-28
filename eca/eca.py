@@ -12,7 +12,7 @@ def log_error(err):
 
 
 def query(route):
-    return requests.get("https://dash.delivr.dev/api/eca/" + route, headers={"X-Auth-Key": auth_key})
+    return requests.get("https://packetframe.com/api/eca/" + route, headers={"X-Auth-Key": auth_key})
 
 
 def check_response(response):

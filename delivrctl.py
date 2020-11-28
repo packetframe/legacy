@@ -25,7 +25,7 @@ if not API_KEY:
 
 
 def _get(endpoint, body):
-    return requests.get("https://dash.delivr.dev/api/" + endpoint, headers={"X-API-Key": API_KEY}, json=body)
+    return requests.get("https://packetframe.com/api/" + endpoint, headers={"X-API-Key": API_KEY}, json=body)
 
 
 def _truncate(string):
