@@ -24,7 +24,7 @@
                     <div class="hero">
                         <img alt="PacketFrame Icon" src="/static/img/icon.png" style="width: 15rem; display: inline-block"/>
 <!--                        <h1><span class="textGradient">PacketFrame CDN</span></h1>-->
-                        <h1>PacketFrame CDN</h1>
+                        <h1>PacketFrame</h1>
                         <p>Welcome to PacketFrame, the Open Source CDN for technology enthusiasts. The platform is currently in private beta, contact <Email/> for more information.</p>
                         <Button inverted onclick={() => window.location.hash = "#/dashboard"} size="1.2rem">Get Started</Button>
                     </div>
