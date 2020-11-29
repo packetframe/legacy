@@ -2,6 +2,10 @@
 	email info@packetframe.com
 }
 
+www.packetframe.com {
+    redir https://packetframe.com{uri}
+}
+
 packetframe.com {
 	root * /home/nate/public/
 	file_server
