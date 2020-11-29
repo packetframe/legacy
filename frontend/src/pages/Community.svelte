@@ -88,6 +88,13 @@
                 <p>Our vision is to offer solutions of high quality at an affordable price. Our services are delivered from our own datacenter in Sandefjord. In that way we can ensure high stability and safety. We work around the clock to give you the best price and service on the market.</p>
             </div>
         </div>
+
+        <div class="item">
+            <div class="item-text">
+                <a href="https://terrahost.no/">Hivane</a>
+                <p>Hivane offers DNS / MX / WWW services to non-for-profit projects. Check out https://www.hivane.net/ for more information.</p>
+            </div>
+        </div>
     </div>
 </main>
 
