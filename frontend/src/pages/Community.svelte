@@ -91,7 +91,7 @@
 
         <div class="item">
             <div class="item-text">
-                <a href="https://terrahost.no/">Hivane</a>
+                <a href="https://hivane.net">Hivane</a>
                 <p>Hivane offers DNS / MX / WWW services to non-for-profit projects. Check out https://www.hivane.net/ for more information.</p>
             </div>
         </div>
