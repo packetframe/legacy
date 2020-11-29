@@ -7,21 +7,19 @@
     import Dashboard from "./pages/Dashboard.svelte";
     import Docs from "./pages/Docs.svelte";
     import Community from "./pages/Community.svelte";
-    // import Peering from "./pages/Peering.svelte";
     import NotFound from "./pages/NotFound.svelte";
     import SnackbarGroup from "./components/SnackbarGroup.svelte";
     import Banner from "./components/Banner.svelte";
 
-    const routes = {
-        "/": Index,
-        "/login": Login,
-        "/signup": Signup,
-        "/dashboard": Dashboard,
-        "/community": Community,
-        // "/peering": Peering,
-        "/docs": Docs,
-        "*": NotFound
-    }
+    const routes = new Map();
+
+    routes.set("/", Index)
+    routes.set("/login", Login)
+    routes.set("/signup", Signup)
+    routes.set("/dashboard", Dashboard)
+    routes.set("/community", Community)
+    routes.set("/docs", Docs)
+    // routes.set("*", NotFound)
 
     // // Load global theme
     // for (const [key, value] of Object.entries(DarkTheme)) {
