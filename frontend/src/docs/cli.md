@@ -7,7 +7,7 @@ title: CLI
 
 # <a href="#/docs">Docs</a> <span>/</span> CLI
 
-<img src="/static/img/main/code3.svg">
+<img src="/static/img/main/code3.svg" alt="Code">
 
 For users that prefer a CLI option, there's a `packetframectl` tool that can wraps the API in a simple command line interface.
 

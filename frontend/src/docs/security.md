@@ -11,7 +11,7 @@ import Email from "../components/Email.svelte";
 
 # <a href="#/docs">Docs</a> <span>/</span> Security
 
-<img src="/static/img/main/hacker.svg">
+<img src="/static/img/main/hacker.svg" alt="Hacker">
 
 Hackers are welcome! If you're interested in testing PacketFrame for vulns, please follow the rules below. When in doubt, ask!
 

@@ -7,7 +7,7 @@ title: Dashboard
 
 # <a href="#/docs">Docs</a> <span>/</span> Dashboard
 
-<img src="/static/img/main/dashboard.svg">
+<img src="/static/img/main/dashboard.svg" alt="Dashboard">
 
 <h2>Dashboard</h2>
 The PacketFrame dashboard implements all the functionality of PacketFrame through the API. Records can be added though the dashboard by clicking the "Add Record" button. Each record type has specific required attributes which will be displayed as input fields after selecting the record type from the dropdown.

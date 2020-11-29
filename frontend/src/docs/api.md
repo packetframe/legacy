@@ -8,7 +8,7 @@ title: API
 
 # <a href="#/docs">Docs</a> <span>/</span> API
 
-<img src="/static/img/main/code2.svg">
+<img src="/static/img/main/code2.svg" alt="Code">
 
 PacketFrame's API exposes all functionality of the platform via a RESTful programmatic interface.
 

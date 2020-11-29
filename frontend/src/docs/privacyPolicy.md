@@ -7,7 +7,7 @@ title: Privacy Policy
 
 # <a href="#/docs">Docs</a> <span>/</span> Privacy Policy
 
-<img src="/static/img/main/privacy.svg">
+<img src="/static/img/main/privacy.svg" alt="Privacy">
 
 Last updated November 27, 2020
 

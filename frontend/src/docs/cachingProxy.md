@@ -7,7 +7,7 @@ title: Caching Proxy
 
 # <a href="#/docs">Docs</a> <span>/</span> Caching Proxy
 
-<img src="/static/img/main/cache.svg">
+<img src="/static/img/main/cache.svg" alt="Cache">
 
 The PacketFrame caching proxy puts the PacketFrame network in front of your origin webserver to increase performance and security. 
 
