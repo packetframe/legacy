@@ -19,6 +19,7 @@
     routes.set("/dashboard", Dashboard)
     routes.set("/community", Community)
     routes.set("/docs", Docs)
+    // TODO: 404 doesn't work
     // routes.set("*", NotFound)
 
     // // Load global theme
