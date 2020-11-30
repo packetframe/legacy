@@ -21,9 +21,11 @@
         })
             .then(response => response.json())
             .then(data => {
-                if (!data["success"]) {
+                if (type === "signup") {
                     addSnackbar(type.charAt(0).toUpperCase() + type.slice(1), data["message"], data["success"] ? "green" : "red");
-                } else {
+                }
+
+                if (data["success"]) {
                     if (type === "login") {
                         window.location.hash = "#/dashboard";
                     } else {
@@ -53,7 +55,7 @@
             {/if}
 
             <div class="form-element">
-                <Button type="submit" centered>{type.charAt(0).toUpperCase() + type.slice(1)}</Button>
+                <Button centered type="submit">{type.charAt(0).toUpperCase() + type.slice(1)}</Button>
             </div>
         </div>
     </form>
