@@ -6,7 +6,7 @@
 
     export let type;
 
-    let username, password;
+    let username, password, message;
 
     function submitForm() {
         fetch($API + "auth/" + type, {
@@ -44,6 +44,12 @@
             <div class="form-element">
                 <TextInput bind:content={password} password placeholder="Password"/>
             </div>
+
+            {#if type === "signup"}
+                <div class="form-element">
+                    <TextInput bind:content={message} placeholder="How did you hear about PacketFrame?"/>
+                </div>
+            {/if}
 
             <div class="form-element">
                 <Button type="submit" centered>{type.charAt(0).toUpperCase() + type.slice(1)}</Button>

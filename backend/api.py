@@ -206,7 +206,7 @@ def auth_signup():
     # Create a new user account
 
     try:
-        username, password = get_args("username", "password")
+        username, password, message = get_args("username", "password", "message")
     except ValueError as e:
         return jsonify({"success": False, "message": str(e)})
 
@@ -223,7 +223,7 @@ def auth_signup():
     if user_doc:
         return jsonify({"success": False, "message": "User already exists"})
 
-    add_queue_message("send_email", args={"recipients": [username], "subject": "[PacketFrame] Welcome to PacketFrame!", "body": welcome_template.render(email=username)})
+    add_queue_message("send_email", args={"recipients": [username], "subject": "[PacketFrame] Welcome to PacketFrame!", "body": welcome_template.render(email=username, message=message)})
 
     users.insert_one({
         "username": username,
