@@ -952,16 +952,16 @@ def clear_queue(username, is_admin):
 @app.route("/debug/queue_stats")
 @authentication_required
 def queue_stats(username, is_admin):
-    # Clear the beanstalk queue
+    # Get queue status
 
     if not is_admin:
         return jsonify({"success": False, "message": "Unauthorized"})
 
-    stats = queue.stats()
+    _stats = queue.stats()
 
     return jsonify({"success": True, "message": {
-        "current_ready": stats["current-jobs-ready"],
-        "current_reserved": stats["current-jobs-reserved"]
+        "current_ready": _stats["current-jobs-ready"],
+        "current_reserved": _stats["current-jobs-reserved"]
     }})
 
 
