@@ -147,4 +147,14 @@
         color: white;
         font-size: 1.3em;
     }
+
+    p {
+        width: clamp(0px, 500px, 95%);
+    }
+
+    .header {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+    }
 </style>
