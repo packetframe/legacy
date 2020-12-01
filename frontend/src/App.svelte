@@ -29,7 +29,7 @@
 
     let showBanner = true;
 
-    if (document.cookie === "hidebanner=true") {
+    if (document.cookie.includes("hidebanner")) {
         showBanner = false;
     }
 
