@@ -26,10 +26,21 @@
     // for (const [key, value] of Object.entries(DarkTheme)) {
     //     document.documentElement.style.setProperty("--" + key, value)
     // }
+
+    let showBanner = true;
+
+    if (document.cookie === "hidebanner=true") {
+        showBanner = false;
+    }
+
+    document.cookie = "hidebanner=true";
 </script>
 
 <main>
-    <Banner>Delivr.dev is now PacketFrame! Same service, same projects, just a new name and domain. 😃</Banner>
+    {#if showBanner}
+        <Banner>Delivr.dev is now PacketFrame! Same service, same projects, just a new name and domain. 😃</Banner>
+    {/if}
+
     <Navbar/>
 
     <div class="body">
@@ -44,6 +55,7 @@
     :global(::selection) {
         background: #d000ff;
     }
+
     :global(::-moz-selection) {
         background: #d000ff;
     }
