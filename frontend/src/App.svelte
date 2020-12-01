@@ -28,12 +28,12 @@
     // }
 
     let showBanner = true;
-
-    if (document.cookie.includes("hidebanner")) {
-        showBanner = false;
-    }
-
-    document.cookie = "hidebanner=true";
+    //
+    // if (document.cookie.includes("hidebanner")) {
+    //     showBanner = false;
+    // }
+    //
+    // document.cookie = "hidebanner=true";
 </script>
 
 <main>
