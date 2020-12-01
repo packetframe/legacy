@@ -35,7 +35,7 @@
             <img alt="code" class="featureImage" src="/static/img/main/code.svg"/>
             <div class="featureCaption">
                 <h1>Built for Developers</h1>
-                <p>PacketFrame was built with developers in mind. With the PacketFrame CDN, the only thing kept private is <a href="https://packetframe.com/docs/privacy-policy">your data</a> and keys to the infrastructure. Every function of the dashboard is exposed via the <a href="https://packetframe.com/docs/api">API</a> and the entire codebase is <a href="https://github.com/packetframe/cdn">open source</a>.</p>
+                <p>PacketFrame was built with developers in mind. With the PacketFrame CDN, the only thing kept private is <a href="https://packetframe.com/docs/privacy-policy">your data</a> and keys to the infrastructure. Everything else is open and accessible. All functionality of the platform is exposed via the <a href="https://packetframe.com/docs/api">API</a> and the entire codebase is <a href="https://github.com/packetframe/cdn">open source</a>.</p>
             </div>
         </div>
 
