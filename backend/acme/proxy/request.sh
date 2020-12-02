@@ -9,5 +9,5 @@ sudo certbot certonly \
 	--manual-public-ip-logging-ok \
 	--keep-until-expiring \
 	--email info@packetframe.com \
-	--manual-auth-hook $(pwd)/auth.py \
-	--manual-cleanup-hook $(pwd)/deploy.sh
+	--manual-auth-hook $(pwd)/auth.py
+#	--manual-cleanup-hook $(pwd)/deploy.sh
