@@ -348,13 +348,13 @@ def zones_list(username, is_admin):
     # Find all zones that have username in their users list
 
     if is_admin:
-        _zones = list(zones.find({}))
+        _zones = list(zones.find({}).sort("zone"))
     else:
         _zones = list(zones.find({
             "users": {
                 "$in": [username]
             }
-        }))
+        }).sort("zone"))
 
     for zone in _zones:
         del zone["_id"]
