@@ -120,11 +120,18 @@
         repo: deb [trusted=yes] https://apt.fury.io/caddy/ /
       when: http
 
-    - name: Install varnish/caddy on HTTP nodes
+    - name: Add natesales repo
+      apt_repository:
+        repo: deb [trusted=yes] https://apt.fury.io/natesales/ /
+      when: http
+
+    - name: Install varnish, caddy, bcg, bgpq4 on HTTP nodes
       apt:
         pkg:
           - varnish
           - caddy
+          - bcg
+          - bgpq4
       when: http
 
     - name: Copy varnish service
