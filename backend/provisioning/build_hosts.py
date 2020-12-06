@@ -76,11 +76,26 @@ for node in db_client["cdn"]["nodes"].find({"http": True}):
         labels:
           service: '""" + node["name"] + """'"""
 
+prometheus_config += """
+
+  - job_name: node_exporters
+    metric_relabel_configs:
+      - source_labels: [__name__]
+        regex: '(node_network_receive_bytes_total|node_network_receive_bytes_total)'
+        action: keep
+    static_configs:"""
+
+for node in db_client["cdn"]["nodes"].find():
+    prometheus_config += """
+      - targets: ['""" + node["management_ip"] + """:9100']
+        labels:
+          service: '""" + node["name"] + """'"""
+
 with open("hosts.yml", "w") as hosts_file:
     hosts_file.write(yaml.dump(_config, default_flow_style=False))
 
-# with open("/home/nate/backend/intra/prometheus.yml", "w") as prometheus_file:
-#     prometheus_file.write(prometheus_config + "\n")
+with open("prometheus.yml", "w") as prometheus_file:
+    prometheus_file.write(prometheus_config + "\n")
 
 print("Deploying monitoring config...")
 os.system("ssh " + config["monitoring_host"] + " -i /home/nate/ssh-key \"pct exe 101 ./update-prometheus.sh\"")
