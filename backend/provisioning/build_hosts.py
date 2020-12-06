@@ -98,4 +98,5 @@ with open("prometheus.yml", "w") as prometheus_file:
     prometheus_file.write(prometheus_config + "\n")
 
 print("Deploying monitoring config...")
-os.system("ssh " + config["monitoring_host"] + " -i /home/nate/ssh-key \"pct exe 101 ./update-prometheus.sh\"")
+os.system("scp -i /home/nate/ssh-key prometheus.yml " + config["monitoring_host"] + ":/tmp/prometheus.yml")
+os.system("ssh " + config["monitoring_host"] + " -i /home/nate/ssh-key './deploy-monitoring.sh'")
