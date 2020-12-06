@@ -300,7 +300,7 @@
           User=root
           Group=root
           Type=simple
-          ExecStart=/usr/bin/node_exporter -web.listen-address="{{ ansible_host }}:9100"
+          ExecStart=/usr/bin/node_exporter --web.listen-address="{{ ansible_host }}:9100"
 
           [Install]
           WantedBy=multi-user.target
