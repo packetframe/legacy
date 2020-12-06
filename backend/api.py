@@ -703,14 +703,18 @@ def counters():
     _nodes = list(nodes.find())
     node_count = 0
 
+    unique_pops = set()
     unique_locations = set()
+
     for node in nodes.find():
         node_count += 1
         unique_locations.add(node["location"])
+        unique_pops.add(node["datacenter"])
 
     return jsonify({"success": True, "message": {
         "nodes": node_count,
-        "locations": len(unique_locations)
+        "locations": len(unique_locations),
+        "pops": len(unique_pops)
     }})
 
 
