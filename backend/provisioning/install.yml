@@ -271,6 +271,50 @@
         state: restarted
       when: bind_exporter.changed
 
+    # Node exporter
+
+    - name: Check if node_exporter exists
+      stat:
+        path: /usr/bin/node_exporter
+      register: node_exporter_stat
+
+    - name: Get node_exporter
+      unarchive:
+        src: https://github.com/prometheus/node_exporter/releases/download/v1.0.1/node_exporter-1.0.1.linux-amd64.tar.gz
+        dest: /tmp/
+        remote_src: yes
+      when: not node_exporter_stat.stat.exists
+
+    - name: Move node_exporter to path
+      command: mv /tmp/node_exporter-1.0.1.linux-amd64/node_exporter /usr/bin/node_exporter
+      when: not node_exporter_stat.stat.exists
+
+    - name: Create node_exporter service
+      copy:
+        content: |
+          [Unit]
+          Description=Node Exporter
+          After=network.target
+
+          [Service]
+          User=root
+          Group=root
+          Type=simple
+          ExecStart=/usr/bin/node_exporter -web.listen-address="{{ ansible_host }}:9100"
+
+          [Install]
+          WantedBy=multi-user.target
+        dest: /etc/systemd/system/node-exporter.service
+      register: node_exporter
+      when: not node_exporter_stat.stat.exists
+
+    - name: Enable and start node_exporter
+      systemd:
+        name: node-exporter
+        enabled: yes
+        state: restarted
+      when: node_exporter.changed
+
     # BIRD
 
     - name: Copy BIRD2 config
