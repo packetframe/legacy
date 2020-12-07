@@ -699,6 +699,21 @@ def nodes_list(username, is_admin):
     return jsonify({"success": True, "message": _nodes})
 
 
+@app.route("/nodes/geoloc", methods=["GET"])
+def nodes_geoloc():
+    # Get a list of all nodes with geolocation info
+
+    _nodes = list(nodes.find())
+
+    for node in _nodes:
+        # Delete everything besides name and geoloc
+        for attrib in node:
+            if not (attrib == "name" or attrib == "geoloc"):
+                del node[attrib]
+
+    return jsonify({"success": True, "message": _nodes})
+
+
 @app.route("/counters", methods=["GET"])
 def counters():
     # Get node and location counters
