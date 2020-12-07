@@ -703,13 +703,10 @@ def nodes_list(username, is_admin):
 def nodes_geoloc():
     # Get a list of all nodes with geolocation info
 
-    _nodes = list(nodes.find())
+    _nodes = {}
 
-    for node in _nodes:
-        # Delete everything besides name and geoloc
-        for attrib in node:
-            if not (attrib == "name" or attrib == "geoloc"):
-                del node[attrib]
+    for node in list(nodes.find()):
+        nodes[node["name"]] = node["geoloc"]
 
     return jsonify({"success": True, "message": _nodes})
 
