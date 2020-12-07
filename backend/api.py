@@ -692,6 +692,9 @@ def nodes_list(username, is_admin):
 
         if not is_admin:  # If user isn't admin, remove sensitive info
             del node["management_ip"]
+            del node["datacenter"]
+            del node["connectivity"]
+            del node["http"]
 
     return jsonify({"success": True, "message": _nodes})
 
