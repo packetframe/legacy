@@ -38,7 +38,9 @@ export default {
 	},
 	plugins: [
 		mdsvexPages({
-			docPath: "docs"
+			docPath: "docs",
+			hasSidebar: false,
+			hasNavbar: false
 		}),
 
 		svelte({
