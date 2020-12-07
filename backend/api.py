@@ -706,7 +706,7 @@ def nodes_geoloc():
     _nodes = {}
 
     for node in list(nodes.find()):
-        nodes[node["name"]] = node["geoloc"]
+        _nodes[node["name"]] = node["geoloc"]
 
     return jsonify({"success": True, "message": _nodes})
 
