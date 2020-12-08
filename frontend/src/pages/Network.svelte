@@ -23,7 +23,9 @@
         setTimeout(() => {
             initGlobe();
         }, 100);
-    })
+    });
+
+    let nodes;
 
     function animate() {
         if (globe) globe.tick();
@@ -37,6 +39,7 @@
         fetch("https://packetframe.com/api/nodes/geoloc")
             .then(response => response.json())
             .then(data => {
+                nodes = data["message"];
                 for (const name in data["message"]) {
                     const lat = parseFloat(data["message"][name].split(", ")[0]);
                     const lon = parseFloat(data["message"][name].split(", ")[1]);
@@ -54,9 +57,35 @@
     * {
         margin: 0;
     }
+
+    #globe {
+        z-index: -5;
+    }
+
+    .overlay {
+        position: absolute;
+        left: 35px;
+        top: 170px;
+    }
+    
+    h1 {
+        text-decoration: underline;
+    }
 </style>
 
 
 <main>
     <div id="globe"></div>
+    <div class="overlay">
+        <h1>PacketFrame Network</h1>
+        <ul>
+            {#if nodes}
+                {#each nodes as node}
+                    <li>node</li>
+                {/each}
+            {:else}
+                Loading...
+            {/if}
+        </ul>
+    </div>
 </main>
