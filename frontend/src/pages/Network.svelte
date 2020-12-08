@@ -47,18 +47,11 @@
                 }
             })
     }
-
-    window.addEventListener('resize', () => {
-        let height = window.innerHeight - (document.getElementsByTagName("main")[0].clientTop + document.getElementsByTagName("main")[0].clientHeight);
-        globe.camera.aspect = window.innerWidth / height;
-        globe.camera.updateProjectionMatrix();
-        globe.renderer.setSize(window.innerWidth, height);
-    });
 </script>
 
 
 <style>
-    main {
+    * {
         margin: 0;
     }
 </style>
