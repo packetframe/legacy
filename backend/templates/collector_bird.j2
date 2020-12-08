@@ -23,16 +23,40 @@ protocol kernel {
   };
 }
 
+protocol bgp RIPE_RISv4 {
+  local as ASN;
+  neighbor 193.0.4.28 as 12654;
+  ipv4 {
+    import none;
+    export where (ASN,800) ~ bgp_community;
+  };
+}
+
+protocol bgp RIPE_RISv6 {
+  local as ASN;
+  neighbor 2001:67c:2e8:2:ffff:0:4:28 as 12654;
+  ipv6 {
+    import none;
+    export where (ASN,800) ~ bgp_community;
+  };
+}
+
 template bgp collector_peer {
   local as ASN;
 
   ipv4 {
-    import all;
+    import filter {
+        bgp_community.add((ASN,800));
+        accept;
+    };
     export none;
   };
 
   ipv6 {
-    import all;
+    import filter {
+        bgp_community.add((ASN,800));
+        accept;
+    };
     export none;
   };
 }
