@@ -43,6 +43,26 @@ protocol bgp RIPE_RISv6 {
   };
 }
 
+protocol bgp NLNOG_LGv4 {
+  local as ASN;
+  neighbor 82.94.230.130 as 199036;
+  multihop 255;
+  ipv4 {
+    import none;
+    export where (ASN,800) ~ bgp_community;
+  };
+}
+
+protocol bgp NLNOG_LGv6 {
+  local as ASN;
+  neighbor 2001:888:2001::130 as 199036;
+  multihop 255;
+  ipv6 {
+    import none;
+    export where (ASN,800) ~ bgp_community;
+  };
+}
+
 template bgp collector_peer {
   local as ASN;
 
