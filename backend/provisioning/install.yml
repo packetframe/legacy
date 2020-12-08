@@ -16,7 +16,7 @@
         content: APT::Default-Release "stable";
         dest: /etc/apt/apt.conf.d/default-release
 
-    - name: Install rsync, bind9, dnsutils, ufw, unbound
+    - name: Install rsync, bind9, dnsutils, ufw, unbound, bsdmainutils
       apt:
         update_cache: yes
         pkg:
@@ -25,6 +25,7 @@
           - curl
           - dnsutils
           - ufw
+          - bsdmainutils
 
     - name: Install BIRD2 from sid
       apt:
