@@ -71,6 +71,10 @@
     h1 {
         text-decoration: underline;
     }
+
+    p {
+        margin-top: 15px;
+    }
 </style>
 
 
@@ -78,14 +82,6 @@
     <div id="globe"></div>
     <div class="overlay">
         <h1>PacketFrame Network</h1>
-        <ul>
-            {#if nodes}
-                {#each nodes as node}
-                    <li>node</li>
-                {/each}
-            {:else}
-                Loading...
-            {/if}
-        </ul>
+        <p>PacketFrame uses <a href="https://natesales.net/network">AS34553</a> for network operations. All AS34553 PoPs have CDN presence and direct peering is available at most locations.</p>
     </div>
 </main>
