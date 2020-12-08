@@ -15,6 +15,7 @@
         <a href="/#/"><img alt="Logo" src="/static/img/logo.png" style="width: 20rem"></a>
     </div>
     <div class="right">
+        <a href="/#/dashboard">Dashboard</a>
         <a href="/#/community">Community</a>
         <a href="/#/network">Network</a>
         <a href="/#/docs">Docs</a>
