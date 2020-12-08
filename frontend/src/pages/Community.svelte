@@ -27,6 +27,13 @@
 
         <div class="item">
             <div class="item-text">
+                <a href="https://terrahost.no/">Terrahost</a>
+                <p>Our vision is to offer solutions of high quality at an affordable price. Our services are delivered from our own datacenter in Sandefjord. In that way we can ensure high stability and safety. We work around the clock to give you the best price and service on the market.</p>
+            </div>
+        </div>
+
+        <div class="item">
+            <div class="item-text">
                 <a href="https://hostus.us/">HostUS</a>
                 <p>We offer cPanel Web Hosting, Reseller Hosting, OpenVZ VPS, KVM VPS and Managed VPS in 10 datacenter locations across 4 continents. All backed by our amazing 24/7 support team.</p>
             </div>
@@ -84,15 +91,15 @@
 
         <div class="item">
             <div class="item-text">
-                <a href="https://terrahost.no/">Terrahost</a>
-                <p>Our vision is to offer solutions of high quality at an affordable price. Our services are delivered from our own datacenter in Sandefjord. In that way we can ensure high stability and safety. We work around the clock to give you the best price and service on the market.</p>
+                <a href="https://www.hivane.net">Hivane</a>
+                <p>Hivane offers DNS / MX / WWW services to non-for-profit projects. Check out https://www.hivane.net/ for more information.</p>
             </div>
         </div>
 
         <div class="item">
             <div class="item-text">
-                <a href="https://www.hivane.net">Hivane</a>
-                <p>Hivane offers DNS / MX / WWW services to non-for-profit projects. Check out https://www.hivane.net/ for more information.</p>
+                <a href="https://misaka.io/">Misaka Network</a>
+                <p>Superb cloud infrastructure with low latency. All our services are carefully designed to provide high performance, reliable and scalable at a reasonably price.</p>
             </div>
         </div>
     </div>
