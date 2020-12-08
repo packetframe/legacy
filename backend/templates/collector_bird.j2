@@ -63,6 +63,26 @@ protocol bgp NLNOG_LGv6 {
   };
 }
 
+protocol bgp HE_RTBGPv4 {
+  local as ASN;
+  neighbor 64.62.153.100 as 393338;
+  multihop 255;
+  ipv4 {
+    import none;
+    export where (ASN,800) ~ bgp_community;
+  };
+}
+
+protocol bgp HE_RTBGPv6 {
+  local as ASN;
+  neighbor 2001:470:0:441::50 as 393338;
+  multihop 255;
+  ipv6 {
+    import none;
+    export where (ASN,800) ~ bgp_community;
+  };
+}
+
 template bgp collector_peer {
   local as ASN;
 
