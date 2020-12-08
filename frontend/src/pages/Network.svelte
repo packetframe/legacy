@@ -1,4 +1,6 @@
 <script>
+    import {onMount} from "svelte";
+
     let globe = new ENCOM.Globe(window.innerWidth, window.innerHeight - (document.getElementsByTagName("main")[0].clientTop + document.getElementsByTagName("main")[0].clientHeight), {
         font: "sans-serif",
         data: [],
@@ -7,7 +9,7 @@
         markerColor: "#8e44ad",
         pinColor: "#aacfd1",
         satelliteColor: "#aacfd1",
-        scale: 1,
+        scale: 0.9,
         dayLength: 14000,
         introLinesDuration: 2000,
         maxPins: 100,
@@ -15,7 +17,13 @@
         viewAngle: 0.75
     });
 
-    document.getElementsByTagName("main")[0].appendChild(globe.domElement);
+    onMount(() => {
+        document.getElementById("globe").prepend(globe.domElement);
+
+        setTimeout(() => {
+            initGlobe();
+        }, 100);
+    })
 
     function animate() {
         if (globe) globe.tick();
@@ -46,10 +54,6 @@
         globe.camera.updateProjectionMatrix();
         globe.renderer.setSize(window.innerWidth, height);
     });
-
-    setTimeout(() => {
-        initGlobe();
-    }, 100);
 </script>
 
 
@@ -60,4 +64,6 @@
 </style>
 
 
-<main></main>
+<main>
+    <div id="globe"></div>
+</main>
