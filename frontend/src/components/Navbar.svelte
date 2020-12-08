@@ -16,6 +16,7 @@
     </div>
     <div class="right">
         <a href="/#/community">Community</a>
+        <a href="/#/network">Network</a>
         <a href="/#/docs">Docs</a>
         {#if $location === "/dashboard"}
             <div on:click={() => logout()}>Logout</div>
