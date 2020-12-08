@@ -26,6 +26,7 @@ protocol kernel {
 protocol bgp RIPE_RISv4 {
   local as ASN;
   neighbor 193.0.4.28 as 12654;
+  multihop 255;
   ipv4 {
     import none;
     export where (ASN,800) ~ bgp_community;
@@ -35,6 +36,7 @@ protocol bgp RIPE_RISv4 {
 protocol bgp RIPE_RISv6 {
   local as ASN;
   neighbor 2001:67c:2e8:2:ffff:0:4:28 as 12654;
+  multihop 255;
   ipv6 {
     import none;
     export where (ASN,800) ~ bgp_community;
