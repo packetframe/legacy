@@ -993,7 +993,7 @@ def refresh_cache(username, is_admin):
         return jsonify({"success": False, "message": "Unauthorized"})
 
     add_queue_message("refresh_cache", None)
-    return jsonify({"success": True, "message": "Refreshing cache config"})
+    return jsonify({"success": True, "message": "Queued cache refresh"})
 
 
 @app.route("/debug/update_collector")
@@ -1005,7 +1005,7 @@ def update_collector(username, is_admin):
         return jsonify({"success": False, "message": "Unauthorized"})
 
     _update_collector()
-    return jsonify({"success": True, "message": "Refreshing cache config"})
+    return jsonify({"success": True, "message": "Queued collector refresh"})
 
 
 if __name__ == "__main__":
