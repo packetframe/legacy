@@ -2,7 +2,7 @@
     import {onMount} from "svelte";
 
     let globe = new ENCOM.Globe(window.innerWidth, window.innerHeight - (document.getElementsByTagName("main")[0].clientTop + document.getElementsByTagName("main")[0].clientHeight), {
-        font: "sans-serif",
+        font: "Segoe UI",
         data: [],
         tiles: grid.tiles,
         baseColor: "#dd00ff",
@@ -10,7 +10,7 @@
         pinColor: "#aacfd1",
         satelliteColor: "#aacfd1",
         scale: 0.9,
-        dayLength: 14000,
+        dayLength: 28000,
         introLinesDuration: 2000,
         maxPins: 100,
         maxMarkers: 100,
@@ -25,7 +25,13 @@
         }, 100);
     });
 
-    let nodes;
+    function onWindowResize(){
+        globe.camera.aspect = window.innerWidth / window.innerHeight;
+        globe.camera.updateProjectionMatrix();
+        globe.renderer.setSize(window.innerWidth, window.innerHeight);
+    }
+
+    window.addEventListener( 'resize', onWindowResize, false );
 
     function animate() {
         if (globe) globe.tick();
@@ -41,12 +47,15 @@
             .then(data => {
                 nodes = data["message"];
                 for (const name in data["message"]) {
-                    const lat = parseFloat(data["message"][name].split(", ")[0]);
-                    const lon = parseFloat(data["message"][name].split(", ")[1]);
-                    globe.addPin(lat, lon, "");
-                    globe.addMarker(lat, lon, name, false);
-//                    globe.addSatellite(lat, lon, 0, {coreColor: "#ffffff", numWaves: 3});
-                    console.log("Added " + name + " " + lat + ", " + lon);
+                const lat = parseFloat(data["message"][name].split(", ")[0]);
+                const lon = parseFloat(data["message"][name].split(", ")[1]);
+
+                if (name.length <= 3) {
+                    let altitude = 1.1 + .2 * Math.random();
+                    globe.addPin(lat, lon, "", altitude + .1);
+                    globe.addMarker(lat, lon, name, altitude, false);
+                }
+                // console.log("Added " + name + " " + lat + ", " + lon);
                 }
             })
     }

@@ -42080,7 +42080,7 @@ Globe.prototype.destroy = function(callback){
 
 };
 
-Globe.prototype.addPin = function(lat, lon, text){
+Globe.prototype.addPin = function(lat, lon, text, _altitude){
 
     lat = parseFloat(lat);
     lon = parseFloat(lon);
@@ -42090,7 +42090,7 @@ Globe.prototype.addPin = function(lat, lon, text){
         topColor: this.pinColor
     }
 
-    var altitude = 1.2;
+    var altitude = _altitude;
 
     if(typeof text != "string" || text.length === 0){
         altitude -= .05 + Math.random() * .05;
@@ -42157,7 +42157,7 @@ Globe.prototype.addPin = function(lat, lon, text){
 
 }
 
-Globe.prototype.addMarker = function(lat, lon, text, connected){
+Globe.prototype.addMarker = function(lat, lon, text, altitude, connected){
 
     var marker;
     var opts = {
@@ -42166,11 +42166,11 @@ Globe.prototype.addMarker = function(lat, lon, text, connected){
     };
 
     if(typeof connected == "boolean" && connected){
-        marker = new Marker(lat, lon, text, 1.2, this.markers[this.markers.length-1], this.scene, opts);
+        marker = new Marker(lat, lon, text, altitude, this.markers[this.markers.length-1], this.scene, opts);
     } else if(typeof connected == "object"){
-        marker = new Marker(lat, lon, text, 1.2, connected, this.scene, opts);
+        marker = new Marker(lat, lon, text, altitude, connected, this.scene, opts);
     } else {
-        marker = new Marker(lat, lon, text, 1.2, null, this.scene, opts);
+        marker = new Marker(lat, lon, text, altitude, null, this.scene, opts);
     }
 
     this.markers.push(marker);
@@ -42366,16 +42366,16 @@ var createMarkerTexture = function(markerColor) {
         texture;
 
     canvas =  utils.renderToCanvas(markerWidth, markerHeight, function(ctx){
-     //   ctx.fillStyle=markerColor;
+    //    ctx.fillStyle=markerColor;
     //    ctx.strokeStyle=markerColor;
-   //     ctx.lineWidth=0;
-  //      ctx.beginPath();
- //       ctx.arc(markerWidth/2, markerHeight/2, markerWidth/3, 0, 2* Math.PI);
-//        ctx.stroke();
+    //    ctx.lineWidth=0;
+    // //    ctx.beginPath();
+    // //    ctx.arc(markerWidth/2, markerHeight/2, markerWidth/3, 0, 2* Math.PI);
+    // //    ctx.stroke();
 
-//        ctx.beginPath();
-       // ctx.arc(markerWidth/2, markerHeight/2, markerWidth/5, 0, 2* Math.PI);
-  //      ctx.fill();
+    //    ctx.beginPath();
+    //    ctx.arc(markerWidth/2, markerHeight/2, markerWidth/8, 0, 2* Math.PI);
+    //    ctx.fill();
 
     });
 
@@ -42394,7 +42394,7 @@ var Marker = function(lat, lon, text, altitude, previous, scene, _opts){
 //        lineWidth: 0.5,
         markerColor: "#FFCC00",
         labelColor: "#FFF",
-        font: "Cantarell",
+        font: "Segoe UI",
         fontSize: 12,
         drawTime: 2000,
         lineSegments: 150
@@ -42412,7 +42412,7 @@ var Marker = function(lat, lon, text, altitude, previous, scene, _opts){
     this.lat = parseFloat(lat);
     this.lon = parseFloat(lon);
     this.text = text;
-    this.altitude = parseFloat(altitude);
+    this.altitude = parseFloat(altitude); // Changed to allow for lower names -Seth
     this.scene = scene;
     this.previous = previous;
     this.next = [];
@@ -42442,18 +42442,19 @@ var Marker = function(lat, lon, text, altitude, previous, scene, _opts){
         scene._encom_markerTexture = createMarkerTexture(this.opts.markerColor);
     }
 
-    markerMaterial = new THREE.SpriteMaterial({map: scene._encom_markerTexture, opacity: .7, depthTest: true, fog: true});
+    markerMaterial = new THREE.SpriteMaterial({map: scene._encom_markerTexture, opacity: 1, depthTest: true, fog: true});
     this.marker = new THREE.Sprite(markerMaterial);
 
     this.marker.scale.set(0, 0);
-    this.marker.position.set(point.x * altitude, point.y * altitude, point.z * altitude);
+    this.marker.position.set(point.x * (altitude + .06), point.y * (altitude + .06), point.z * (altitude + .06));
 
     labelCanvas = utils.createLabel(text.toUpperCase(), this.opts.fontSize, this.opts.labelColor, this.opts.font, this.opts.markerColor);
     labelTexture = new THREE.Texture(labelCanvas);
     labelTexture.needsUpdate = true;
 
     labelMaterial = new THREE.SpriteMaterial({
-        map : labelTexture,
+		map : labelTexture,
+		color: "#fff",
         useScreenCoordinates: false,
         opacity: 0,
         depthTest: true,
