@@ -83,6 +83,20 @@ protocol bgp HE_RTBGPv6 {
   };
 }
 
+protocol bgp FMT_CORE {
+  local as ASN;
+  neighbor 23.141.112.1 as 34553;
+  multihop 255;
+  ipv4 {
+    import none;
+    export where (ASN,800) ~ bgp_community;
+  };
+  ipv6 {
+    import none;
+    export where (ASN,800) ~ bgp_community;
+  };
+}
+
 template bgp collector_peer {
   local as ASN;
 
