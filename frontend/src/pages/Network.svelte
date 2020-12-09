@@ -69,6 +69,7 @@
 
     #globe {
         z-index: -5;
+        overflow-x: hidden;
     }
 
     .overlay {
