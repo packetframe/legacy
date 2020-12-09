@@ -353,12 +353,12 @@ protocol bgp COLLECTOR {
 
   ipv4 {
     import none;
-    export all;
+    export where source = RTS_BGP;
   };
 
   ipv6 {
     import none;
-    export all;
+    export where source = RTS_BGP;
   };
 }
 
