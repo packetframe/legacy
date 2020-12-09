@@ -43,6 +43,22 @@
         cursor: pointer;
     }
 
+    .right a {
+        padding: 0px 0px 4px;
+        margin: 0px 10px;
+        border-bottom: 1px solid white;
+    }
+
+    .right a {
+        transition: ease color 0.4s, ease border-bottom 0.2s, ease padding-top 0.2s;
+    }
+
+    .right a:hover {
+        color: #996de0;
+        border-bottom: 4px solid white;
+        padding-top: 3px;
+    }
+
     .left {
         padding-top: 12px;
         display: flex;
@@ -58,7 +74,5 @@
     .right a, .left a {
         color: white;
         text-decoration: none;
-        padding-left: 5px;
-        padding-right: 5px;
     }
 </style>
