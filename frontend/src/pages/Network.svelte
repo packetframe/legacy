@@ -1,6 +1,8 @@
 <script>
     import {onMount} from "svelte";
 
+    let nodes;
+
     let globe = new ENCOM.Globe(window.innerWidth, window.innerHeight - (document.getElementsByTagName("main")[0].clientTop + document.getElementsByTagName("main")[0].clientHeight), {
         font: "Segoe UI",
         data: [],
