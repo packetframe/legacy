@@ -20,7 +20,7 @@
         <a href="/#/network">Network</a>
         <a href="/#/docs">Docs</a>
         {#if $location === "/dashboard"}
-            <div on:click={() => logout()}>Logout</div>
+            <a href="#" on:click={() => logout()}>Logout</>
         {:else}
             <a href="/#/signup">Signup</a>
             <a href="/#/login">Login</a>
