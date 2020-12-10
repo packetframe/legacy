@@ -102,6 +102,13 @@
                 <p>Superb cloud infrastructure with low latency. All our services are carefully designed to provide high performance, reliable and scalable at a reasonably price.</p>
             </div>
         </div>
+
+        <div class="item">
+            <div class="item-text">
+                <a href="https://www.virtua.cloud/">Virtua Systems</a>
+                <p>Virtua.Cloud is a cloud hosting company, providing affordable Linux VPS and Windows VPS in Europe with instant setup and hourly billing.</p>
+            </div>
+        </div>
     </div>
 </main>
 
