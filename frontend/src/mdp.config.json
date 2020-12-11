@@ -1,1 +1,17 @@
-{}
+{
+    "sidebar": {
+        "docs": {
+            "Documentation": [
+                {"route": "", "label": "Home"},
+                {"route": "dashboard", "label": "Dashboard"},
+                {"route": "eca", "label": "ECA"},
+                {"route": "api", "label": "API"},
+                {"route": "cli", "label": "CLI"},
+                {"route": "caching-proxy", "label": "Caching Proxy"},
+                {"route": "privacy-policy", "label": "Privacy Policy"},
+                {"route": "security", "label": "Security"}
+            ],
+            "default-open": ["Documentation"]
+        }
+    }
+}
