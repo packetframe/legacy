@@ -35,6 +35,9 @@
         align-items: center;
         justify-content: space-between;
         cursor: pointer;
+        position: relative;
+        top: 0;
+        left: 0;
     }
 
     a {
