@@ -79,10 +79,10 @@ for node in db_client["cdn"]["nodes"].find({"http": True}):
 prometheus_config += """
 
   - job_name: node_exporters
-    metric_relabel_configs:
-      - source_labels: [__name__]
-        regex: '/(node_network_receive_bytes_total|node_network_receive_bytes_total)/g'
-        action: keep
+    # metric_relabel_configs:
+    #   - source_labels: [__name__]
+    #     regex: '/(node_network_receive_bytes_total|node_network_receive_bytes_total)/g'
+    #     action: keep
     static_configs:"""
 
 for node in db_client["cdn"]["nodes"].find():
