@@ -13,18 +13,18 @@
     let menuOpen = false;
 
     $: if (screenWidth > 820 && menuOpen) {
-        menuOpen = false;
+        menuChange();
     }
 
     const menuChange = () => {
-        menuOpen = !menuOpen;
-        if (menuOpen) {
-            document.body.style.setProperty('height', '100vh');
-            document.body.style.setProperty('overflow', 'hidden');
-        } else {
-            document.body.style.removeProperty('height');
-            document.body.style.removeProperty('overflow');
-        }
+            menuOpen = !menuOpen;
+            if (menuOpen && screenWidth <= 820) {
+                document.body.style.setProperty('height', '100vh');
+                document.body.style.setProperty('overflow', 'hidden');
+            } else {
+                document.body.style.removeProperty('height');
+                document.body.style.removeProperty('overflow');
+            }
     }
 
 </script>
