@@ -121,7 +121,8 @@ define BOGONS_v4 = [
   198.18.0.0/15{15,32},   # RFC 2544 - Network Interconnect Device Benchmark Testing
   198.51.100.0/24{24,32}, # RFC 5737 - TEST-NET-2
   203.0.113.0/24{24,32},  # RFC 5737 - TEST-NET-3
-  224.0.0.0/3{3,32}       # RFC 5771 - Multcast (formerly Class D)
+  224.0.0.0/3{3,32},      # RFC 5771 - Multcast (formerly Class D)
+  192.34.27.0/24          # UnmeteredExchange
 ];
 
 define BOGONS_v6 = [
@@ -154,7 +155,8 @@ define BOGONS_v6 = [
   fc00::/7{7,128},          # RFC 4193 - Unique Local Unicast
   fe80::/10{10,128},        # RFC 4291 - Link Local Unicast
   fec0::/10{10,128},        # RFC 4291 - Reserved by IETF
-  ff00::/8{8,128}           # RFC 4291 - Multicast
+  ff00::/8{8,128},          # RFC 4291 - Multicast
+  2602:ffb1:200::/48        # Unmetered Exchange
 ];
 
 define BOGON_ASNS = [
