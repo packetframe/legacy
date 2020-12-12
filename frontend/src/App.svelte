@@ -10,6 +10,7 @@
     import Network from "./pages/Network.svelte";
     import NotFound from "./pages/NotFound.svelte";
     import SnackbarGroup from "./components/SnackbarGroup.svelte";
+    import MDPWrapper from "rollup-plugin-mdsvex-pages/src/components/MDPWrapper.svelte";
     const routes = new Map();
 
     routes.set("/", Index);
@@ -52,12 +53,24 @@
 </style>
 
 <main>
-    <Navbar />
+    <Navbar/>
+
+    <MDPWrapper navbar={false} styles={{
+        'sidebar-border': '1px solid white', 
+        'sidebar-margin-top': '0px', 
+        'background-color': 'black', 
+        'text-color': 'white',
+        'sidebar-active': '#996de0',
+        'sidebar-hover': '#996de0',
+        }}>
 
     <div class="body">
-        <Router {routes} />
-        <SnackbarGroup />
+        <Router {routes}/>
+        <SnackbarGroup/>
     </div>
 
     <footer>&copy; PacketFrame 2020.</footer>
+    </MDPWrapper>
+
+
 </main>
