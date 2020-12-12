@@ -10,7 +10,6 @@
     import Network from "./pages/Network.svelte";
     import NotFound from "./pages/NotFound.svelte";
     import SnackbarGroup from "./components/SnackbarGroup.svelte";
-
     const routes = new Map();
 
     routes.set("/", Index);
