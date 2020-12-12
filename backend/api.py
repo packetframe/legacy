@@ -548,8 +548,6 @@ def records_add(zone, user_doc):
                 return jsonify({"success": False, "message": str(e)})
 
             # TODO: Check for TXT validity and maybe put quotes around the TXT record?
-            # if not valid_label(value):
-            #     return jsonify({"success": False, "message": "Invalid MX server"})
 
         elif rec_type == "MX":
             try:
