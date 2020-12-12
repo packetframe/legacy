@@ -8,22 +8,50 @@
             method: "POST"
         }).then(() => window.location = "/")
     }
+
+    let screenWidth;
+    let menuOpen = false;
+
+    $: if (screenWidth > 820 && menuOpen) {
+        menuOpen = false;
+    }
+
+    const menuChange = () => {
+        menuOpen = !menuOpen;
+        if (menuOpen) {
+            document.body.style.setProperty('height', '100vh');
+            document.body.style.setProperty('overflow', 'hidden');
+        } else {
+            document.body.style.removeProperty('height');
+            document.body.style.removeProperty('overflow');
+        }
+    }
+
 </script>
 
-<main>
-    <div class="left">
-        <a href="/#/"><img alt="Logo" src="/static/img/logo.png" style="width: 20rem"></a>
+<svelte:window bind:innerWidth={screenWidth} />
+
+<main class:open={menuOpen} class:condensed={screenWidth <= 820}>
+    <div class="condensed-container" class:condensed={screenWidth <= 820}>
+        <div class="left">
+            <a href="/#/"><img alt="Logo" src="/static/img/logo.png" style="width: min(20rem, calc(100% - 50px));"></a>
+        </div>
+        {#if screenWidth <= 820}
+            <span class="material-icons right" on:click={menuChange}>
+                {menuOpen ? 'close' : 'menu'}
+            </span>
+        {/if}
     </div>
-    <div class="right">
-        <a href="/#/dashboard">Dashboard</a>
-        <a href="/#/community">Community</a>
-        <a href="/#/network">Network</a>
-        <a href="/#/docs">Docs</a>
+    <div class="right" class:condensed={screenWidth <= 820} class:open={menuOpen}>
+        <a on:click={menuChange} href="/#/dashboard">Dashboard</a>
+        <a on:click={menuChange} href="/#/community">Community</a>
+        <a on:click={menuChange} href="/#/network">Network</a>
+        <a on:click={menuChange} href="/#/docs">Docs</a>
         {#if $location === "/dashboard"}
             <a href="#" on:click={() => logout()}>Logout</a>
         {:else}
-            <a href="/#/signup">Signup</a>
-            <a href="/#/login">Login</a>
+            <a on:click={menuChange} href="/#/signup">Signup</a>
+            <a on:click={menuChange} href="/#/login">Login</a>
         {/if}
     </div>
 </main>
@@ -40,10 +68,58 @@
         left: 0;
     }
 
+    main.open.condensed {
+        flex-direction: column;
+        height: 100vh;
+    }
+
     a {
         max-height: 100%;
         align-items: center;
         cursor: pointer;
+    }
+
+    .right.condensed {
+        display: none;
+        width: 100%;
+        height: 0px;
+        position: relative;
+        top: 0;
+        left: 0;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        background-color: black;
+        z-index: 2000;
+        padding-right: 0px;
+    }
+
+    .right.condensed.open {
+        display: flex;
+        height: 100%;
+    }
+
+    .right.condensed a {
+        font-size: large;
+        width: min(90%, 400px);
+        text-align: center;
+        padding: 20px 0px;
+        border-bottom: 1px solid white;
+    }
+
+    .right.condensed a:hover {
+        border-bottom: 1px solid #996de0;
+        padding: 20px 0px;
+        border-collapse: collapse;
+    }
+
+    .condensed-container {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .condensed-container.condensed {
+        width: 100%;
     }
 
     .right a {
