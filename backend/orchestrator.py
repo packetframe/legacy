@@ -254,10 +254,11 @@ while True:
 
         elif operation == "update_monitoring":
             print("Deploying monitoring config...")
-            os.system("scp -i /home/nate/ssh-key prometheus.yml " + config["monitoring_host"] + ":/tmp/prometheus.yml")
-            os.system("ssh " + config["monitoring_host"] + " -i /home/nate/ssh-key './deploy-monitoring.sh'")
+            # noinspection StandardShellInjection
+            os.system("scp -i /home/nate/ssh-key prometheus.yml " + configuration["monitoring_host"] + ":/tmp/prometheus.yml")
+            # noinspection StandardShellInjection
+            os.system("ssh " + configuration["monitoring_host"] + " -i /home/nate/ssh-key './deploy-monitoring.sh'")
             print("Finished deploying monitoring config")
-
 
         else:
             print("ERROR: This task isn't recognized")
