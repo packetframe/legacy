@@ -1,5 +1,5 @@
 <script>
-    import {onMount} from "svelte";
+    import {onDestroy, onMount} from "svelte";
 
     let nodes;
 
@@ -26,6 +26,10 @@
             initGlobe();
         }, 100);
     });
+
+    onDestroy(() => {
+        globe.destroy();
+    })
 
     function onWindowResize(){
         globe.camera.aspect = window.innerWidth / window.innerHeight;
