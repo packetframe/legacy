@@ -647,8 +647,8 @@ def records_add(zone, user_doc):
         proxied = False
 
     if proxied:
-        if not user_doc.get("admin"):
-            return jsonify({"success": False, "message": "Proxied records are not available on your account. Please contact info@packetframe.com for more information."})
+        # if not user_doc.get("admin"):
+        #     return jsonify({"success": False, "message": "Proxied records are not available on your account. Please contact info@packetframe.com for more information."})
 
         if (not user_doc.get("acl")) or len(user_doc.get("acl")) < 1:
             return jsonify({"success": False, "message": "You must configure an ACL before adding a proxied record."})
