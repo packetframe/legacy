@@ -9,6 +9,7 @@ from time import time, strftime
 # noinspection PyUnresolvedReferences
 import utils
 # noinspection PyPackageRequirements
+import yaml
 from argon2 import PasswordHasher
 # noinspection PyPackageRequirements
 from argon2.exceptions import VerifyMismatchError
@@ -200,6 +201,7 @@ def _update_collector():
 
     add_queue_message("update_collector", None)
 
+
 def _update_monitoring():
     _config = {
         "nodes": {
@@ -207,7 +209,7 @@ def _update_monitoring():
             "vars": {
                 "ansible_user": "root",
                 "ansible_port": 34553,
-                "ansible_ssh_private_key_file": config["ssh-key"]
+                "ansible_ssh_private_key_file": configuration["ssh-key"]
             }
         }
     }
@@ -232,7 +234,7 @@ def _update_monitoring():
     - job_name: dns_nodes
         static_configs:"""
 
-    for node in db_client["cdn"]["nodes"].find():
+    for node in db["nodes"].find():
         _config["nodes"]["hosts"][node["name"]] = {
             "ansible_host": node["management_ip"],
             "http": node["http"]
@@ -245,13 +247,12 @@ def _update_monitoring():
 
         print("+ " + node["name"])
 
-
     prometheus_config += """
 
     - job_name: cache_nodes_caddy
         static_configs:"""
 
-    for node in db_client["cdn"]["nodes"].find({"http": True}):
+    for node in db["nodes"].find({"http": True}):
         prometheus_config += """
         - targets: ['""" + node["management_ip"] + """:2019']
             labels:
@@ -264,7 +265,7 @@ def _update_monitoring():
     - job_name: cache_nodes_varnish
         static_configs:"""
 
-    for node in db_client["cdn"]["nodes"].find({"http": True}):
+    for node in db["nodes"].find({"http": True}):
         prometheus_config += """
         - targets: ['""" + node["management_ip"] + """:9131']
             labels:
@@ -279,7 +280,7 @@ def _update_monitoring():
         #     action: keep
         static_configs:"""
 
-    for node in db_client["cdn"]["nodes"].find():
+    for node in db["nodes"].find():
         prometheus_config += """
         - targets: ['""" + node["management_ip"] + """:9100']
             labels:
@@ -290,7 +291,7 @@ def _update_monitoring():
 
     with open("prometheus.yml", "w") as prometheus_file:
         prometheus_file.write(prometheus_config + "\n")
-    
+
     add_queue_message("update_monitoring", None)
 
 
