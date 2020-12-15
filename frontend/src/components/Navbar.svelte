@@ -45,7 +45,6 @@
     <div class="right" class:condensed={screenWidth <= 820} class:open={menuOpen}>
         <a on:click={menuChange} href="/#/dashboard">Dashboard</a>
         <a on:click={menuChange} href="/#/community">Community</a>
-        <a on:click={menuChange} href="/#/network">Network</a>
         <a on:click={menuChange} href="/#/docs">Docs</a>
         {#if $location === "/dashboard"}
             <a href="#" on:click={() => logout()}>Logout</a>
