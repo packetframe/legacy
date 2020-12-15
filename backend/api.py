@@ -1089,16 +1089,17 @@ def refresh_cache(username, is_admin):
     return jsonify({"success": True, "message": "Queued cache refresh"})
 
 
-@app.route("/debug/update_collector")
+@app.route("/debug/update_collector_monitoring")
 @authentication_required
-def update_collector(username, is_admin):
-    # Update the BGP config on the route collector
+def update_collector_monitoring(username, is_admin):
+    # Update the BGP config on the route collector and the prometheus config
 
     if not is_admin:
         return jsonify({"success": False, "message": "Unauthorized"})
 
     _update_collector()
-    return jsonify({"success": True, "message": "Queued collector refresh"})
+    _update_monitoring()
+    return jsonify({"success": True, "message": "Queued collector and monitoring update"})
 
 
 if __name__ == "__main__":

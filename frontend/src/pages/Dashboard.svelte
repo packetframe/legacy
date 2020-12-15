@@ -156,14 +156,14 @@
             });
     }
 
-    function updateCollector() {
-        fetch($API + "debug/update_collector", {
+    function updateCollectorMonitoring() {
+        fetch($API + "debug/update_collector_monitoring", {
             method: "GET",
             credentials: "include"
         })
             .then(response => response.json())
             .then(data => {
-                addSnackbar("update_collector", data["message"], data["success"] ? "green" : "red")
+                addSnackbar("update_collector_monitoring", data["message"], data["success"] ? "green" : "red")
             });
     }
 </script>
@@ -216,7 +216,7 @@
             <Button padded onclick={() => addNode()}>Add Node</Button>
             <Button padded onclick={() => {showUserTable = !showUserTable}}>Toggle user table</Button>
             <Button padded onclick={() => showSystemStats()}>System Stats</Button>
-            <Button padded onclick={() => updateCollector()}>Update Collector</Button>
+            <Button padded onclick={() => updateCollectorMonitoring()}>Update Collector/Monitoring</Button>
         </ButtonBar>
     {/if}
 
