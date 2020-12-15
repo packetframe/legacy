@@ -354,11 +354,13 @@ protocol bgp COLLECTOR {
   rr client;
 
   ipv4 {
+    add paths;
     import none;
     export where source = RTS_BGP;
   };
 
   ipv6 {
+    add paths;
     import none;
     export where source = RTS_BGP;
   };
