@@ -88,6 +88,7 @@ protocol bgp FMT_CORE {
   neighbor 23.141.112.1 as 34553;
   multihop 255;
   ipv4 {
+    add paths;
     import all;
     export none;
   };
@@ -102,6 +103,7 @@ protocol bgp PDX_CORE {
   neighbor 44.26.163.1 as 34553;
   multihop 255;
   ipv4 {
+    add paths;
     import all;
     export none;
   };
@@ -115,6 +117,7 @@ template bgp collector_peer {
   local as ASN;
 
   ipv4 {
+    add paths;
     import filter {
         bgp_community.add((ASN,800));
         accept;
@@ -123,6 +126,7 @@ template bgp collector_peer {
   };
 
   ipv6 {
+    add paths;
     import filter {
         bgp_community.add((ASN,800));
         accept;
