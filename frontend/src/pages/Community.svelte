@@ -109,6 +109,14 @@
                 <p>Virtua.Cloud is a cloud hosting company, providing affordable Linux VPS and Windows VPS in Europe with instant setup and hourly billing.</p>
             </div>
         </div>
+
+        <div class="item">
+            <div class="item-text">
+                <a href="https://browserstack.com/">BrowserStack</a>
+                <p>BrowserStack is a cloud web and mobile testing platform that provides developers the ability to test their websites and mobile applications across on-demand browsers, operating systems, and real mobile devices. They have four primary products- Live, App Live, Automate, and App Automate​</p>
+            </div>
+        </div>
+
     </div>
 </main>
 
