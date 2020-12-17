@@ -18,6 +18,6 @@
 #      failed_when: this.x_pop_tag != inventory_hostname
 
     - name: Check DNS query
-      shell: dig +short TXT id.server chaos @ns1.delivr.dev | tr -d '"'
+      shell: dig +short TXT id.server chaos @ns1.packetframe.com | tr -d '"'
       register: this
       failed_when: this.stdout != inventory_hostname
