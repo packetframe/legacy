@@ -49,12 +49,12 @@ Authenticated routes require the `X-API-Key` request header to be set to your AP
 
 ## Debug Routes
 
-| Endpoint             | Methods | Usage                                     |
-| -------------------- | ------- | ----------------------------------------- |
-| /debug/refresh_zones | GET     | Refresh all zones                         |
-| /debug/clear_queue   | GET     | Clear opqueue                             |
-| /debug/queue_status  | GET     | Get number of running and ready tasks     |
-| /debug/refresh_cache | GET     | Refresh cache's varnish and caddy configs |
+| Endpoint                           | Methods | Usage                                     |
+| ---------------------------------- | ------- | ----------------------------------------- |
+| /debug/refresh_zones               | GET     | Refresh all zones                         |
+| /debug/clear_queue                 | GET     | Clear opqueue                             |
+| /debug/queue_status                | GET     | Get number of running and ready tasks     |
+| /debug/refresh_cache               | GET     | Refresh cache's varnish and caddy configs |
 | /debug/update_collector_monitoring | GET     | Update route collector and prometheus configs |
 
 ### Route Specifics
