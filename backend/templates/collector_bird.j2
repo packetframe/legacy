@@ -85,6 +85,10 @@ define BOGON_ASNS = [
   4294967295              # Reserved. RFC7300
 ];
 
+function _reject(string reason) {
+  reject "REJECTED [", reason, "] pfx ", net, " session ", proto, " path ", bgp_path, " pathlen ", bgp_path.len, " origin ", bgp_path.last;
+}
+
 function external_import() {
   if (bgp_path ~ BOGON_ASNS) then _reject("bogon ASN in path");
   if (bgp_path.len > 100) then _reject("long AS_PATH");
