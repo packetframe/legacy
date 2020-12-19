@@ -592,7 +592,7 @@ def records_add(zone, user_doc):
             except ValueError as e:
                 return jsonify({"success": False, "message": str(e)})
 
-            if not valid_label(value):
+            if not valid_label(value) or (not value.endswith(".")):
                 return jsonify({"success": False, "message": "Invalid CNAME value"})
 
         else:
