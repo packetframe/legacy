@@ -191,6 +191,21 @@
         state: restarted
       when: http and not varnish_exporter_stat.stat.exists
 
+    - name: Copy cert update script
+      copy:
+        content: |
+          #!/bin/bash
+          cd /etc/caddy/
+          tar -xvzf certs.tar.gz
+          rm -rf *.pem
+          mv tmp/certs/* .
+          chown -R caddy:caddy *.pem
+          caddy reload -config /etc/caddy/Caddyfile
+          rm -rf tmp/
+          rm -rf certs.tar.gz
+        dest: /root/update-certs.sh
+      when: http
+
     # BIND
 
     - name: Create unique BIND config
