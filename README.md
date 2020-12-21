@@ -3,6 +3,7 @@
   <br>
   <a href="https://github.com/packetframe/cdn/blob/main/LICENSE"><img alt="GitHub license" src="https://img.shields.io/github/license/packetframe/cdn?style=for-the-badge"></a>
   <a href="https://packetframe.com"><img alt="Documentation" src="https://img.shields.io/badge/docs-packetframe.com-blue?style=for-the-badge"></a>
+  <a href="https://saucelabs.com"><img alt="Documentation" src="https://opensource.saucelabs.com/images/opensauce/powered-by-saucelabs-badge-white.png?sanitize=true"></a>
 </p>
 
 ## PacketFrame
