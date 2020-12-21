@@ -117,6 +117,13 @@
             </div>
         </div>
 
+        <div class="item">
+            <div class="item-text">
+                <a href="https://saucelabs.com/">Sauce Labs</a>
+                <p>Continuous testing is a key enabler of digital confidence—the knowledge that you’re delivering the best possible user experience to your customers. Digitally confident organizations know that their web and mobile applications look, function and perform exactly as intended, every single time they’re used. That’s the value of Sauce Labs.​</p>
+            </div>
+        </div>
+
     </div>
 </main>
 
