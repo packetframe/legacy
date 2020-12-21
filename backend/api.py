@@ -214,25 +214,20 @@ def _update_monitoring():
         }
     }
 
-    prometheus_config = """global:
-    scrape_interval:     60s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
-    evaluation_interval: 60s # Evaluate rules every 15 seconds. The default is every 1 minute.
-    # scrape_timeout is set to the global default (10s).
+    prometheus_config = """
+global:
+  scrape_interval:     60s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+  evaluation_interval: 60s # Evaluate rules every 15 seconds. The default is every 1 minute.
+  # scrape_timeout is set to the global default (10s).
 
-    # Attach these labels to any time series or alerts when communicating with
-    # external systems (federation, remote storage, Alertmanager).
-    external_labels:
-        monitor: 'example'
+  # Attach these labels to any time series or alerts when communicating with
+  # external systems (federation, remote storage, Alertmanager).
+  external_labels:
+    monitor: 'example'
 
-    # Alertmanager configuration
-    alerting:
-    alertmanagers:
-    - static_configs:
-        - targets: ['localhost:9093']
-
-    scrape_configs:
-    - job_name: dns_nodes
-        static_configs:"""
+scrape_configs:
+  - job_name: dns_nodes
+    static_configs:"""
 
     for node in db["nodes"].find():
         _config["nodes"]["hosts"][node["name"]] = {
@@ -241,50 +236,56 @@ def _update_monitoring():
         }
 
         prometheus_config += """
-        - targets: ['""" + node["management_ip"] + """:9119']
-            labels:
-            service: '""" + node["name"] + """'"""
+    - targets: ['""" + node["management_ip"] + """:9119']
+      labels:
+        pop: '""" + node["name"] + """'
+"""
 
         print("+ " + node["name"])
 
     prometheus_config += """
-
-    - job_name: cache_nodes_caddy
-        static_configs:"""
+  - job_name: cache_nodes_caddy
+    static_configs:
+"""
 
     for node in db["nodes"].find({"http": True}):
         prometheus_config += """
-        - targets: ['""" + node["management_ip"] + """:2019']
-            labels:
-            service: '""" + node["name"] + """'"""
+    - targets: ['""" + node["management_ip"] + """:2019']
+      labels:
+        pop: '""" + node["name"] + """'
+"""
 
         print("- cache + " + node["name"])
 
     prometheus_config += """
 
-    - job_name: cache_nodes_varnish
-        static_configs:"""
+  - job_name: cache_nodes_varnish
+    static_configs:
+"""
 
     for node in db["nodes"].find({"http": True}):
         prometheus_config += """
-        - targets: ['""" + node["management_ip"] + """:9131']
-            labels:
-            service: '""" + node["name"] + """'"""
+    - targets: ['""" + node["management_ip"] + """:9131']
+      labels:
+        pop: '""" + node["name"] + """'
+"""
 
     prometheus_config += """
 
-    - job_name: node_exporters
-        # metric_relabel_configs:
-        #   - source_labels: [__name__]
-        #     regex: '/(node_network_receive_bytes_total|node_network_receive_bytes_total)/g'
-        #     action: keep
-        static_configs:"""
+  - job_name: node_exporters
+    # metric_relabel_configs:
+    #   - source_labels: [__name__]
+    #     regex: '/(node_network_receive_bytes_total|node_network_receive_bytes_total)/g'
+    #     action: keep
+    static_configs:
+"""
 
     for node in db["nodes"].find():
         prometheus_config += """
-        - targets: ['""" + node["management_ip"] + """:9100']
-            labels:
-            service: '""" + node["name"] + """'"""
+    - targets: ['""" + node["management_ip"] + """:9100']
+      labels:
+        pop: '""" + node["name"] + """'
+"""
 
     with open("hosts.yml", "w") as hosts_file:
         hosts_file.write(yaml.dump(_config, default_flow_style=False))
