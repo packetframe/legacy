@@ -5,10 +5,18 @@
       command: systemctl status "{{ item }}"
       with_items:
         - bind9
-        - caddy
         - bird
       register: result
       ignore_errors: yes
+
+    - name: Check http service status
+      command: systemctl status "{{ item }}"
+      with_items:
+        - caddy
+        - varnish
+      register: http_result
+      ignore_errors: yes
+      when: http
 
 #    - name: Check HTTP query
 #      uri:
