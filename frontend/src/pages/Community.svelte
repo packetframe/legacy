@@ -124,6 +124,13 @@
             </div>
         </div>
 
+        <div class="item">
+            <div class="item-text">
+                <a href="https://ginernet.com">GINERNET</a>
+                <p>Hosting powerful servers in Spain. Service stability, high availability network and priority technical support.​</p>
+            </div>
+        </div>
+
     </div>
 </main>
 
