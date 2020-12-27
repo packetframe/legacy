@@ -9,6 +9,7 @@ www.packetframe.com {
 packetframe.com {
   root * /home/nate/public/
   file_server
+  encode gzip
 
   @hashredir not {
     path /
