@@ -7,7 +7,6 @@
     import Dashboard from "./pages/Dashboard.svelte";
     import Docs from "./pages/Docs.svelte";
     import Community from "./pages/Community.svelte";
-    import Network from "./pages/Network.svelte";
     import NotFound from "./pages/NotFound.svelte";
     import SnackbarGroup from "./components/SnackbarGroup.svelte";
     import MDPWrapper from "rollup-plugin-mdsvex-pages/src/components/MDPWrapper.svelte";
@@ -19,7 +18,6 @@
     routes.set("/dashboard", Dashboard);
     routes.set("/community", Community);
     routes.set("/docs", Docs);
-    routes.set("/network", Network);
     // TODO: 404 doesn't work
     // routes.set("*", NotFound)
 
