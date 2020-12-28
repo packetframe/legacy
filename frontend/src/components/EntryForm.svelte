@@ -31,6 +31,8 @@
                     } else {
                         window.location.hash = "#/login";
                     }
+                } else {
+                    alert(data["message"])
                 }
             });
     }
