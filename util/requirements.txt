@@ -1,0 +1,4 @@
+PyInquirer~=1.0.3
+requests~=2.24.0
+docopt~=0.6.2
+rich~=9.5.1
