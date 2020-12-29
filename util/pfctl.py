@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """Usage:
-    pfctl records <zone> (list|add)
+    pfctl records <zone> [add]
     pfctl records <zone> delete <index>
     pfctl zones list
 """
@@ -25,13 +25,13 @@ console = Console()
 PARENT_ENDPOINT = "https://packetframe.com/api/"
 
 PYINQUIRER_STYLE = style_from_dict({
-    Token.Separator: '#6C6C6C',
-    Token.QuestionMark: '#FFF',
-    Token.Selected: '#dd00ff',
-    Token.Pointer: '#FFF',
-    Token.Instruction: '',
-    Token.Answer: '#dd00ff',
-    Token.Question: '',
+    Token.Separator: "#6C6C6C",
+    Token.QuestionMark: "#FFF",
+    Token.Selected: "#dd00ff",
+    Token.Pointer: "#FFF",
+    Token.Instruction: "",
+    Token.Answer: "#dd00ff",
+    Token.Question: "",
 })
 
 
@@ -106,31 +106,31 @@ def add_record(zone):
     console.print(f"[underline]Add a new record to {zone}")
     record = prompt([
         {
-            'type': 'input',
-            'name': "label",
-            'message': "Label",
+            "type": "input",
+            "name": "label",
+            "message": "Label",
         },
         {
-            'type': 'list',
-            'name': 'type',
-            'message': "Type",
-            'choices': ["A", "AAAA", "TXT", "MX", "PTR"]
+            "type": "list",
+            "name": "type",
+            "message": "Type",
+            "choices": ["A", "AAAA", "TXT", "MX", "PTR"]
         },
         {
-            'type': 'input',
-            'name': "ttl",
-            'message': "TTL",
+            "type": "input",
+            "name": "ttl",
+            "message": "TTL",
             "default": "86400"
         },
         {
-            'type': 'input',
-            'name': "value",
-            'message': "Value",
+            "type": "input",
+            "name": "value",
+            "message": "Value",
         },
         {
-            'type': 'confirm',
-            'name': 'proxied',
-            'message': 'Proxied'
+            "type": "confirm",
+            "name": "proxied",
+            "message": "Proxied"
         }
     ], style=PYINQUIRER_STYLE)
 
@@ -154,10 +154,9 @@ def delete_record(zone, index):
 
 
 # Main
-
 if args["zones"] and args["list"]:
     list_zones()
-elif args["records"] and args["list"]:
+elif args["records"] and not args["add"]:
     list_records(args["<zone>"])
 elif args["records"] and args["add"]:
     add_record(args["<zone>"])
