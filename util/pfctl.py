@@ -122,7 +122,7 @@ def add_record(zone):
             "type": "list",
             "name": "type",
             "message": "Type",
-            "choices": ["A", "AAAA", "TXT", "MX", "PTR"]
+            "choices": ["A", "AAAA", "TXT", "MX", "CNAME", "PTR"]
         },
         {
             "type": "input",
