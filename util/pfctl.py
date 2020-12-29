@@ -1,11 +1,15 @@
 #!/usr/bin/python3
 """Usage:
+    pfctl account [login|logout]
     pfctl records <zone> [add]
     pfctl records <zone> delete <index>
     pfctl zones list
 """
 
-from os import environ
+from os import makedirs
+from os.path import exists
+from pathlib import Path
+from shutil import rmtree
 
 import requests
 from PyInquirer import style_from_dict, prompt, Token
@@ -23,6 +27,7 @@ args = docopt(__doc__)
 console = Console()
 
 PARENT_ENDPOINT = "https://packetframe.com/api/"
+config_path = str(Path.home()) + "/.config/packetframe/"
 
 PYINQUIRER_STYLE = style_from_dict({
     Token.Separator: "#6C6C6C",
@@ -34,14 +39,24 @@ PYINQUIRER_STYLE = style_from_dict({
     Token.Question: "",
 })
 
+# Set API key if not trying to lotg in
+if args and not args["login"]:
+    try:
+        with open(config_path + "key", "r") as api_key_file:
+            API_KEY = api_key_file.read()
+    except FileNotFoundError:
+        console.print(":x: Account not found: run [dim]pfctl login[/] to log into your account")
+        exit(1)
+else:
+    API_KEY = ""
+
 
 # Request helper
 
 
 def _request(message, route, method, body=None):
     with console.status(f"[bold green]{message}..."):
-        r = requests.request(method, PARENT_ENDPOINT + route,
-                             json=body, headers={"X-API-Key": API_KEY})
+        r = requests.request(method, PARENT_ENDPOINT + route, json=body, headers={"X-API-Key": API_KEY})
         if r.status_code != 200:
             console.log(
                 f"[bold red]ERROR (request)[reset] code {r.status_code} body {r.text}")
@@ -50,13 +65,6 @@ def _request(message, route, method, body=None):
             console.log(f"[bold red]ERROR (api)[reset] {r.json()['message']}")
             exit(1)
         return r.json()["message"]
-
-
-# Get API key
-API_KEY = environ.get("PACKETFRAME_API_KEY")
-if not API_KEY:
-    console.log(f"[bold red]ERROR (cli)[reset] PACKETFRAME_API_KEY environment variable is not set")
-    exit(1)
 
 
 def list_zones():
@@ -153,10 +161,52 @@ def delete_record(zone, index):
     print(_request("Deleting record", f"zone/{zone}/delete_record/{index}", "POST"))
 
 
+def login():
+    console.print("[underline]PacketFrame Login")
+    account = prompt([
+        {
+            "type": "input",
+            "name": "username",
+            "message": "Email:",
+        },
+        {
+            "type": "password",
+            "message": "Password:",
+            "name": "password"
+        }
+    ], style=PYINQUIRER_STYLE)
+
+    if account:
+        r = _request(f"Logging in as {account['username']}", "auth/login", "POST", account)
+        console.print("[bold green]Login successful")
+        if not exists(config_path):
+            makedirs(config_path)
+        with open(config_path + "key", "w") as api_key_file:
+            api_key_file.write(r)
+        with open(config_path + "email", "w") as email_file:
+            email_file.write(account["username"])
+
+
+def account():
+    with open(config_path + "email", "r") as email_file:
+        console.print(f":lock: Logged in as [underline]{email_file.read()}")
+
+
+def logout():
+    rmtree(config_path)
+    console.print("Logout complete")
+
+
 # Main
-if args["zones"] and args["list"]:
+if args["login"]:
+    login()
+elif args["logout"]:
+    logout()
+elif args["account"] and not args["login"]:
+    account()
+elif args["zones"] and args["list"]:
     list_zones()
-elif args["records"] and not args["add"]:
+elif args["records"] and not args["add"] and not args["delete"]:
     list_records(args["<zone>"])
 elif args["records"] and args["add"]:
     add_record(args["<zone>"])
