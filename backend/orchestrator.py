@@ -255,9 +255,9 @@ while True:
         elif operation == "update_monitoring":
             print("Deploying monitoring config...")
             # noinspection StandardShellInjection
-            os.system("scp -i /home/nate/ssh-key prometheus.yml " + configuration["monitoring_host"] + ":/tmp/prometheus.yml")
+            os.system("scp -P 34553 -i /home/nate/ssh-key prometheus.yml " + configuration["monitoring_host"] + ":/etc/prometheus/prometheus.yml")
             # noinspection StandardShellInjection
-            os.system("ssh " + configuration["monitoring_host"] + " -i /home/nate/ssh-key './deploy-monitoring.sh'")
+            os.system("ssh -p 34553 " + configuration["monitoring_host"] + " -i /home/nate/ssh-key 'curl -X POST http://localhost:9090/-/reload'")
             print("Finished deploying monitoring config")
 
         else:
