@@ -9,9 +9,11 @@ title: Privacy Policy
 
 <img src="/static/img/main/privacy.svg" alt="Privacy">
 
-Last updated December 20, 2020
+Last updated January 3, 2021
 
 Webserver logs are stored for **7 days** (or less if the log file gets too big) and are in the [Common Log Format](https://en.wikipedia.org/wiki/Common_Log_Format).
+
+We also use a self hosted instance of [Plausible](https://github.com/plausible/analytics) for analytics of the `packetframe.com` site.
 
 Anonymized counters from all DNS queries are stored for 360 days (or until they get too big). We use https://github.com/prometheus-community/bind_exporter if you would like to see the full list of metrics, but in short these logs include numbers only so nothing that's able to identify any particular user.  
 
