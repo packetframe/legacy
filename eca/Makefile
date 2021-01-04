@@ -21,7 +21,7 @@ build:
 	cp eca.py debian/usr/bin/packetframe-eca.py
 	cp packetframe-eca.service /etc/systemd/system/
 	echo "$$VARS" > debian/DEBIAN/control
-	echo "Copyright 2020 PacketFrame." > debian/DEBIAN/copyright
+	echo "Copyright 2021 PacketFrame." > debian/DEBIAN/copyright
 	dpkg-deb --build debian
 	mv debian.deb packetframe-eca.deb
 

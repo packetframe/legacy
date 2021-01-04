@@ -67,7 +67,7 @@
         <SnackbarGroup/>
     </div>
 
-    <footer>&copy; PacketFrame 2020.</footer>
+    <footer>&copy; PacketFrame 2021.</footer>
     </MDPWrapper>
 
 
