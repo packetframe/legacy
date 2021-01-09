@@ -56,7 +56,7 @@
 
         <div class="item">
             <div class="item-text">
-                <a href="https:/ifog.ch/">iFog</a>
+                <a href="https://ifog.ch/">iFog</a>
                 <p>iFog GmbH offers IT services. This includes Web Hosting, vServers, IXP Access as well as IP Transit and LIR Services.</p>
             </div>
         </div>
