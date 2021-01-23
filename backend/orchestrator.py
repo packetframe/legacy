@@ -37,6 +37,7 @@ def run_ssh_command(command):
     for line in stderr:
         print(" - ERR " + line.strip('\n'))
 
+
 print("Starting main loop")
 
 while True:
