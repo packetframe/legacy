@@ -3,7 +3,7 @@
     import {onMount} from "svelte";
     import {API} from "../stores";
     import Email from "../components/Email.svelte";
-    import EmailSignupForm from "../components/EmailSignupForm.svelte";
+    // import EmailSignupForm from "../components/EmailSignupForm.svelte";
 
     let nodes, locations;
 
@@ -92,7 +92,7 @@
             </div>
         </div>
 
-        <EmailSignupForm/>
+<!--        <EmailSignupForm/>-->
     </div>
 </main>
 
