@@ -270,13 +270,11 @@ while True:
                     error = "- ERROR: " + node["name"] + " timed out."
                     print(error)
                 else:
-                    stdin, stdout, stderr = ssh.exec_command("systemctl is-active bind9")
-                    for line in stdout:
-                        if line.strip("\n") != "active":
-                            print(node["name"] + " ERR")
-                        else:
-                            print(node["name"] + " OK")
-                        break
+                    _, state, _ = ssh.exec_command("systemctl is-active bind9")
+                    if state.strip("\n") != "active":
+                        print(node["name"] + " ERR")
+                    else:
+                        print(node["name"] + " OK")
 
             else:
                 print("ERROR: This task isn't recognized")
