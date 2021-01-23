@@ -1,5 +1,6 @@
 ---
-id: api title: API
+id: api
+title: API
 ---
 
 <div class="wrapper">
