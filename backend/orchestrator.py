@@ -272,7 +272,10 @@ while True:
                     print(error)
                 else:
                     stdout, stderr = run_ssh_command("systemctl is-active bind9")
-                    print(f"{node['name']} stdout: {stdout} stderr: {stderr}")
+                    for line in stdout:
+                        print(f"{node['name']} stdout: {line}")
+                    for line in stderr:
+                        print(f"{node['name']} stderr: {line}")
                     ssh.close()
 
             else:
