@@ -1106,7 +1106,7 @@ def update_collector_monitoring(username, is_admin):
 
 @app.route("/debug/healthcheck")
 @authentication_required
-def healthcheck(is_admin):
+def healthcheck(username, is_admin):
     # Run node healthcheck
 
     if not is_admin:
