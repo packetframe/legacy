@@ -272,7 +272,7 @@ while True:
                 else:
                     _, state_stdout, _ = ssh.exec_command("systemctl is-active bind9")
                     state_stdout = state_stdout.readlines()
-                    if state_stdout.strip("\n") != "active":
+                    if "".join(state_stdout).strip("\n") != "active":
                         print(node["name"] + " ERR")
                     else:
                         print(node["name"] + " OK")
