@@ -1,6 +1,5 @@
 ---
-id: api
-title: API
+id: api title: API
 ---
 
 <div class="wrapper">
@@ -56,6 +55,7 @@ Authenticated routes require the `X-API-Key` request header to be set to your AP
 | /debug/queue_status                | GET     | Get number of running and ready tasks     |
 | /debug/refresh_cache               | GET     | Refresh cache's varnish and caddy configs |
 | /debug/update_collector_monitoring | GET     | Update route collector and prometheus configs |
+| /debug/healthcheck                 | GET     | Run network-wide node healthcheck |
 
 ### Route Specifics
 
@@ -76,8 +76,7 @@ Request Body:
 
 Create a zone
 
-Methods: POST
-Returns: API Key
+Methods: POST Returns: API Key
 
 Request Body:
 
@@ -139,7 +138,6 @@ Methods: GET
 | URL Field | Type   | Description                                                                   |
 | --------- | ------ | ----------------------------------------------------------------------------- |
 | zone      | string | RFC 1035 DNS label of the zone (e.g. `example.com` or `2.0.192.in-addr.arpa`) |
-
 
 ##### /zone/[ZONE]/delete_record/[INDEX]
 

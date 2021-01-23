@@ -6,20 +6,21 @@ from functools import wraps
 from os import urandom
 from time import time, strftime
 
-# noinspection PyUnresolvedReferences
-import utils
 # noinspection PyPackageRequirements
 import yaml
 from argon2 import PasswordHasher
 # noinspection PyPackageRequirements
 from argon2.exceptions import VerifyMismatchError
-# noinspection PyUnresolvedReferences
-from config import configuration
 from flask import Flask, request, jsonify, make_response
 from jinja2 import Template
 from pymongo import MongoClient, ASCENDING
 from pymongo.errors import DuplicateKeyError
 from pystalk import BeanstalkClient
+
+# noinspection PyUnresolvedReferences
+import utils
+# noinspection PyUnresolvedReferences
+from config import configuration
 
 app = Flask(__name__)
 if configuration["development"]:
@@ -1101,6 +1102,18 @@ def update_collector_monitoring(username, is_admin):
     _update_collector()
     _update_monitoring()
     return jsonify({"success": True, "message": "Queued collector and monitoring update"})
+
+
+@app.route("/debug/healthcheck")
+@authentication_required
+def healthcheck(is_admin):
+    # Run node healthcheck
+
+    if not is_admin:
+        return jsonify({"success": False, "message": "Unauthorized"})
+
+    add_queue_message("healthcheck", None)
+    return jsonify({"success": True, "message": "Queued healthcheck"})
 
 
 if __name__ == "__main__":

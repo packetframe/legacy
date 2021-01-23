@@ -3,6 +3,8 @@ import os
 import shutil
 import tarfile
 import time
+from email.mime.text import MIMEText
+from smtplib import SMTP_SSL as SMTP
 
 from paramiko import SSHClient, AutoAddPolicy
 from paramiko.ssh_exception import NoValidConnectionsError
@@ -10,11 +12,8 @@ from pymongo import MongoClient
 from pystalk import BeanstalkClient
 from scp import SCPClient
 
-from config import configuration
 import utils
-
-from smtplib import SMTP_SSL as SMTP
-from email.mime.text import MIMEText
+from config import configuration
 
 db_client = MongoClient("mongodb://localhost:27017")
 db = db_client["cdn"]
@@ -37,6 +36,7 @@ def run_ssh_command(command):
         print(" - " + line.strip('\n'))
     for line in stderr:
         print(" - ERR " + line.strip('\n'))
+    return stdout, stderr
 
 
 print("Starting main loop")
@@ -260,8 +260,23 @@ while True:
             os.system("ssh -p 34553 " + configuration["monitoring_host"] + " -i /home/nate/ssh-key 'curl -X POST http://localhost:9090/-/reload'")
             print("Finished deploying monitoring config")
 
-        else:
-            print("ERROR: This task isn't recognized")
+        elif operation == "healthcheck":
+            print("Running healthcheck")
+            for node in db["nodes"].find():
+                print(f"running healthcheck {node['location']}")
+
+                try:
+                    ssh.connect(node["management_ip"], username="root", port=34553, key_filename=configuration["ssh-key"])
+                except (TimeoutError, NoValidConnectionsError):
+                    error = "- ERROR: " + node["name"] + " timed out."
+                    print(error)
+                else:
+                    stdout, stderr = run_ssh_command("systemctl is-active bind9")
+                    print(f"{node['name']} stdout: {stdout} stderr: {stderr}")
+                    ssh.close()
+
+            else:
+                print("ERROR: This task isn't recognized")
 
         queue.delete_job(job.job_id)
 
