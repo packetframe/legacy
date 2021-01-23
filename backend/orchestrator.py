@@ -36,8 +36,6 @@ def run_ssh_command(command):
         print(" - " + line.strip('\n'))
     for line in stderr:
         print(" - ERR " + line.strip('\n'))
-    return stdout, stderr
-
 
 print("Starting main loop")
 
@@ -271,12 +269,13 @@ while True:
                     error = "- ERROR: " + node["name"] + " timed out."
                     print(error)
                 else:
-                    stdout, stderr = run_ssh_command("systemctl is-active bind9")
+                    stdin, stdout, stderr = ssh.exec_command("systemctl is-active bind9")
                     for line in stdout:
-                        print(f"{node['name']} stdout: {line}")
-                    for line in stderr:
-                        print(f"{node['name']} stderr: {line}")
-                    ssh.close()
+                        if line.strip("\n") != "active":
+                            print(node["name"] + " ERR")
+                        else:
+                            print(node["name"] + " OK")
+                        break
 
             else:
                 print("ERROR: This task isn't recognized")
