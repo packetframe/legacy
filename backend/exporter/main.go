@@ -20,6 +20,7 @@ const updateDelay = 10 * time.Second
 
 var (
 	listenAddr = flag.String("web.listen-addr", ":9786", "Listening Address")
+	mongoAddr  = flag.String("db", "mongodb://localhost:27017", "MongoDB host")
 )
 
 var (
@@ -46,7 +47,7 @@ func main() {
 	}
 
 	log.Println("connecting to database")
-	client, err := mongo.NewClient(options.Client().ApplyURI("mongodb://localhost:8000"))
+	client, err := mongo.NewClient(options.Client().ApplyURI(*mongoAddr))
 	if err != nil {
 		log.Fatal(err)
 	}
