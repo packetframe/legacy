@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"flag"
+	"github.com/go-ping/ping"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
@@ -72,20 +73,46 @@ func main() {
 					log.Fatal(err)
 				}
 
+				// ping node management IP
+				log.Infof("pinging %s\n", node["management_ip"].(string))
+				pinger, err := ping.NewPinger(node["management_ip"].(string))
+				if err != nil {
+					log.Warnln(err)
+				}
+				pinger.Count = 1
+				pinger.SetPrivileged(true)
+
+				err = pinger.Run()
+				if err != nil {
+					log.Warnf("ping run: %v\n", err)
+				}
+
+				statusCode := 0 // 0 for failure
+				pinger.OnFinish = func(stats *ping.Statistics) {
+					log.Printf("%s done\n", node["name"])
+					if stats.PacketsSent == stats.PacketsRecv {
+						log.Printf("%s working\n", node["name"])
+						statusCode = 1
+					}
+				}
+
+				// set labels and status code
 				nodes.With(
 					prometheus.Labels{
 						"node":   node["name"].(string),
 						"geoloc": node["geoloc"].(string),
 					},
-				).Add(1)
+				).Add(float64(statusCode))
 			}
 
 			if err := cursor.Err(); err != nil {
-				log.Fatal(err)
+				log.Warnln(err)
 			}
 
+			// close cursor connection
 			cursor.Close(context.TODO())
 
+			// set last updated time
 			lastUpdate.SetToCurrentTime()
 			time.Sleep(updateDelay)
 		}
