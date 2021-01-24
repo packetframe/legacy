@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"flag"
-	"github.com/go-ping/ping"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
@@ -13,6 +12,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 )
 
@@ -29,12 +29,12 @@ var (
 		Help: "PacketFrame last update",
 	})
 
-	nodes = promauto.NewCounterVec(
-		prometheus.CounterOpts{
+	nodes = promauto.NewGaugeVec(
+		prometheus.GaugeOpts{
 			Name: "packetframe_node_status",
 			Help: "PacketFrame Node Status",
 		},
-		[]string{"node", "geoloc"},
+		[]string{"node", "latitude", "longitude"},
 	)
 )
 
@@ -74,36 +74,39 @@ func main() {
 					log.Fatal(err)
 				}
 
-				// ping node management IP
-				log.Infof("pinging %s\n", node["management_ip"].(string))
-				pinger, err := ping.NewPinger(node["management_ip"].(string))
-				if err != nil {
-					log.Warnln(err)
-				}
-				pinger.Count = 1
-				pinger.SetPrivileged(true)
+				//// ping node management IP
+				//log.Infof("pinging %s\n", node["management_ip"].(string))
+				//pinger, err := ping.NewPinger(node["management_ip"].(string))
+				//if err != nil {
+				//	log.Warnln(err)
+				//}
+				//pinger.Count = 1
+				//pinger.SetPrivileged(true)
+				//
+				//err = pinger.Run()
+				//if err != nil {
+				//	log.Warnf("ping run: %v\n", err)
+				//}
+				//
+				//statusCode := 0 // 0 for failure
+				//pinger.OnFinish = func(stats *ping.Statistics) {
+				//	log.Printf("%s done\n", node["name"])
+				//	if stats.PacketsSent == stats.PacketsRecv {
+				//		log.Printf("%s working\n", node["name"])
+				//		statusCode = 1
+				//	}
+				//}
 
-				err = pinger.Run()
-				if err != nil {
-					log.Warnf("ping run: %v\n", err)
-				}
-
-				statusCode := 0 // 0 for failure
-				pinger.OnFinish = func(stats *ping.Statistics) {
-					log.Printf("%s done\n", node["name"])
-					if stats.PacketsSent == stats.PacketsRecv {
-						log.Printf("%s working\n", node["name"])
-						statusCode = 1
-					}
-				}
+				coords := strings.Split(node["geoloc"].(string), ", ")
 
 				// set labels and status code
 				nodes.With(
 					prometheus.Labels{
-						"node":   node["name"].(string),
-						"geoloc": node["geoloc"].(string),
+						"node":      node["name"].(string),
+						"latitude":  coords[0],
+						"longitude": coords[1],
 					},
-				).Add(float64(statusCode))
+				).Set(1)
 			}
 
 			if err := cursor.Err(); err != nil {
