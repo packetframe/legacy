@@ -3,8 +3,6 @@
   <br>
   <a href="https://github.com/packetframe/cdn/blob/main/LICENSE"><img alt="GitHub license" src="https://img.shields.io/github/license/packetframe/cdn?style=for-the-badge"></a>
   <a href="https://packetframe.com"><img alt="Documentation" src="https://img.shields.io/badge/docs-packetframe.com-blue?style=for-the-badge"></a>
-  <br>
-  <a href="https://saucelabs.com"><img height="50px" alt="Documentation" src="https://opensource.saucelabs.com/images/opensauce/powered-by-saucelabs-badge-white.png?sanitize=true"></a>
 </p>
 
 ## PacketFrame
@@ -27,5 +25,15 @@ The PacketFrame CDN is an open source (AGPL-3.0) anycast CDN platform, currently
         └── components # Individual Svelte components
 ```
 
+#### Development
+The repo is designed to be tested at the service level. Each daemon or service should be able to be ran and debugged independently of the rest of the network.
+
 #### Future
 This repo contains the current production codebase for the CDN. The new v3 controlplane rewrite is under development: [cdnv3](https://github.com/natesales/cdnv3/).
+
+#### Author
+Nate Sales and [friends](https://github.com/packetframe/cdn/graphs/contributors).
+
+#### License
+AGPLv3
+
