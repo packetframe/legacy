@@ -26,3 +26,6 @@ The PacketFrame CDN is an open source (AGPL-3.0) anycast CDN platform, currently
     └── src
         └── components # Individual Svelte components
 ```
+
+#### Future
+This repo contains the current production codebase for the CDN. The new v3 controlplane rewrite is under development: [cdnv3](https://github.com/natesales/cdnv3/).
