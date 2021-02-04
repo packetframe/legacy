@@ -32,7 +32,7 @@ The repo is designed to be tested at the service level. Each daemon or service s
 This repo contains the current production codebase for the CDN. The new v3 controlplane rewrite is under development: [cdnv3](https://github.com/natesales/cdnv3/).
 
 #### Author
-Nate Sales and [friends](https://github.com/packetframe/cdn/graphs/contributors).
+[Nate Sales](https://natesales.net) and [friends](https://github.com/packetframe/cdn/graphs/contributors).
 
 #### License
 AGPLv3
