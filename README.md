@@ -35,5 +35,4 @@ This repo contains the current production codebase for the CDN. The new v3 contr
 [Nate Sales](https://natesales.net) and [friends](https://github.com/packetframe/cdn/graphs/contributors).
 
 #### License
-AGPLv3
-
+[AGPLv3](https://github.com/packetframe/cdn/blob/main/LICENSE)
