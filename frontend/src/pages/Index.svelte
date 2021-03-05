@@ -29,8 +29,8 @@
                     <div class="hero">
                         <img alt="PacketFrame Icon" src="/static/img/icon.png" style="width: 15rem; display: inline-block"/>
 <!--                        <h1><span class="textGradient">PacketFrame CDN</span></h1>-->
-                        <h1>PacketFrame</h1>
-                        <p>Welcome to PacketFrame, the Open Source CDN for technology enthusiasts. The platform is currently in private beta, contact <Email/> for more information.</p>
+                        <h1>Packetframe</h1>
+                        <p>Welcome to Packetframe, the Open Source CDN for technology enthusiasts. The platform is currently in private beta, contact <Email/> for more information.</p>
                         <Button inverted onclick={() => window.location.hash = "#/dashboard"} size="1.2rem">Get Started</Button>
                     </div>
                 </div>
@@ -42,7 +42,7 @@
             </div>
             <div class="featureCaption">
                 <h1>Built for Developers</h1>
-                <p>PacketFrame was built with developers in mind. With the PacketFrame CDN, the only thing kept private is <a href="https://packetframe.com/docs/privacy-policy">your data</a> and keys to the infrastructure. Everything else is open and accessible. All functionality of the platform is exposed via the <a href="https://packetframe.com/docs/api">API</a> and the entire codebase is <a href="https://github.com/packetframe/cdn">open source</a>.</p>
+                <p>Packetframe was built with developers in mind. With the Packetframe CDN, the only thing kept private is <a href="https://packetframe.com/docs/privacy-policy">your data</a> and keys to the infrastructure. Everything else is open and accessible. All functionality of the platform is exposed via the <a href="https://packetframe.com/docs/api">API</a> and the entire codebase is <a href="https://github.com/packetframe/cdn">open source</a>.</p>
             </div>
         </div>
 
