@@ -67,8 +67,6 @@
         <SnackbarGroup/>
     </div>
 
-    <footer>&copy; PacketFrame 2021.</footer>
+    <footer>&copy; Nate Sales 2021.</footer>
     </MDPWrapper>
-
-
 </main>
