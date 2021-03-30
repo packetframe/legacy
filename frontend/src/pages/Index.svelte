@@ -62,7 +62,7 @@
         <div class="featureBlock featureBlockReverse">
             <div class="featureCaption">
                 <h1>Globally Distributed</h1>
-                <p>There are currently {nodes} PoPs across {locations} cities and with a presence in all 6 consumer-inhabited continents. (If you know of a datacenter in Antarctica, let me know!)</p>
+                <p>There are currently 41 PoPs across 38 cities and with a presence in all 6 consumer-inhabited continents. (If you know of a datacenter in Antarctica, let me know!)</p>
             </div>
             <div class="featureImageWrapper">
                 <img alt="world" class="featureImage" src="/static/img/main/world.svg"/>
