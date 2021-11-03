@@ -7,7 +7,7 @@
 
 ## PacketFrame
 
-The PacketFrame CDN is an open source (AGPL-3.0) anycast CDN platform, currently in beta. If you're interested in an account, send an email to the address listed on the front page of https://packetframe.com or reach out in #packetframe on freenode.
+The PacketFrame CDN is an open source (AGPL-3.0) anycast CDN platform, currently in beta. If you're interested in an account, send an email to the address listed on the front page of https://packetframe.com or reach out in #packetframe on the [Libera.Chat](https://libera.chat/guides/connect) IRC network.
 
 *In the interest of consistency and ease of development, the multiple CDN version repos are being consolodated into a single project repo at https://github.com/natesales/cdn-tree An attempt has been made to preserve the most significant revision history, but it's still a work in progress.*
 
