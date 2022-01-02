@@ -5,11 +5,11 @@
   <a href="https://packetframe.com"><img alt="Documentation" src="https://img.shields.io/badge/docs-packetframe.com-blue?style=for-the-badge"></a>
 </p>
 
-## PacketFrame
+## Packetframe
 
-The PacketFrame CDN is an open source (AGPL-3.0) anycast CDN platform, currently in beta. If you're interested in an account, send an email to the address listed on the front page of https://packetframe.com or reach out in #packetframe on the [Libera.Chat](https://libera.chat/guides/connect) IRC network.
+*This repo stores the first production release of Packetframe, and is now considered legacy software. See https://github.com/packetframe/api and https://github.com/packetframe/web for the current production release.*
 
-*In the interest of consistency and ease of development, the multiple CDN version repos are being consolodated into a single project repo at https://github.com/natesales/cdn-tree An attempt has been made to preserve the most significant revision history, but it's still a work in progress.*
+The Packetframe CDN is an open source (AGPL-3.0) anycast CDN platform, currently in beta. If you're interested in an account, send an email to the address listed on the front page of https://packetframe.com or reach out in #packetframe on the [Libera.Chat](https://libera.chat/guides/connect) IRC network.
 
 #### Project Structure
 
@@ -29,9 +29,6 @@ The PacketFrame CDN is an open source (AGPL-3.0) anycast CDN platform, currently
 
 #### Development
 The repo is designed to be tested at the service level. Each daemon or service should be able to be ran and debugged independently of the rest of the network.
-
-#### Future
-This repo contains the current production codebase for the CDN. The new v3 controlplane rewrite is under development: [cdnv3](https://github.com/natesales/cdnv3/).
 
 #### Author
 [Nate Sales](https://natesales.net) and [friends](https://github.com/packetframe/cdn/graphs/contributors).
